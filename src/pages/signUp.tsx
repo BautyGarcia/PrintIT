@@ -1,9 +1,9 @@
 import { type NextPage } from "next";
-import { useState } from "react";
+import { FormEventHandler, useState } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 
-const SignInPage: NextPage = () => {
+const SignUpPage: NextPage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
       <h1 className="text-4xl font-bold text-white">Sign In Page</h1>
@@ -14,7 +14,7 @@ const SignInPage: NextPage = () => {
   );
 }
 
-export default SignInPage;
+export default SignUpPage;
 
 const AuthShowcase: React.FC = () => {
   return (
@@ -36,9 +36,8 @@ const RegisterForm: React.FC = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-
     await signIn("credentials", {
       callbackUrl: "http://localhost:3000/home",
       email,

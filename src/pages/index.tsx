@@ -1,7 +1,8 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
+import Link from "next/link";
 
 const Landing: NextPage = () => {
   const { data: sessionData } = useSession();
@@ -19,7 +20,9 @@ const Landing: NextPage = () => {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl p-5">PrintIT</h1>
-        <button onClick={() => void signIn()}><p className="bg-blue-500 text-white py-2 px-4 rounded">SignIn</p></button>
+        <button>
+          <p className="bg-blue-500 text-white py-2 px-4 rounded"><Link href={"/signUp"}>Enter</Link></p>
+        </button>
         {sessionData && <button onClick={() => void signOut()} className="p-5"><p className="bg-blue-500 text-white py-2 px-4 rounded">SignOut</p></button>}
 
         <p className="text-center text-2xl text-white">

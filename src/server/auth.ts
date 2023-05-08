@@ -43,47 +43,68 @@ export const authOptions: NextAuthOptions = {
       clientSecret: env.GOOGLE_CLIENT_SECRET
     }),
     CredentialsProvider({
-      name: "signup",
+      name: "credentials",
       credentials: {},
       async authorize(credentials) {
-        const { name, email, password } = credentials as {
+        const { name, email, password, isSignUp } = credentials as {
           name: string;
           email: string;
           password: string;
+          isSignUp: boolean;
         }
-        
+
         const existingUser = await prisma.user.findUnique({
           where: {
             email,
           },
         });
-        
-        if (existingUser) {
+
+        if (isSignUp === true) {
+          if (existingUser) {
+            throw new Error('Invalid email');
+          }
+
+          const salt = await bcrypt.genSalt();
+          const hashedPassword = await bcrypt.hash(password, salt);
+
+          const newUser = await prisma.user.create({
+            data: {
+              name,
+              email,
+              password: hashedPassword,
+            },
+          });
+
+          return newUser;
+        }
+
+        const { password: hashedPassword } = existingUser as {
+          password: string;
+        }
+
+        if (!existingUser) {
           throw new Error('Invalid email');
         }
-        
-        const salt = await bcrypt.genSalt();
-        const hashedPassword = await bcrypt.hash(password, salt);
-        
-        const newUser = await prisma.user.create({
-          data: {
-            name,
-            email,
-            password: hashedPassword,
-          },
-        });
 
-        return newUser;
+        const validatedPassword = await bcrypt.compare(password, hashedPassword);
+
+        if (!validatedPassword) {
+          throw new Error('Invalid password');
+        }
+
+        return existingUser;
+
       }
     })
   ],
   pages: {
     signIn: "/signUp",
-    
+
   },
   session: {
     strategy: "jwt",
   },
+  secret: env.JWT_SECRET,
 };
 
 /**

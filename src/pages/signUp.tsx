@@ -1,15 +1,15 @@
 import { type NextPage } from "next";
-import { FormEventHandler, useState } from "react";
+import { type FormEventHandler, useState } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 
 const SignUpPage: NextPage = () => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-      <h1 className="text-4xl font-bold text-white">Sign In Page</h1>
+      <h1 className="text-4xl font-bold text-white">Sign Up Page</h1>
       <RegisterForm />
       <AuthShowcase />
-      <p className="text-white p-5">Ya tenes una cuenta? <Link href={"/logIn"} className="text-blue-500">Ingresa</Link></p>
+      <p className="text-white p-5">Ya tenes una cuenta? <Link href={"/signIn"} className="text-blue-500">Ingresa</Link></p>
     </main>
   );
 }
@@ -25,7 +25,7 @@ const AuthShowcase: React.FC = () => {
           callbackUrl: '/home',
         })}
       >
-        Sign in with Google
+        Sign Up with Google
       </button>
     </div>
   );
@@ -42,14 +42,14 @@ const RegisterForm: React.FC = () => {
       callbackUrl: "/home",
       email,
       password,
-      name
+      name,
+      isSignUp: true
     });
   };
 
   return (
     <>
       <form className="flex flex-col max-w-md mx-auto mt-8" onSubmit={handleSubmit}>
-        <h2 className="text-2xl font-bold mb-4 text-white">Sign up</h2>
         <div className="mb-4">
           <label className="font-bold mb-2 text-white" htmlFor="email">
             Email
@@ -90,7 +90,7 @@ const RegisterForm: React.FC = () => {
           className="bg-blue-500 text-white py-2 px-4 rounded disabled:opacity-50 mb-5"
           type="submit"
         >
-          Registrarse
+          Sign Up
         </button>
       </form>
     </>

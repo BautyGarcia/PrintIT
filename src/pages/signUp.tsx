@@ -22,7 +22,7 @@ const AuthShowcase: React.FC = () => {
       <button
         className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
         onClick={() => void signIn('google', {
-          callbackUrl: 'http://localhost:3000/home',
+          callbackUrl: '/home',
         })}
       >
         Sign in with Google
@@ -39,7 +39,7 @@ const RegisterForm: React.FC = () => {
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     await signIn("credentials", {
-      callbackUrl: "http://localhost:3000/home",
+      callbackUrl: "/home",
       email,
       password,
       name

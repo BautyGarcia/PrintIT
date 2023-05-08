@@ -5,9 +5,10 @@ import {
   type DefaultSession,
 } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
+import bcrypt from "bcrypt";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -36,31 +37,53 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
-  callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
-  },
-  adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET
+    }),
+    CredentialsProvider({
+      name: "signup",
+      credentials: {},
+      async authorize(credentials) {
+        const { name, email, password } = credentials as {
+          name: string;
+          email: string;
+          password: string;
+        }
+        
+        const existingUser = await prisma.user.findUnique({
+          where: {
+            email,
+          },
+        });
+        
+        if (existingUser) {
+          throw new Error('Invalid email');
+        }
+        
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(password, salt);
+        
+        const newUser = await prisma.user.create({
+          data: {
+            name,
+            email,
+            password: hashedPassword,
+          },
+        });
+
+        return newUser;
+      }
     })
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
   ],
+  pages: {
+    signIn: "/signUp",
+    
+  },
+  session: {
+    strategy: "jwt",
+  },
 };
 
 /**

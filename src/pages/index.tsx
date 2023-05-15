@@ -16,11 +16,11 @@ const Landing: NextPage = () => {
   return (
     <>
       <Head> 
-        <link rel="icon" href="../../public/Logo.png" />
         <title>PrintIT</title>
         <meta name="description" content="PrintIT" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+        <Logo height={50} width={50}/>
         <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl p-5">PrintIT</h1>
         <button>
           <p className="bg-blue-500 text-white py-2 px-4 rounded"><Link href={"/signUp"}>Enter</Link></p>

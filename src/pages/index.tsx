@@ -3,7 +3,7 @@ import Head from "next/head";
 import { signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import Link from "next/link";
-import { Logo } from "~/Components/logo"; 
+import { Logo } from "~/components/logo"; 
 
 const Landing: NextPage = () => {
   const { data: sessionData } = useSession();

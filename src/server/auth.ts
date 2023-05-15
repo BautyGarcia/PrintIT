@@ -46,24 +46,25 @@ export const authOptions: NextAuthOptions = {
       name: "credentials",
       credentials: {},
       async authorize(credentials) {
-        const { name, email, password, isSignUp } = credentials as {
+        const { name, email, password, method } = credentials as {
           name: string;
           email: string;
           password: string;
-          isSignUp: boolean;
+          method: string;
         }
-
+        
         const existingUser = await prisma.user.findUnique({
           where: {
             email,
           },
         });
 
-        if (isSignUp === true) {
+        if (method === "signUp") {          
+
           if (existingUser) {
             throw new Error('Invalid email');
           }
-
+          
           const salt = await bcrypt.genSalt();
           const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -77,7 +78,7 @@ export const authOptions: NextAuthOptions = {
 
           return newUser;
         }
-
+        
         const { password: hashedPassword } = existingUser as {
           password: string;
         }
@@ -99,7 +100,6 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/signUp",
-
   },
   session: {
     strategy: "jwt",

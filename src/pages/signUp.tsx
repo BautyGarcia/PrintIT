@@ -38,12 +38,18 @@ const RegisterForm: React.FC = () => {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+
+    if (email === "" || password === "" || name === "") {
+      alert("Please fill all the fields");
+      return;
+    }
+
     await signIn("credentials", {
       callbackUrl: "/home",
       email,
       password,
       name,
-      isSignUp: true
+      method: "signUp",
     });
   };
 

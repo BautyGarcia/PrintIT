@@ -17,6 +17,7 @@ const Landing: NextPage = () => {
     <>
       <Head> 
         <title>PrintIT</title>
+        <link rel="icon" href="/Logo.png" />
         <meta name="description" content="PrintIT" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">

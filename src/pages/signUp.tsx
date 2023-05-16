@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import { type FormEventHandler, useState } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import Head from "next/head";
 
 const SignUpPage: NextPage = () => {
   return (
@@ -55,6 +56,11 @@ const RegisterForm: React.FC = () => {
 
   return (
     <>
+      <Head> 
+          <title>PrintIT</title>
+          <link rel="icon" href="/Logo.ico"/>
+          <meta name="description" content="PrintIT" />
+      </Head>
       <form className="flex flex-col max-w-md mx-auto mt-8" onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="font-bold mb-2 text-white" htmlFor="email">

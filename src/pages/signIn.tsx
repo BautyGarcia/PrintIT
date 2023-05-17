@@ -4,15 +4,22 @@ import { type FormEventHandler, useState } from "react";
 import Link from "next/link";
 import { LogoGoogle } from "~/components/logoGoogle";
 import Head from "next/head";
+import {LogosignInIMG} from "~/components/signInImg";
 
 const SignInPage: NextPage = () => {
     return (
-        <main className="flex min-h-screen flex-col items-start justify-center bg-white">
-            <h1 className="text-4xl font-family-Inter text-black">Bienvenido devuelta</h1>
+        <main className="w-full h-screen  bg-white">
+           <section className="w-1/2 flex items-center justify-center text-center flex-col h-full">
+            <h1 className="text-4xl font-family-Inter text-black">Bienvenido Devuelta</h1>
             <h3 className="font-family-Inter text-black">Ingrese sus datos</h3>            
             <SignInForm />
             <AuthShowcase />
             <p className="text-grey p-5">¿Tenes una cuenta? <Link href={"/signUp"} className="text-blue-500">Ingresa</Link></p>
+
+           </section>
+           <picture className="w-1/2 h-screen absolute right-0 top-0">
+            <LogosignInIMG width={680} height={880}/>
+           </picture>
         </main>
     );
 }
@@ -39,13 +46,13 @@ const SignInForm: React.FC = () => {
                 <link rel="icon" href="/Logo.ico"/>
                 <meta name="description" content="PrintIT" />
             </Head>
-        <form className="flex flex-col items-start justify-center max-w-md mx-auto mt-8" onSubmit={handleSubmit}>
-                <div className="mb-4">
-                    <label className="font-bold mb-2 text-black" htmlFor="email">
+        <form className="max-w-md mx-auto mt-8" onSubmit={handleSubmit}>
+                <div className="mb-6">
+                    <label className="font-bold text-black" htmlFor="email">
                         Email 
                     </label>
                     <input
-                        className="w-full border border-gray-400 p-2 rounded-lg"
+                        className="w-full border border-gray-400 p-2 rounded-lg mt-4"
                         type="email"
                         id="email"
                         placeholder="Your email"
@@ -53,12 +60,12 @@ const SignInForm: React.FC = () => {
                         onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
-                <div className="mb-4">
-                    <label className="font-bold mb-2 text-black" htmlFor="password">
+                <div className="mb-6">
+                    <label className="font-bold text-black" htmlFor="password">
                         Password
                     </label>
                     <input
-                        className="w-full border border-gray-400 p-2 rounded-lg"
+                        className="w-full border border-gray-400 p-2 rounded-lg mt-4"
                         type="password"
                         id="password"
                         placeholder="Your password"
@@ -67,7 +74,7 @@ const SignInForm: React.FC = () => {
                     />
                 </div>
                 <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded-lg"
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded-lg w-4/5"
                     type="submit"
                 >
                     Sign in
@@ -79,15 +86,15 @@ const SignInForm: React.FC = () => {
 
 const AuthShowcase: React.FC = () => {
     return (
-      <div className="flex flex-col items-center justify-center gap-4">
+      <div className="w-full flex justify-center">
         
-        <LogoGoogle height={10} width={10} flex-col />
          <button
-          className="rounded-full bg-white/10 px-10 py-3 font-semibold text-black no-underline transition hover:bg-white/20 mt-5 flex-col"
+          className="flex rounded-full border-2 border-[#D8D8D8] font-semibold text-black no-underline transition hover:bg-white/20 mt-5 flex-row items-center justify-center gap-4 w-3/6 h-10"
           onClick={() => void signIn('google', {
-            callbackUrl: '/home',
-          })}
+              callbackUrl: '/home',
+            })}
          >
+         <LogoGoogle height={20} width={20} />
           Sign In with Google
          </button>
             

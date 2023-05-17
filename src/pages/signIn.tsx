@@ -9,7 +9,7 @@ import { Logo } from "~/components/logo";
 
 const SignInPage: NextPage = () => {
     return (
-        <main className="w-full h-screen  bg-white">
+        <main className="w-full h-screen bg-white">
             <div className="absolute mt-5 ml-5 flex items-center gap-2">
                 <Logo width={40} height={40}/>
                 <h2>PrintIT</h2>
@@ -57,7 +57,7 @@ const SignInForm: React.FC = () => {
                         Email 
                     </label>
                     <input
-                        className="w-full border border-gray-200 p-2 rounded-lg mt-2"
+                        className="w-full border border-gray-400 p-2 rounded-lg mt-2"
                         type="email"
                         id="email"
                         placeholder="Your email"

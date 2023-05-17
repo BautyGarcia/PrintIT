@@ -3,15 +3,22 @@ import { type FormEventHandler, useState } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import Head from "next/head";
+import {LogoSignUpIMG} from "~/components/signUpImg"
 
 const SignUpPage: NextPage = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-      <h1 className="text-4xl font-bold text-white">Sign Up Page</h1>
-      <RegisterForm />
-      <AuthShowcase />
-      <p className="text-white p-5">Ya tenes una cuenta? <Link href={"/signIn"} className="text-blue-500">Ingresa</Link></p>
-    </main>
+    <section className="w-full h-full bg-white">
+      <main className="w-1/2 flex items-center justify-center text-center flex-col h-full">
+        <h1 className="text-4xl font-bold text-black">Bienvenido a PrinIT</h1>
+        <h3 className="font-family-Inter text-black">Ingrese sus datos</h3>  
+        <RegisterForm />
+        <AuthShowcase />
+        <p className="text-black p-5">Ya tenes una cuenta? <Link href={"/signIn"} className="text-blue-500">Ingresa</Link></p>
+        <picture className="w-1/2 h-screen absolute right-0 top-0">
+            <LogoSignUpIMG width={680} height={880}/>
+        </picture>
+      </main>
+    </section>
   );
 }
 
@@ -21,7 +28,7 @@ const AuthShowcase: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <button
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+        className="rounded-full bg-white/10 px-10 py-3 font-semibold text-black no-underline transition hover:bg-white/20"
         onClick={() => void signIn('google', {
           callbackUrl: '/home',
         })}
@@ -61,39 +68,42 @@ const RegisterForm: React.FC = () => {
           <link rel="icon" href="/Logo.ico"/>
           <meta name="description" content="PrintIT" />
       </Head>
-      <form className="flex flex-col max-w-md mx-auto mt-8" onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="font-bold mb-2 text-white" htmlFor="email">
+      <form className="max-w-md mx-auto mt-8" onSubmit={handleSubmit}>
+        <div className="mb-6">
+          <label className="font-bold text-black" htmlFor="email">
             Email
           </label>
           <input
-            className="w-full border border-gray-400 p-2 rounded-lg"
+            className="w-full border border-gray-400 p-2 rounded-lg mt-4"
             type="email"
             id="email"
+            placeholder="Your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="mb-4">
-          <label className="font-bold mb-2 text-white" htmlFor="password">
+        <div className="mb-6">
+          <label className="font-bold text-black" htmlFor="password">
             Password
           </label>
           <input
-            className="w-full border border-gray-400 p-2 rounded-lg"
+            className="w-full border border-gray-400 p-2 rounded-lg mt-4"
             type="password"
             id="password"
+            placeholder="Your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <div className="mb-4">
-          <label className="font-bold mb-2 text-white" htmlFor="fullName">
+        <div className="mb-6">
+          <label className="font-bold text-black" htmlFor="fullName">
             Full Name
           </label>
           <input
-            className="w-full border border-gray-400 p-2 rounded-lg"
+            className="w-full border border-gray-400 p-2 rounded-lg mt-4"
             type="text"
             id="fullName"
+            placeholder="Ingrese su Nombre completo"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />

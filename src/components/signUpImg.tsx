@@ -1,10 +1,7 @@
-import Image from "next/image"
+import Image from "next/image";
 
-interface LogoGoogleProps {
-    width: number;
-    height: number;
-}
+interface LogoGoogleProps {}
 
-export const LogoSignUpIMG: React.FC<LogoGoogleProps> = ({ width, height }) => {
-    return <Image src= "/SignUp.png" alt= "logoSignUp" width={width} height={height}/>
-}
+export const LogoSignUpIMG: React.FC<LogoGoogleProps> = ({}) => {
+  return <Image src="/SignUp.png" alt="logoSignUp" width={680} height={880} />;
+};

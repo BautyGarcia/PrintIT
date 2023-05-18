@@ -1,9 +1,6 @@
 import Image from "next/image";
-import { useEffect } from "react";
 
-interface LogoGoogleProps {}
-
-export const LogosignInIMG: React.FC<LogoGoogleProps> = ({}) => {
+export const LogosignInIMG: React.FC = ({}) => {
   return (
     <Image
       className="h-screen w-full"

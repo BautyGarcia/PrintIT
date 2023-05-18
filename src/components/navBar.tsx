@@ -20,18 +20,18 @@ const Links = [{
 }
 ]
 
-export const navBar: React.FC = ({}) => {
+export const NavBar: React.FC = ({}) => {
     return (
-        <header className="rounded p-4 border-2 border-black">
+        <header className="rounded p-4 border-2 border-black w-full">
             <nav className="flex gap-16 justify-between items-center list-none">
 
-                <div className="w-350 flex gap-32 pl-50 items-center mt-5 mb-5r">
+                <div className="w-350 flex gap-4 pl-50 items-center text-center mt-5 mb-5">
                     <Logo width={40} height={40} display="flex" justifyContent="center" />
-                    <h1 className="font-family-Inter font-weight-250">PrintIT</h1>
+                    <h1 className="font-family-Inter font-weight-250 felx justify-center">PrintIT</h1>
                 </div>
                 <div className="flex w-full justify-around items-center">
                 {Links.map(({ label, route }: { label: string, route: string }) => (
-                    <Link className="color-black text-underline hover:bg-white" key={route} href={route}>
+                    <Link className="color-black text-underline" key={route} href={route}>
                         {label}
                     </Link>
                 ))}

@@ -4,6 +4,7 @@ import { signOut, useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import Link from "next/link";
 import { Logo } from "~/components/logo"; 
+import { NavBar } from "~/components/navBar";
 
 const Landing: NextPage = () => {
   const { data: sessionData } = useSession();
@@ -20,7 +21,8 @@ const Landing: NextPage = () => {
         <link rel="icon" href="/Logo.ico"/>
         <meta name="description" content="PrintIT" />
       </Head>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+      <NavBar />
+      <main className="flex min-h-screen flex-col items-center justify-center bg-white from-[#2e026d] to-[#15162c]">
         <Logo height={50} width={50} justifyContent={"center"} display={"flex"} />
         <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl p-5">PrintIT</h1>
         <button>

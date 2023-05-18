@@ -29,7 +29,7 @@ const SignUpPage: NextPage = () => {
           </Link>
         </p>
       </section>
-      <picture className="absolute right-0 top-0 h-screen w-1/2">
+      <picture className="w-1/2 h-screen absolute right-0 top-0">
         <LogoSignUpIMG />
       </picture>
     </main>

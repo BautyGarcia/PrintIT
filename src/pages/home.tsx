@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { NavBar } from "~/components/navBar";
+import { Footer } from "~/components/footer";
 
 const Home: NextPage = () => {
   const { data: sessionData } = useSession();
@@ -19,6 +20,7 @@ const Home: NextPage = () => {
           <p className="text-white">Welcome {sessionData.user?.name}</p>
         )}
       </main>
+      <Footer />
     </>
   );
 };

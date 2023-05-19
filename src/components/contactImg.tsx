@@ -1,11 +1,11 @@
 import Image from "next/image";
 
-export const RecoverIMG: React.FC = () => {
+export const ContactIMG: React.FC = () => {
   return (
     <Image
       className="h-screen w-full"
-      src="/Recover.png"
-      alt="logoRecover"
+      src="/ContactImg.png"
+      alt="ContactIMg"
       width={680}
       height={880}
     />

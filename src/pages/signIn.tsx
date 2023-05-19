@@ -55,11 +55,12 @@ const SignInForm: React.FC = () => {
     };
 
     return (
-        <>  <Head>
-            <title>PrintIT</title>
-            <link rel="icon" href="/Logo.ico" />
-            <meta name="description" content="PrintIT" />
-        </Head>
+        <>
+            <Head>
+                <title>PrintIT</title>
+                <link rel="icon" href="/Logo.ico" />
+                <meta name="description" content="PrintIT" />
+            </Head>
             <form className="flex text-center flex-col justify-center items-center w-full mx-auto mt-8" onSubmit={handleSubmit}>
                 <div className="mb-2 w-4/5">
                     <label className="flex font-family-Inter text-black justify-left" htmlFor="email">

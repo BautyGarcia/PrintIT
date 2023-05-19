@@ -61,6 +61,7 @@ const RegisterForm: React.FC = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [type, setType] = useState("password");
+
   const handleChangeInputType = () => {
     if (type == "password") {
       setType("text");

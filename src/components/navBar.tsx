@@ -44,10 +44,14 @@ export const NavBar: React.FC = ({}) => {
         </div>
         <div className="felx flex-col items-center justify-center">
           <button className="font-family-Inter mt-3 w-4/5 rounded-lg border-2 border-black bg-white py-2 text-black hover:bg-gray-500">
-            Iniciar Sesion
+            <p>
+              <Link href={"/signIn"}>Log In</Link>
+            </p>
           </button>
           <button className="font-family-Inter mt-3 w-4/5 rounded-lg border-none bg-blue-500 py-2 text-white hover:bg-blue-700">
-            Registrarse
+            <p>
+              <Link href={"/signUp"}>Register</Link>
+            </p>
           </button>
         </div>
       </nav>

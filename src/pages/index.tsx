@@ -5,6 +5,7 @@ import { api } from "~/utils/api";
 import Link from "next/link";
 import { Logo } from "~/components/logo";
 import { NavBar } from "~/components/navBar";
+import { Footer } from "~/components/footer";
 
 const Landing: NextPage = () => {
   const { data: sessionData } = useSession();
@@ -42,12 +43,12 @@ const Landing: NextPage = () => {
             <p className="rounded bg-blue-500 px-4 py-2 text-white">SignOut</p>
           </button>
         )}
-
         <p className="text-center text-2xl text-white">
           {sessionData && <span>Logged in as {sessionData.user?.name}</span>}
           {secretMessage && <span> - {secretMessage}</span>}
         </p>
       </main>
+      <Footer/>
     </>
   );
 };

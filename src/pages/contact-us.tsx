@@ -37,7 +37,7 @@ const ContactForm: React.FC = () => {
   const [surname, setSurname] = useState("");
   const [mensaje, setMensaje] = useState("");
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
   };
 

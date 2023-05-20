@@ -23,7 +23,7 @@ const Links = [
 
 export const NavBar: React.FC = ({}) => {
   return (
-    <header className="h-24 w-full rounded border-2 border-black p-4">
+    <header className="border- h-24 w-full border-2 p-4 shadow shadow-black">
       <nav className="flex list-none items-center justify-between gap-16">
         <div className="w-350 pl-50 mb-0 mt-0 flex items-center gap-4 text-center">
           <Logo width={40} height={40} display="flex" justifyContent="center" />

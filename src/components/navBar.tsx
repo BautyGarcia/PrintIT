@@ -5,11 +5,11 @@ import {
   Group,
   Button,
   Divider,
-  Box,
   Burger,
   Drawer,
   ScrollArea,
   rem,
+  useMantineColorScheme,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Logo } from './logo';
@@ -78,10 +78,11 @@ const useStyles = createStyles((theme) => ({
 export const NavBar: React.FC = () => {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
   const { classes, theme } = useStyles();
-  
+  const { colorScheme } = useMantineColorScheme();
+
   return (
-    <Box pb={120}>
-      <Header height={60} px="md" className="fixed">
+    <>
+      <Header height={60} px="md" className={ colorScheme === "dark" ? "fixed bg-[#1C2333]" : "fixed bg-white" }>
         <Group position="apart" sx={{ height: '100%' }}>
           <Link href="/" passHref>
             <Logo width={40} height={40} />
@@ -153,6 +154,6 @@ export const NavBar: React.FC = () => {
 
         </ScrollArea>
       </Drawer>
-    </Box>
+    </>
   );
 }

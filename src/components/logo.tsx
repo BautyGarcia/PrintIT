@@ -1,3 +1,4 @@
+import { useMantineColorScheme } from "@mantine/core";
 import Image from "next/image"
 
 interface LogoProps {
@@ -8,5 +9,14 @@ interface LogoProps {
 }
 
 export const Logo: React.FC<LogoProps> = ({ width, height }) => {
-    return <Image src= "/Logo.png" alt= "logo" width={width} height={height}/>
+    const { colorScheme } = useMantineColorScheme();
+    
+    return (
+        <Image 
+            src= {colorScheme === 'light' ? "/logo.png" : "/logoWhite.png"} 
+            alt= "logo" 
+            width={width} 
+            height={height}
+        />
+    )
 }

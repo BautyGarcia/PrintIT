@@ -14,6 +14,7 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { Logo } from './logo';
 import Link from 'next/link';
+import SchemeButton from './schemeButton';
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -77,13 +78,13 @@ const useStyles = createStyles((theme) => ({
 export const NavBar: React.FC = () => {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
   const { classes, theme } = useStyles();
-
+  
   return (
     <Box pb={120}>
       <Header height={60} px="md" className="fixed">
         <Group position="apart" sx={{ height: '100%' }}>
           <Link href="/" passHref>
-            <Logo width={40} height={40}/>
+            <Logo width={40} height={40} />
           </Link>
 
           <Group sx={{ height: '100%' }} spacing={0} className={classes.hiddenMobile}>
@@ -99,6 +100,7 @@ export const NavBar: React.FC = () => {
           </Group>
 
           <Group className={classes.hiddenMobile}>
+            <SchemeButton />
             <Link href="/signIn" passHref>
               <Button variant="default">Log in</Button>
             </Link>
@@ -135,14 +137,20 @@ export const NavBar: React.FC = () => {
 
           <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
 
-          <Group position="center" grow pb="xl" px="md">
-            <Link href="/signIn" passHref>
-              <Button variant="default">Log in</Button>
-            </Link>
-            <Link href="/signUp" passHref>
-              <Button variant='undefined' className='bg-indigo-400 text-white'>Sign up</Button>
-            </Link>
+          <Group position='apart'>
+            <Group position="left" pb="lg" px="sm" >
+              <Link href="/signIn" passHref>
+                <Button variant="default">Log in</Button>
+              </Link>
+              <Link href="/signUp" passHref>
+                <Button variant='undefined' className='bg-indigo-400 text-white'>Sign up</Button>
+              </Link>
+            </Group>
+            <Group position="right" pb="lg" px="md">
+              <SchemeButton />
+            </Group>
           </Group>
+
         </ScrollArea>
       </Drawer>
     </Box>

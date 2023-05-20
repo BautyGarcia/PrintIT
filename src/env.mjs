@@ -24,6 +24,8 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
     JWT_SECRET: z.string(),
+    MAILPASSWORD: z.string(),
+    MAILUSER: z.string(),
   },
 
   /**
@@ -47,5 +49,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     JWT_SECRET: process.env.JWT_SECRET,
+    MAILPASSWORD: process.env.MAILPASSWORD,
+    MAILUSER: process.env.MAILUSER,
   },
 });

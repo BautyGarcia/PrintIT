@@ -113,7 +113,7 @@ const SignInForm: React.FC = () => {
             ></i>
           </span>
           <Link
-            href={"/recover"}
+            href={"/recoverPassword"}
             className="flex justify-end text-xs text-blue-500"
           >
             ¿Olvidaste tu Contraseña?

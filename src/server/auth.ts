@@ -59,7 +59,9 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
-        if (method === "signUp") {          
+        if (method === "signUp") {       
+
+          console.log("Entered SIGNUP")
 
           if (existingUser) {
             throw new Error('Invalid email');
@@ -78,6 +80,8 @@ export const authOptions: NextAuthOptions = {
 
           return newUser;
         }
+        
+        console.log("Entered SIGNIN")
         
         const { password: hashedPassword } = existingUser as {
           password: string;

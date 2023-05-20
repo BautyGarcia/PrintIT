@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { type NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { api } from "~/utils/api";
@@ -39,7 +39,7 @@ const RecoverPassword: NextPage = () => {
             setConfirmPassword("");
             setError("");
             // Redirect the user to the login page or any other desired page
-            router.push("/signIn");
+            await router.push("/signIn");
         } catch (error) {
             setError("Failed to reset password. Please try again.");
         } finally {

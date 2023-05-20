@@ -7,7 +7,6 @@ import bcrypt from "bcrypt";
 import {
     createTRPCRouter,
     publicProcedure,
-    protectedProcedure,
 } from "~/server/api/trpc";
 
 const transporter = nodemailer.createTransport({

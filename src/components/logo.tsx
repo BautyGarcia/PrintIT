@@ -13,7 +13,7 @@ export const Logo: React.FC<LogoProps> = ({ width, height }) => {
     
     return (
         <Image 
-            src= {colorScheme === 'light' ? "/logo.png" : "/logoWhite.png"} 
+            src= {colorScheme === 'light' ? "/Logo.png" : "/LogoWhite.png"} 
             alt= "logo" 
             width={width} 
             height={height}

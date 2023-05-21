@@ -9,6 +9,7 @@ import { Logo } from "~/components/logo";
 import "remixicon/fonts/remixicon.css";
 import { useRouter } from "next/router";
 import { notifications } from "@mantine/notifications";
+import { Button } from "@mantine/core";
 
 const SignUpPage: NextPage = () => {
   return (
@@ -64,6 +65,7 @@ const RegisterForm: React.FC = () => {
   const [password, setPassword] = useState("");
   const [type, setType] = useState("password");
   const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -77,6 +79,7 @@ const RegisterForm: React.FC = () => {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     let errorMessage = "";
 
     if (email === "" || password === "" || name === "") { errorMessage = "Por favor complete todos los campos"; setError(true) }
@@ -90,6 +93,7 @@ const RegisterForm: React.FC = () => {
         color: 'red',
         autoClose: 5000,
       })
+      setIsLoading(false);
     } else {
       await signIn("credentials", {
         redirect: false,
@@ -105,6 +109,7 @@ const RegisterForm: React.FC = () => {
             color: 'green',
             autoClose: 2000,
           });
+          setIsLoading(false);
           void router.push("/home");
         } else {
           notifications.show({
@@ -113,6 +118,7 @@ const RegisterForm: React.FC = () => {
             color: 'red',
             autoClose: 5000,
           })
+          setIsLoading(false);
           setError(true);
         }
       });
@@ -188,12 +194,13 @@ const RegisterForm: React.FC = () => {
             ></i>
           </span>
         </div>
-        <button
+        <Button
           className="font-family-Inter mt-3 w-4/5 rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"
           type="submit"
+          loading={isLoading}
         >
           Sign Up
-        </button>
+        </Button>
       </form>
     </>
   );

@@ -9,6 +9,7 @@ import { Logo } from "~/components/logo";
 import "remixicon/fonts/remixicon.css";
 import { notifications } from '@mantine/notifications';
 import { useRouter } from 'next/router';
+import { Button } from '@mantine/core';
 
 const SignInPage: NextPage = () => {
     return (
@@ -45,6 +46,7 @@ const SignInForm: React.FC = () => {
     const [password, setPassword] = useState("");
     const [type, setType] = useState("password");
     const [error, setError] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter();
 
@@ -58,6 +60,7 @@ const SignInForm: React.FC = () => {
 
     const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         let errorMessage = "";
 
         if (!email || !password) { errorMessage = "Por favor complete todos los campos"; setError(true) }
@@ -71,6 +74,7 @@ const SignInForm: React.FC = () => {
                 color: 'red',
                 autoClose: 5000,
             })
+            setIsLoading(false);
         } else {
             await signIn("credentials", {
                 email,
@@ -85,6 +89,7 @@ const SignInForm: React.FC = () => {
                         color: 'green',
                         autoClose: 2000,
                     });
+                    setIsLoading(false);
                     void router.push("/home");
                 } else {
                     notifications.show({
@@ -93,7 +98,8 @@ const SignInForm: React.FC = () => {
                         color: 'red',
                         autoClose: 5000,
                     })
-                    setError(true);
+                    setIsLoading(false);
+                    setError(true);   
                 }
             });
         }
@@ -158,12 +164,13 @@ const SignInForm: React.FC = () => {
                         ¿Olvidaste tu Contraseña?
                     </Link>
                 </div>
-                <button
+                <Button
                     className="font-family-Inter mt-3 w-4/5 rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"
                     type="submit"
+                    loading={isLoading}
                 >
-                    Sign in
-                </button>
+                    {isLoading ? 'Loading...' : 'Sign In'}
+                </Button>
             </form>
         </>
     );

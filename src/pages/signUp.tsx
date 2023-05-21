@@ -23,9 +23,9 @@ const SignUpPage: NextPage = () => {
         <RegisterForm />
         <AuthShowcase />
         <p className="font-family-Inter p-5 text-black">
-          Ya tenes una cuenta?{" "}
+          ¿Ya tenés una cuenta?{" "}
           <Link href={"/signIn"} className="font-family-Inter text-blue-500">
-            Ingresa
+            Ingresá acá
           </Link>
         </p>
       </section>

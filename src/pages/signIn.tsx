@@ -25,9 +25,9 @@ const SignInPage: NextPage = () => {
                 <SignInForm />
                 <AuthShowcase />
                 <p className="font-family-Inter text-grey p-5">
-                    ¿Tenes una cuenta?{" "}
+                    ¿No tenés cuenta?{" "}
                     <Link href={"/signUp"} className="font-family-Inter text-blue-500">
-                        Inicia sesion aca
+                        Registrate acá
                     </Link>
                 </p>
             </section>
@@ -44,6 +44,8 @@ const SignInForm: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [type, setType] = useState("password");
+    const [error, setError] = useState(false);
+
     const router = useRouter();
 
     const handleChangeInputType = () => {
@@ -58,16 +60,16 @@ const SignInForm: React.FC = () => {
         e.preventDefault();
         let errorMessage = "";
 
-        if (!email || !password) { errorMessage = "Por favor complete todos los campos" }
-        else if (!email.includes("@") || !email.includes(".")) { errorMessage = "Por favor ingrese un email valido" }
-        else if (password.length < 8) { errorMessage = "La contraseña debe tener al menos 8 caracteres" }
+        if (!email || !password) { errorMessage = "Por favor complete todos los campos"; setError(true) }
+        else if (!email.includes("@") || !email.includes(".")) { errorMessage = "Por favor ingrese un email valido"; setError(true) }
+        else if (password.length < 8) { errorMessage = "La contraseña debe tener al menos 8 caracteres"; setError(true) }
 
         if (errorMessage) {
             notifications.show({
                 title: 'Error',
                 message: errorMessage,
                 color: 'red',
-                autoClose: 3000,
+                autoClose: 5000,
             })
         } else {
             await signIn("credentials", {
@@ -81,7 +83,7 @@ const SignInForm: React.FC = () => {
                         title: 'Éxito',
                         message: "Inicio de sesión exitoso",
                         color: 'green',
-                        autoClose: 1500,
+                        autoClose: 2000,
                     });
                     void router.push("/home");
                 } else {
@@ -89,8 +91,9 @@ const SignInForm: React.FC = () => {
                         title: 'Error',
                         message: response?.error || "Error al iniciar sesión",
                         color: 'red',
-                        autoClose: 3000,
+                        autoClose: 5000,
                     })
+                    setError(true);
                 }
             });
         }
@@ -109,13 +112,13 @@ const SignInForm: React.FC = () => {
             >
                 <div className="mb-2 w-4/5">
                     <label
-                        className="font-family-Inter justify-left flex text-black"
+                        className= { error ? "font-family-Inter justify-left flex text-red-500" : "font-family-Inter justify-left flex text-black" }
                         htmlFor="email"
                     >
                         Email
                     </label>
                     <input
-                        className="mt-2 w-full rounded-lg border border-gray-400 p-2"
+                        className= { error ? "mt-2 w-full rounded-lg border border-red-400 p-2 focus:border-sky-500" : "mt-2 w-full rounded-lg border border-gray-400 p-2 focus:border-sky-500" }
                         type="text"
                         id="email"
                         placeholder="Your email"
@@ -125,13 +128,13 @@ const SignInForm: React.FC = () => {
                 </div>
                 <div className="mb-2 w-4/5">
                     <label
-                        className="font-family-Inter justify-left flex text-black"
+                        className= { error ? "font-family-Inter justify-left flex text-red-500" : "font-family-Inter justify-left flex text-black" }
                         htmlFor="password"
                     >
                         Password
                     </label>
                     <input
-                        className="mt-2 w-full rounded-lg border border-gray-400 p-2"
+                        className= { error ? "mt-2 w-full rounded-lg border border-red-400 p-2" : "mt-2 w-full rounded-lg border border-gray-400 p-2" }
                         type={type}
                         id="password"
                         placeholder="Your password"

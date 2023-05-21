@@ -59,12 +59,10 @@ export const authOptions: NextAuthOptions = {
           },
         });
 
-        if (method === "signUp") {       
-
-          console.log("Entered SIGNUP")
+        if (method === "signUp") {          
 
           if (existingUser) {
-            throw new Error('Invalid email');
+            throw new Error('Este email ya esta registrado');
           }
           
           const salt = await bcrypt.genSalt();
@@ -80,21 +78,19 @@ export const authOptions: NextAuthOptions = {
 
           return newUser;
         }
-        
-        console.log("Entered SIGNIN")
-        
-        const { password: hashedPassword } = existingUser as {
-          password: string;
-        }
 
         if (!existingUser) {
-          throw new Error('Invalid email');
+          throw new Error('Este email no esta registrado');
+        }
+
+        const { password: hashedPassword } = existingUser as {
+          password: string;
         }
 
         const validatedPassword = await bcrypt.compare(password, hashedPassword);
 
         if (!validatedPassword) {
-          throw new Error('Invalid password');
+          throw new Error('Contraseña Incorrecta');
         }
 
         return existingUser;

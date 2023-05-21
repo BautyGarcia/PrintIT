@@ -5,6 +5,7 @@ import { api } from "~/utils/api";
 import "~/styles/globals.css";
 import { MantineProvider, ColorSchemeProvider, type ColorScheme } from "@mantine/core";
 import { useState } from "react";
+import { Notifications } from '@mantine/notifications';
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -34,6 +35,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         colorScheme
       }} withGlobalStyles withNormalizeCSS>
         <SessionProvider session={session}>
+          <Notifications />
           <Component {...pageProps} />
         </SessionProvider>
       </MantineProvider>

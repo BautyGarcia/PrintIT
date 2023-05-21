@@ -14,13 +14,13 @@ const ContactUs: NextPage = () => {
         <meta name="description" content="PrintIT" />
       </Head>
       <NavBar />
-      <main className="h-screen w-full bg-white p-10">
+      <main className="mt-5 h-screen w-full bg-white p-10">
         <h1 className="text-4xl">Contactate con Nosotros</h1>
         <h6 className="text-xs">
           Nos encantaria escuchar tus preguntas o propuestas
         </h6>
         <ContactForm />
-        <picture className="absolute right-0 top-24 h-screen w-1/2">
+        <picture className="absolute right-0 top-5 h-screen w-1/2">
           <ContactIMG />
         </picture>
       </main>

@@ -4,7 +4,7 @@ import { Group, Button, TextInput, Text, useMantineColorScheme, CloseButton } fr
 const PrinterPopup: React.FC = () => {
     const [opened, { toggle, close }] = useDisclosure(false);
     const { colorScheme } = useMantineColorScheme();
-    //"bg-white rounded-md shadow-md"
+
     return (
         <>
             <Group className="flex justify-center">

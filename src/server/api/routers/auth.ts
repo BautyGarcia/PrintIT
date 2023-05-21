@@ -94,7 +94,7 @@ const emailText = (username: string, redirectURL: string) => `
 
 
 export const authRouter = createTRPCRouter({
-    recoverPassword: publicProcedure
+    sendPasswordEmail: publicProcedure
         .input(z.object({ email: z.string() }))
         .mutation(async ({ input, ctx }) => {
 
@@ -109,7 +109,7 @@ export const authRouter = createTRPCRouter({
             });
 
             if (!user) {
-                throw new Error("User not found");
+                throw new Error("Este Email no esta asignado a ninguna cuenta");
             }
 
             //Create token
@@ -151,7 +151,7 @@ export const authRouter = createTRPCRouter({
                 return newRecoverPasswordToken;
             } catch (error) {
                 console.log(error);
-                throw new Error("Error sending email");
+                throw new Error("No se pudo enviar el Email de recuperación");
             }
         }),
     getEmailByToken: publicProcedure

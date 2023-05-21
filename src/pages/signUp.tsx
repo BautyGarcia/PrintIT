@@ -138,13 +138,13 @@ const RegisterForm: React.FC = () => {
       >
         <div className="mb-2 w-4/5">
           <label
-            className= { error ? "font-family-Inter justify-left flex text-red-500" : "font-family-Inter justify-left flex text-black" }
+            className={error ? "font-family-Inter justify-left flex text-red-500" : "font-family-Inter justify-left flex text-black"}
             htmlFor="fullName"
           >
             User
           </label>
           <input
-            className= { error ? "mt-2 w-full rounded-lg border border-red-500 p-2" : "mt-2 w-full rounded-lg border border-gray-400 p-2" }
+            className={error ? "mt-2 w-full rounded-lg border border-red-500 p-2" : "mt-2 w-full rounded-lg border border-gray-400 p-2"}
             type="text"
             id="fullName"
             placeholder="Ingrese su Usuario"
@@ -154,13 +154,13 @@ const RegisterForm: React.FC = () => {
         </div>
         <div className="mb-2 w-4/5">
           <label
-            className= { error ? "font-family-Inter justify-left flex text-red-500" : "font-family-Inter justify-left flex text-black" }
+            className={error ? "font-family-Inter justify-left flex text-red-500" : "font-family-Inter justify-left flex text-black"}
             htmlFor="email"
           >
             Email
           </label>
           <input
-            className= { error ? "mt-2 w-full rounded-lg border border-red-500 p-2" : "mt-2 w-full rounded-lg border border-gray-400 p-2" }
+            className={error ? "mt-2 w-full rounded-lg border border-red-500 p-2" : "mt-2 w-full rounded-lg border border-gray-400 p-2"}
             type="text"
             id="email"
             placeholder="Your email"
@@ -170,13 +170,13 @@ const RegisterForm: React.FC = () => {
         </div>
         <div className="mb-2 w-4/5">
           <label
-            className= { error ? "font-family-Inter justify-left flex text-red-500" : "font-family-Inter justify-left flex text-black" }
+            className={error ? "font-family-Inter justify-left flex text-red-500" : "font-family-Inter justify-left flex text-black"}
             htmlFor="password"
           >
             Password
           </label>
           <input
-            className= { error ? "mt-2 w-full rounded-lg border border-red-500 p-2" : "mt-2 w-full rounded-lg border border-gray-400 p-2" }
+            className={error ? "mt-2 w-full rounded-lg border border-red-500 p-2" : "mt-2 w-full rounded-lg border border-gray-400 p-2"}
             type={type}
             id="password"
             placeholder="Your password"

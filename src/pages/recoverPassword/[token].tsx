@@ -1,3 +1,4 @@
+import { Button } from "@mantine/core";
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -17,8 +18,6 @@ const RecoverPassword: NextPage = () => {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     
-    
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -91,13 +90,13 @@ const RecoverPassword: NextPage = () => {
                         />
                     </div>
                     <div>
-                        <button
+                        <Button
                             type="submit"
                             className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                            disabled={isLoading}
+                            loading={isLoading}
                         >
                             {isLoading ? "Resetting..." : "Reset Password"}
-                        </button>
+                        </Button>
                     </div>
                 </form>
             </div>

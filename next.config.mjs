@@ -18,5 +18,8 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  images: {
+    domains: ["storage.googleapis.com", "storage.cloud.google.com"]
+  },
 };
 export default config;

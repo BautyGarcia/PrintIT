@@ -8,6 +8,7 @@ import {
     createTRPCRouter,
     publicProcedure,
 } from "~/server/api/trpc";
+import path from "path";
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -126,7 +127,7 @@ export const authRouter = createTRPCRouter({
 
             const emailName = email.slice(0, email.indexOf('@'));
             const redirectURL = env.NODE_ENV === "production" ? `https://printitweb.vercel.app/recoverPassword/${token}` : `http://localhost:3000/recoverPassword/${token}`;
-            const imagePath = env.NODE_ENV === "production" ? "/LogoWhite.png" : "public/LogoWhite.png";
+            const imagePath = path.join(process.cwd(), 'public', 'LogoWhite.png');
 
             //Set mail options
             const mailOptions = {

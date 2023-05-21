@@ -32,7 +32,7 @@ const SignUpPage: NextPage = () => {
           </Link>
         </p>
       </section>
-      <picture className="w-1/2 h-screen absolute right-0 top-0">
+      <picture className="absolute right-0 top-0 h-screen w-1/2">
         <LogoSignUpIMG />
       </picture>
     </main>
@@ -82,17 +82,24 @@ const RegisterForm: React.FC = () => {
     setIsLoading(true);
     let errorMessage = "";
 
-    if (email === "" || password === "" || name === "") { errorMessage = "Por favor complete todos los campos"; setError(true) }
-    else if (!email.includes("@") || !email.includes(".")) { errorMessage = "Por favor ingrese un email valido"; setError(true) }
-    else if (password.length < 8) { errorMessage = "La contraseña debe tener al menos 8 caracteres"; setError(true) }
+    if (email === "" || password === "" || name === "") {
+      errorMessage = "Por favor complete todos los campos";
+      setError(true);
+    } else if (!email.includes("@") || !email.includes(".")) {
+      errorMessage = "Por favor ingrese un email valido";
+      setError(true);
+    } else if (password.length < 8) {
+      errorMessage = "La contraseña debe tener al menos 8 caracteres";
+      setError(true);
+    }
 
     if (errorMessage) {
       notifications.show({
-        title: 'Error',
+        title: "Error",
         message: errorMessage,
-        color: 'red',
+        color: "red",
         autoClose: 5000,
-      })
+      });
       setIsLoading(false);
     } else {
       await signIn("credentials", {
@@ -104,20 +111,20 @@ const RegisterForm: React.FC = () => {
       }).then((response) => {
         if (response?.ok) {
           notifications.show({
-            title: 'Éxito',
+            title: "Éxito",
             message: "Registro exitoso",
-            color: 'green',
+            color: "green",
             autoClose: 2000,
           });
           setIsLoading(false);
           void router.push("/home");
         } else {
           notifications.show({
-            title: 'Error',
+            title: "Error",
             message: response?.error || "Error al registrar usuario",
-            color: 'red',
+            color: "red",
             autoClose: 5000,
-          })
+          });
           setIsLoading(false);
           setError(true);
         }
@@ -138,13 +145,21 @@ const RegisterForm: React.FC = () => {
       >
         <div className="mb-2 w-4/5">
           <label
-            className={error ? "font-family-Inter justify-left flex text-red-500" : "font-family-Inter justify-left flex text-black"}
+            className={
+              error
+                ? "font-family-Inter justify-left flex text-red-500"
+                : "font-family-Inter justify-left flex text-black"
+            }
             htmlFor="fullName"
           >
             User
           </label>
           <input
-            className={error ? "mt-2 w-full rounded-lg border border-red-500 p-2" : "mt-2 w-full rounded-lg border border-gray-400 p-2"}
+            className={
+              error
+                ? "mt-2 w-full rounded-lg border border-red-500 p-2"
+                : "mt-2 w-full rounded-lg border border-gray-400 p-2"
+            }
             type="text"
             id="fullName"
             placeholder="Ingrese su Usuario"
@@ -154,13 +169,21 @@ const RegisterForm: React.FC = () => {
         </div>
         <div className="mb-2 w-4/5">
           <label
-            className={error ? "font-family-Inter justify-left flex text-red-500" : "font-family-Inter justify-left flex text-black"}
+            className={
+              error
+                ? "font-family-Inter justify-left flex text-red-500"
+                : "font-family-Inter justify-left flex text-black"
+            }
             htmlFor="email"
           >
             Email
           </label>
           <input
-            className={error ? "mt-2 w-full rounded-lg border border-red-500 p-2" : "mt-2 w-full rounded-lg border border-gray-400 p-2"}
+            className={
+              error
+                ? "mt-2 w-full rounded-lg border border-red-500 p-2"
+                : "mt-2 w-full rounded-lg border border-gray-400 p-2"
+            }
             type="text"
             id="email"
             placeholder="Your email"
@@ -170,13 +193,21 @@ const RegisterForm: React.FC = () => {
         </div>
         <div className="mb-2 w-4/5">
           <label
-            className={error ? "font-family-Inter justify-left flex text-red-500" : "font-family-Inter justify-left flex text-black"}
+            className={
+              error
+                ? "font-family-Inter justify-left flex text-red-500"
+                : "font-family-Inter justify-left flex text-black"
+            }
             htmlFor="password"
           >
             Password
           </label>
           <input
-            className={error ? "mt-2 w-full rounded-lg border border-red-500 p-2" : "mt-2 w-full rounded-lg border border-gray-400 p-2"}
+            className={
+              error
+                ? "mt-2 w-full rounded-lg border border-red-500 p-2"
+                : "mt-2 w-full rounded-lg border border-gray-400 p-2"
+            }
             type={type}
             id="password"
             placeholder="Your password"
@@ -185,7 +216,7 @@ const RegisterForm: React.FC = () => {
           />
           <span
             onClick={handleChangeInputType}
-            className="absolute left-[43%] mt-4"
+            className="absolute left-[43%] mt-3"
           >
             <i
               className={

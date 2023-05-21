@@ -20,7 +20,7 @@ const ContactUs: NextPage = () => {
           Nos encantaria escuchar tus preguntas o propuestas
         </h6>
         <ContactForm />
-        <picture className="absolute right-0 top-24 h-screen w-1/2">
+        <picture className="absolute right-0 top-5 h-screen w-1/2">
           <ContactIMG />
         </picture>
       </main>

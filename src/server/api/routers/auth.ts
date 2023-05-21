@@ -139,7 +139,7 @@ export const authRouter = createTRPCRouter({
                 attachments: [
                     {
                         filename: 'LogoWhite.png',
-                        path: 'public/LogoWhite.png',
+                        path: env.NODE_ENV === "production" ? 'LogoWhite.png' : 'public/LogoWhite.png',
                         cid: 'logoBlanco' //same cid value as in the html img src
                     }
                 ]

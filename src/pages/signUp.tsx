@@ -7,6 +7,8 @@ import { LogoSignUpIMG } from "~/components/signUpImg";
 import { LogoGoogle } from "~/components/logoGoogle";
 import { Logo } from "~/components/logo";
 import "remixicon/fonts/remixicon.css";
+import { useRouter } from "next/router";
+import { notifications } from "@mantine/notifications";
 
 const SignUpPage: NextPage = () => {
   return (
@@ -61,6 +63,9 @@ const RegisterForm: React.FC = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [type, setType] = useState("password");
+  const [error, setError] = useState(false);
+
+  const router = useRouter();
 
   const handleChangeInputType = () => {
     if (type == "password") {
@@ -72,19 +77,46 @@ const RegisterForm: React.FC = () => {
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    let errorMessage = "";
 
-    if (email === "" || password === "" || name === "") {
-      alert("Please fill all the fields");
-      return;
+    if (email === "" || password === "" || name === "") { errorMessage = "Por favor complete todos los campos"; setError(true) }
+    else if (!email.includes("@") || !email.includes(".")) { errorMessage = "Por favor ingrese un email valido"; setError(true) }
+    else if (password.length < 8) { errorMessage = "La contraseña debe tener al menos 8 caracteres"; setError(true) }
+
+    if (errorMessage) {
+      notifications.show({
+        title: 'Error',
+        message: errorMessage,
+        color: 'red',
+        autoClose: 5000,
+      })
+    } else {
+      await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+        name,
+        method: "signUp",
+      }).then((response) => {
+        if (response?.ok) {
+          notifications.show({
+            title: 'Éxito',
+            message: "Registro exitoso",
+            color: 'green',
+            autoClose: 2000,
+          });
+          void router.push("/home");
+        } else {
+          notifications.show({
+            title: 'Error',
+            message: response?.error || "Error al registrar usuario",
+            color: 'red',
+            autoClose: 5000,
+          })
+          setError(true);
+        }
+      });
     }
-
-    await signIn("credentials", {
-      callbackUrl: "/home",
-      email,
-      password,
-      name,
-      method: "signUp",
-    });
   };
 
   return (
@@ -100,13 +132,13 @@ const RegisterForm: React.FC = () => {
       >
         <div className="mb-2 w-4/5">
           <label
-            className="font-family-Inter justify-left flex text-black"
+            className= { error ? "font-family-Inter justify-left flex text-red-500" : "font-family-Inter justify-left flex text-black" }
             htmlFor="fullName"
           >
             User
           </label>
           <input
-            className="mt-2 w-full rounded-lg border border-gray-400 p-2"
+            className= { error ? "mt-2 w-full rounded-lg border border-red-500 p-2" : "mt-2 w-full rounded-lg border border-gray-400 p-2" }
             type="text"
             id="fullName"
             placeholder="Ingrese su Usuario"
@@ -116,14 +148,14 @@ const RegisterForm: React.FC = () => {
         </div>
         <div className="mb-2 w-4/5">
           <label
-            className="font-family-Inter justify-left flex text-black"
+            className= { error ? "font-family-Inter justify-left flex text-red-500" : "font-family-Inter justify-left flex text-black" }
             htmlFor="email"
           >
             Email
           </label>
           <input
-            className="mt-2 w-full rounded-lg border border-gray-400 p-2"
-            type="email"
+            className= { error ? "mt-2 w-full rounded-lg border border-red-500 p-2" : "mt-2 w-full rounded-lg border border-gray-400 p-2" }
+            type="text"
             id="email"
             placeholder="Your email"
             value={email}
@@ -132,13 +164,13 @@ const RegisterForm: React.FC = () => {
         </div>
         <div className="mb-2 w-4/5">
           <label
-            className="font-family-Inter justify-left flex text-black"
+            className= { error ? "font-family-Inter justify-left flex text-red-500" : "font-family-Inter justify-left flex text-black" }
             htmlFor="password"
           >
             Password
           </label>
           <input
-            className="mt-2 w-full rounded-lg border border-gray-400 p-2"
+            className= { error ? "mt-2 w-full rounded-lg border border-red-500 p-2" : "mt-2 w-full rounded-lg border border-gray-400 p-2" }
             type={type}
             id="password"
             placeholder="Your password"

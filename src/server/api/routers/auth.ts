@@ -97,6 +97,7 @@ export const authRouter = createTRPCRouter({
         .input(z.object({ email: z.string() }))
         .mutation(async ({ input, ctx }) => {
 
+            console.log("Entered recoverPassword")
             //Get input
             const { email } = input;
 
@@ -111,6 +112,7 @@ export const authRouter = createTRPCRouter({
                 throw new Error("User not found");
             }
 
+            console.log("User Validated")
             //Create token
             const token = uuidv4();
             console.log(token);
@@ -124,8 +126,10 @@ export const authRouter = createTRPCRouter({
                 },
             });
 
+            console.log("Created Token Register")
             const emailName = email.slice(0, email.indexOf('@'));
             const redirectURL = env.NODE_ENV === "production" ? `https://printitweb.vercel.app/recoverPassword/${token}` : `http://localhost:3000/recoverPassword/${token}`;
+            console.log("Set Variables", redirectURL, emailName)
             //Set mail options
             const mailOptions = {
                 from: 'PrintIT <contact.printit.app@gmail.com>',

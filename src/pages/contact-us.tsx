@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { NavBar } from "~/components/navBar";
+import { LandingHeader } from "~/components/landingHeader";
 import { Footer } from "~/components/footer";
 import { type FormEventHandler, useState } from "react";
 import { ContactIMG } from "~/components/contactImg";
@@ -13,7 +13,7 @@ const ContactUs: NextPage = () => {
         <link rel="icon" href="/Logo.ico" />
         <meta name="description" content="PrintIT" />
       </Head>
-      <NavBar />
+      <LandingHeader />
       <main className="h-screen w-full bg-white p-10">
         <h1 className="text-4xl">Contactate con Nosotros</h1>
         <h6 className="text-xs">

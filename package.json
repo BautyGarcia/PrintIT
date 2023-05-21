@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@mantine/core": "^6.0.11",
+    "@mantine/dropzone": "^6.0.11",
     "@mantine/ds": "^6.0.11",
     "@mantine/notifications": "^6.0.11",
     "@next-auth/prisma-adapter": "^1.0.5",

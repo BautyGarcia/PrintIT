@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { NavBar } from "~/components/navBar";
+import { LandingHeader } from "~/components/landingHeader";
 import { Footer } from "~/components/footer";
 
 const About: NextPage = () => {
@@ -11,7 +11,7 @@ const About: NextPage = () => {
         <link rel="icon" href="/Logo.ico" />
         <meta name="description" content="PrintIT" />
       </Head>
-      <NavBar />
+      <LandingHeader />
       <main className="h-screen w-full bg-white"></main>
       <Footer />
     </>

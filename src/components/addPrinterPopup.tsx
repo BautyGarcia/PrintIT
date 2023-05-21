@@ -2,7 +2,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { Group, Button, TextInput, Text, useMantineColorScheme, CloseButton } from '@mantine/core';
 
 const PrinterPopup: React.FC = () => {
-    const [opened, { toggle, close }] = useDisclosure(false);
+    const [opened, { toggle }] = useDisclosure(false);
     const { colorScheme } = useMantineColorScheme();
 
     return (

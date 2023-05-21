@@ -75,7 +75,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const NavBar: React.FC = () => {
+export const LandingHeader: React.FC = () => {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
   const { classes, theme } = useStyles();
   const { colorScheme } = useMantineColorScheme();

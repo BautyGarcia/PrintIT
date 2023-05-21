@@ -1,11 +1,22 @@
+import { useState } from 'react';
+import {
+  AppShell,
+  Navbar,
+  Header,
+  useMantineTheme,
+} from '@mantine/core';
 import { type NextPage } from "next";
-import { useSession } from "next-auth/react";
+import HomeNavBar from '~/components/homeNavBar';
+import HomeHeader from '~/components/homeHeader';
+import { useSession } from 'next-auth/react';
 import Head from "next/head";
-import { NavBar } from "~/components/navBar";
-import { Footer } from "~/components/footer";
+import STLDropzone from '~/components/fileDropzone';
 
-const Home: NextPage = () => {
+const HomePage: NextPage = () => {
+  const theme = useMantineTheme();
+  const [opened, setOpened] = useState(false);
   const { data: sessionData } = useSession();
+
   return (
     <>
       <Head>
@@ -13,16 +24,29 @@ const Home: NextPage = () => {
         <link rel="icon" href="/Logo.ico" />
         <meta name="description" content="PrintIT" />
       </Head>
-      <NavBar />
-      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <h1 className="text-4xl font-bold text-white">Home Page</h1>
-        {sessionData && (
-          <p className="text-white">Welcome {sessionData.user?.name}</p>
-        )}
-      </main>
-      <Footer />
+      <AppShell
+        styles={{
+          main: {
+            background: theme.colorScheme === 'dark' ? "#0E1525" : "#F0F1F8",
+          },
+        }}
+        navbarOffsetBreakpoint="sm"
+        asideOffsetBreakpoint="sm"
+        navbar={
+          <Navbar className={theme.colorScheme === 'dark' ? 'bg-[#1C2333]' : 'bg-[#FFF]'} p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }}>
+            <HomeNavBar />
+          </Navbar>
+        }
+        header={
+          <Header className={theme.colorScheme === 'dark' ? 'bg-[#1C2333]' : 'bg-[#FFF]'} height={{ base: 50, md: 70 }} p="md">
+            <HomeHeader username={sessionData?.user.name as string} userImage={sessionData?.user.image as string} opened={opened} setOpened={setOpened} />
+          </Header>
+        }
+      >
+        <STLDropzone />
+      </AppShell>
     </>
   );
-};
+}
 
-export default Home;
+export default HomePage;

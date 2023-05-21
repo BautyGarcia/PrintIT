@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 interface LogoProps {
     width: number;
     height: number;
-    justifyContent?: string;
-    display?: string;
 }
 
 export const Logo: React.FC<LogoProps> = ({ width, height }) => {

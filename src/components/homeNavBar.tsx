@@ -7,11 +7,11 @@ import {
   IconFile3d,
   IconPackage,
   IconMessage,
-  IconPlus
 } from '@tabler/icons-react';
 import SchemeButton from './schemeButton';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
+import PrinterPopup from "~/components/addPrinterPopup";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -154,11 +154,8 @@ const HomeNavBar: React.FC = () => {
     <>
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
-          <a href="#" className={classes.addPrinter} onClick={(event) => event.preventDefault()}>
-            <IconPlus className={classes.addPrinterIcon} />
-            <span>Registrar Impresora</span>
-          </a>
-          <a href="#" className={classes.community} onClick={(event) => event.preventDefault()}>
+          <PrinterPopup/>
+          <a href="" className={classes.community} onClick={(event) => event.preventDefault()}>
             <IconMessage className={classes.communityIcon}/>
             <span>Comunidad</span>
           </a>

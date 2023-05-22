@@ -45,13 +45,13 @@ const STLDropzone = () => {
                     <Group position="center">
                         <Dropzone.Accept>
                             <IconDownload
-                                size={rem(50)}
+                                size={rem(40)}
                                 color="#3B82F6"
                                 stroke={1.5}
                             />
                         </Dropzone.Accept>
                         <Dropzone.Reject>
-                            <IconX size={rem(50)} color={theme.colors.red[6]} stroke={1.5} />
+                            <IconX size={rem(40)} color={theme.colors.red[6]} stroke={1.5} />
                         </Dropzone.Reject>
                         <Dropzone.Idle>
                             <IconCloudUpload
@@ -74,14 +74,14 @@ const STLDropzone = () => {
                 </div>
             </Dropzone>
 
-            <Button
-                className="absolute w-40 left-1/2 transform -translate-x-1/2 -bottom-5 bg-[#3B82F6]"
+            {/* <Button
+                className="absolute w-40 left-1/2 transform -translate-x-1/2 -bottom-2 bg-[#3B82F6]"
                 size="md"
                 radius="xl"
                 onClick={() => openRef.current?.()}
             >
                 Select files
-            </Button>
+            </Button> */}
         </div>
     );
 }

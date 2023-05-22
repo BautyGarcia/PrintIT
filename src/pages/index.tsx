@@ -7,7 +7,6 @@ import { useMantineColorScheme } from "@mantine/core";
 const Landing: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
 
-//flex min-h-screen flex-col items-center justify-center bg-white from-[#2e026d] to-[#15162c]
   return (
     <>
       <Head>

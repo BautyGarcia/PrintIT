@@ -32,9 +32,9 @@ export const Footer = () => {
         <Logo width={40} height={40}/>
 
         <Group className={classes.links}>
-          <Link href="/about" passHref className="hover:text-gray-200 hover:underline">Sobre Nosotros</Link>
-          <Link href="/" passHref className="hover:text-gray-200 hover:underline">Inicio</Link>
-          <Link href="/contact-us" passHref className="hover:text-gray-200 hover:underline">Contactanos</Link>
+          <Link href="/about" passHref className="hover:text-gray-200">Sobre Nosotros</Link>
+          <Link href="/" passHref className="hover:text-gray-200">Inicio</Link>
+          <Link href="/contact-us" passHref className="hover:text-gray-200">Contactanos</Link>
         </Group>
 
         <Group spacing="xs" position="right" noWrap>

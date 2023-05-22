@@ -1,13 +1,17 @@
 import { type NextPage } from "next";
 import { Logo } from "~/components/logo";
-import { useState } from "react";
+import {type FormEventHandler, useState, useRef} from "react";
 import { RecoverIMG } from "~/components/recoverImg";
 import Head from "next/head";
 import { api } from "~/utils/api";
 import { Button } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { useRouter } from "next/router";
+import { Autocomplete, Loader, useMantineColorScheme, Text} from "@mantine/core";
 
 const Recover: NextPage = () => {
+    const { colorScheme } = useMantineColorScheme();
+
     return (
         <>
             <Head>
@@ -15,13 +19,13 @@ const Recover: NextPage = () => {
                 <link rel="icon" href="/Logo.ico" />
                 <meta name="description" content="PrintIT" />
             </Head>
-            <main className="h-screen w-full bg-white">
+            <main className={ colorScheme === "dark" ? "h-screen w-full bg-[#1C2333]" : "h-screen w-full bg-[#FFFFFF]" }>
                 <div className="absolute ml-5 mt-5 flex items-center gap-2">
                     <Logo width={40} height={40} />
                     <h2>PrintIT</h2>
                 </div>
                 <section className="flex h-full w-1/2 flex-col items-center justify-center text-center">
-                    <h1 className="font-family-Inter text-4xl text-black">
+                    <h1 className={colorScheme === "dark" ? "font-family-Inter text-4xl text-white" : "font-family-Inter text-4xl text-black"}>
                         Recuperar Contraseña
                     </h1>
                     <h3 className="font-family-Inter text-#AFAFAF">
@@ -44,6 +48,28 @@ const RecoverForm: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
     const { mutate: sendPasswordEmail } = api.auth.sendPasswordEmail.useMutation();
+    const timeoutRef = useRef<number>(-1);
+    const [value, setValue] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [data, setData] = useState<string[]>([]);
+    const router = useRouter();
+    
+    const handleChange = (val: string) => {
+        window.clearTimeout(timeoutRef.current);
+        setValue(val);
+        setEmail(val);
+        setData([]);
+    
+        if (val.trim().length === 0 || val.includes('@')) {
+            setLoading(false);
+        } else {
+            setLoading(true);
+            timeoutRef.current = window.setTimeout(() => {
+                setLoading(false);
+                setData(['gmail.com', 'outlook.com', 'yahoo.com'].map((provider) => `${val}@${provider}`));
+            }, 500);
+        }
+    };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -86,20 +112,36 @@ const RecoverForm: React.FC = () => {
     return (
         <form className="mx-auto mt-8 flex w-full flex-col items-center justify-center text-center" onSubmit={handleSubmit}>
             <div className="mb-2 w-4/5">
-                <label
-                    className= { error ? "font-family-Inter justify-left flex text-red-500" : "font-family-Inter justify-left flex text-black" }
-                    htmlFor="email"
-                >
-                    Email
-                </label>
-                <input
-                    className= { error ? "mt-2 w-full rounded-lg border border-red-500 p-2" : "mt-2 w-full rounded-lg border border-gray-400 p-2" }
-                    type="email"
-                    id="email"
-                    placeholder="Your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
+            <Text
+                        fw={500}
+                        className={
+                            error
+                                ? "font-family-Inter justify-left flex text-red-500"
+                                : "font-family-Inter justify-left flex"
+                        }
+
+                    >
+                        Email
+                    </Text>
+                    {
+                        error ?
+                            <Autocomplete
+                                error
+                                value={value}
+                                data={data}
+                                onChange={handleChange}
+                                rightSection={loading ? <Loader size="1rem" /> : null}
+                                placeholder="Your email"
+                            />
+                            :
+                            <Autocomplete
+                                value={value}
+                                data={data}
+                                onChange={handleChange}
+                                rightSection={loading ? <Loader size="1rem" /> : null}
+                                placeholder="Your email"
+                            />
+                    }
             </div>
             <Button
                 className="font-family-Inter mt-3 w-4/5 rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"

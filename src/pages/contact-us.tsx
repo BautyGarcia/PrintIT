@@ -1,11 +1,14 @@
-import { type NextPage } from "next";
+import { type NextPage  } from "next";
 import Head from "next/head";
 import { LandingHeader } from "~/components/landingHeader";
 import { Footer } from "~/components/footer";
-import { type FormEventHandler, useState } from "react";
+import {  type FormEventHandler, useState, useRef } from "react";
 import { ContactIMG } from "~/components/contactImg";
+import { Autocomplete, Loader, useMantineColorScheme, Text, TextInput } from "@mantine/core";
+import { useRouter } from "next/router";
 
 const ContactUs: NextPage = () => {
+  const { colorScheme } = useMantineColorScheme();
   return (
     <>
       <Head>
@@ -14,8 +17,16 @@ const ContactUs: NextPage = () => {
         <meta name="description" content="PrintIT" />
       </Head>
       <LandingHeader />
-      <main className="h-screen w-full bg-white p-10">
-        <h1 className="text-4xl">Contactate con Nosotros</h1>
+      <main
+        className=
+        {
+          colorScheme === "dark" ?
+          "flex flex-col items-start justify-center bg-[#0E1525] from-[#2e026d] to-[#15162c] h-screen w-full p-10"
+          :
+          "flex flex-col items-start justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c] h-screen w-full p-10"
+        }
+      >
+        <h1 className="text-4xl flex justify-start">Contactate con Nosotros</h1>
         <h6 className="text-xs">
           Nos encantaria escuchar tus preguntas o propuestas
         </h6>
@@ -24,6 +35,7 @@ const ContactUs: NextPage = () => {
           <ContactIMG />
         </picture>
       </main>
+      
       <Footer />
     </>
   );
@@ -36,10 +48,34 @@ const ContactForm: React.FC = () => {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const timeoutRef = useRef<number>(-1);
+  const [value, setValue] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<string[]>([]);
+  const router = useRouter();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
   };
+
+  const handleChange = (val: string) => {
+    window.clearTimeout(timeoutRef.current);
+    setValue(val);
+    setEmail(val);
+    setData([]);
+
+    if (val.trim().length === 0 || val.includes('@')) {
+        setLoading(false);
+    } else {
+        setLoading(true);
+        timeoutRef.current = window.setTimeout(() => {
+            setLoading(false);
+            setData(['gmail.com', 'outlook.com', 'yahoo.com'].map((provider) => `${val}@${provider}`));
+        }, 500);
+    }
+};
 
   return (
     <>
@@ -49,75 +85,133 @@ const ContactForm: React.FC = () => {
         <meta name="description" content="PrintIT" />
       </Head>
       <form
-        className="mx-auto mt-8 flex w-full flex-col items-start justify-start text-center"
+        className="mx-auto mt-20 flex w-full flex-col items-start justify-start text-center"
         onSubmit={handleSubmit}
       >
         <div className="flex w-1/2 flex-row ">
           <div className="mb-2 w-4/5 pr-4">
-            <label
-              className="font-family-Inter justify-left flex text-black"
-              htmlFor="text"
-            >
-              Nombre
-            </label>
-            <input
-              className="flex-start mt-2 flex w-full justify-start rounded-lg border border-gray-400 p-2"
-              type="text"
-              id="name"
-              placeholder="Your Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+                    <Text
+                        fw={500}
+                        className={
+                            error
+                                ? "font-family-Inter justify-left flex text-red-500"
+                                : "font-family-Inter justify-left flex"
+                        }
+
+                    >
+                        Nombre
+                    </Text>
+                    {
+                        error ?
+                            <TextInput
+                                error
+                                value={name}
+                                onChange={(event) => setName(event.currentTarget.value)}
+                                rightSection={loading ? <Loader size="1rem" /> : null}
+                                placeholder="Your Name"
+                            />
+                            :
+                            <TextInput
+                                value={name}
+                                onChange={(event) => setName(event.currentTarget.value)}
+                                rightSection={loading ? <Loader size="1rem" /> : null}
+                                placeholder="Your Name"
+                            />
+                    }
           </div>
           <div className="mb-2 w-4/5">
-            <label
-              className="font-family-Inter justify-left flex text-black"
-              htmlFor="text"
-            >
-              Apellido
-            </label>
-            <input
-              className="flex-start mt-2 flex w-full justify-start rounded-lg border border-gray-400 p-2"
-              type="text"
-              id="text"
-              placeholder="Your email"
-              value={surname}
-              onChange={(e) => setSurname(e.target.value)}
-            />
+                    <Text
+                        fw={500}
+                        className={
+                            error
+                                ? "font-family-Inter justify-left flex text-red-500"
+                                : "font-family-Inter justify-left flex"
+                        }
+
+                    >
+                        Apellido
+                    </Text>
+                    {
+                        error ?
+                            <TextInput
+                                error
+                                value={surname}
+                                onChange={(event) => setSurname(event.currentTarget.value)}
+                                rightSection={loading ? <Loader size="1rem" /> : null}
+                                placeholder="Your Surname"
+                            />
+                            :
+                            <TextInput
+                                value={surname}
+                                onChange={(event) => setSurname(event.currentTarget.value)}
+                                rightSection={loading ? <Loader size="1rem" /> : null}
+                                placeholder="Your Surname"
+                            />
+                    }
           </div>
         </div>
         <div className="mb-2 w-1/2">
           <div>
-            <label
-              className="font-family-Inter justify-left flex text-black"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <input
-              className="flex-start mt-2 flex w-full justify-start rounded-lg border border-gray-400 p-2"
-              type="email"
-              id="email"
-              placeholder="Your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+                    <Text
+                        fw={500}
+                        className={
+                            error
+                                ? "font-family-Inter justify-left flex text-red-500"
+                                : "font-family-Inter justify-left flex"
+                        }
+
+                    >
+                        Email
+                    </Text>
+                    {
+                        error ?
+                            <Autocomplete
+                                error
+                                value={value}
+                                data={data}
+                                onChange={handleChange}
+                                rightSection={loading ? <Loader size="1rem" /> : null}
+                                placeholder="Your email"
+                            />
+                            :
+                            <Autocomplete
+                                value={value}
+                                data={data}
+                                onChange={handleChange}
+                                rightSection={loading ? <Loader size="1rem" /> : null}
+                                placeholder="Your email"
+                            />
+                    }
           </div>
           <div>
-            <label
-              className="font-family-Inter justify-left flex text-black"
-              htmlFor="mensaje"
-            >
-              Mensaje
-            </label>
-            <input
-              className="flex-start mt-2 flex h-20 w-full justify-start rounded-lg border border-gray-400 p-2 "
-              type="text"
-              id="mensaje"
-              placeholder="Your mensaje"
-              value={mensaje}
-              onChange={(e) => setMensaje(e.target.value)}
-            />
+                    <Text
+                        fw={500}
+                        className={
+                            error
+                                ? "font-family-Inter justify-left flex text-red-500"
+                                : "font-family-Inter justify-left flex"
+                        }
+
+                    >
+                        Mensaje
+                    </Text>
+                    {
+                        error ?
+                            <TextInput
+                                error
+                                value={mensaje}
+                                onChange={(event) => setMensaje(event.currentTarget.value)}
+                                rightSection={loading ? <Loader size="1rem" /> : null}
+                                placeholder="Your Message"
+                            />
+                            :
+                            <TextInput
+                                value={mensaje}
+                                onChange={(event) => setMensaje(event.currentTarget.value)}
+                                rightSection={loading ? <Loader size="1rem" /> : null}
+                                placeholder="Your Message"
+                            />
+                    }
           </div>
           <div className=" flex-start flex w-full justify-start">
             <button

@@ -1,218 +1,219 @@
+import { type FormEventHandler, useState, useRef } from "react";
 import { type NextPage } from "next";
-import { signIn } from "next-auth/react";
-import { type FormEventHandler, useState } from "react";
-import Link from "next/link";
-import { LogoGoogle } from "~/components/logoGoogle";
-import Head from "next/head";
+import { Autocomplete, Loader, useMantineColorScheme, Text, PasswordInput } from "@mantine/core";
 import { LogosignInIMG } from "~/components/signInImg";
-import { Logo } from "~/components/logo";
-import "remixicon/fonts/remixicon.css";
 import { notifications } from "@mantine/notifications";
+import { AuthShowcase } from "~/components/googleAuthShowcase";
 import { useRouter } from "next/router";
+import { signIn } from "next-auth/react";
 import { Button } from "@mantine/core";
+import { Logo } from "~/components/logo";
+import Head from "next/head";
+import Link from "next/link";
+import "remixicon/fonts/remixicon.css";
 
 const SignInPage: NextPage = () => {
-  return (
-    <main className="h-screen w-full bg-white">
-      <div className="absolute ml-5 mt-5 flex items-center gap-2">
-        <Logo width={40} height={40} />
-        <h2>PrintIT</h2>
-      </div>
-      <section className="flex h-full w-1/2 flex-col items-center justify-center text-center">
-        <h1 className="font-family-Inter text-4xl text-black">
-          Bienvenido Devuelta
-        </h1>
-        <h3 className="font-family-Inter text-#AFAFAF">Ingrese sus datos</h3>
-        <SignInForm />
-        <AuthShowcase />
-        <p className="font-family-Inter text-grey p-5">
-          ¿No tenés cuenta?{" "}
-          <Link href={"/signUp"} className="font-family-Inter text-blue-500">
-            Registrate acá
-          </Link>
-        </p>
-      </section>
-      <picture className="absolute right-0 top-0 h-screen w-1/2">
-        <LogosignInIMG />
-      </picture>
-    </main>
-  );
+    const { colorScheme } = useMantineColorScheme();
+
+    return (
+        <main className={colorScheme === "dark" ? "h-screen w-full bg-[#1C2333]" : "h-screen w-full bg-white"} >
+            <div className="absolute ml-5 mt-5 flex items-center gap-2">
+                <Logo width={40} height={40} />
+                <h2 className={colorScheme === "dark" ? "text-white" : 'text-black'}>PrintIT</h2>
+            </div>
+            <section className="flex h-full w-1/2 flex-col items-center justify-center text-center">
+                <h1 className={colorScheme === "dark" ? "font-family-Inter text-4xl text-white" : 'font-family-Inter text-4xl text-black'}>
+                    Bienvenido Devuelta
+                </h1>
+                <h3 className="font-family-Inter text-#AFAFAF">Ingrese sus datos</h3>
+                <SignInForm />
+                <AuthShowcase />
+                <p className={colorScheme === "dark" ? "font-family-Inter text-white p-5" : "font-family-Inter text-grey p-5"}>
+                    ¿No tenés cuenta?{" "}
+                    <Link href={"/signUp"} className="font-family-Inter text-blue-500">
+                        Registrate acá
+                    </Link>
+                </p>
+            </section>
+            <picture className="absolute right-0 top-0 h-screen w-1/2">
+                <LogosignInIMG />
+            </picture>
+        </main>
+    );
 };
 
 export default SignInPage;
 
 const SignInForm: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [type, setType] = useState("password");
-  const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const timeoutRef = useRef<number>(-1);
+    const [value, setValue] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [data, setData] = useState<string[]>([]);
+    const router = useRouter();
 
-  const router = useRouter();
+    const handleChange = (val: string) => {
+        window.clearTimeout(timeoutRef.current);
+        setValue(val);
+        setEmail(val);
+        setData([]);
 
-  const handleChangeInputType = () => {
-    if (type == "password") {
-      setType("text");
-    } else {
-      setType("password");
-    }
-  };
-
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    let errorMessage = "";
-
-    if (!email || !password) {
-      errorMessage = "Por favor complete todos los campos";
-      setError(true);
-    } else if (!email.includes("@") || !email.includes(".")) {
-      errorMessage = "Por favor ingrese un email valido";
-      setError(true);
-    } else if (password.length < 8) {
-      errorMessage = "La contraseña debe tener al menos 8 caracteres";
-      setError(true);
-    }
-
-    if (errorMessage) {
-      notifications.show({
-        title: "Error",
-        message: errorMessage,
-        color: "red",
-        autoClose: 5000,
-      });
-      setIsLoading(false);
-    } else {
-      await signIn("credentials", {
-        email,
-        password,
-        method: "signIn",
-        redirect: false,
-      }).then((response) => {
-        if (response?.ok) {
-          notifications.show({
-            title: "Éxito",
-            message: "Inicio de sesión exitoso",
-            color: "green",
-            autoClose: 2000,
-          });
-          setIsLoading(false);
-          void router.push("/home");
+        if (val.trim().length === 0 || val.includes('@')) {
+            setLoading(false);
         } else {
-          notifications.show({
-            title: "Error",
-            message: response?.error || "Error al iniciar sesión",
-            color: "red",
-            autoClose: 5000,
-          });
-          setIsLoading(false);
-          setError(true);
+            setLoading(true);
+            timeoutRef.current = window.setTimeout(() => {
+                setLoading(false);
+                setData(['gmail.com', 'outlook.com', 'yahoo.com'].map((provider) => `${val}@${provider}`));
+            }, 500);
         }
-      });
-    }
-  };
+    };
 
-  return (
-    <>
-      <Head>
-        <title>PrintIT</title>
-        <link rel="icon" href="/Logo.ico" />
-        <meta name="description" content="PrintIT" />
-      </Head>
-      <form
-        className="mx-auto mt-8 flex w-full flex-col items-center justify-center text-center"
-        onSubmit={handleSubmit}
-      >
-        <div className="mb-2 w-4/5">
-          <label
-            className={
-              error
-                ? "font-family-Inter justify-left flex text-red-500"
-                : "font-family-Inter justify-left flex text-black"
-            }
-            htmlFor="email"
-          >
-            Email
-          </label>
-          <input
-            className={
-              error
-                ? "mt-2 w-full rounded-lg border border-red-400 p-2 focus:border-sky-500"
-                : "mt-2 w-full rounded-lg border border-gray-400 p-2 focus:border-sky-500"
-            }
-            type="text"
-            id="email"
-            placeholder="Your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="mb-2 w-4/5">
-          <label
-            className={
-              error
-                ? "font-family-Inter justify-left flex text-red-500"
-                : "font-family-Inter justify-left flex text-black"
-            }
-            htmlFor="password"
-          >
-            Password
-          </label>
-          <input
-            className={
-              error
-                ? "mt-2 w-full rounded-lg border border-red-400 p-2"
-                : "mt-2 w-full rounded-lg border border-gray-400 p-2"
-            }
-            type={type}
-            id="password"
-            placeholder="Your password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <span
-            onClick={handleChangeInputType}
-            className="absolute left-[43%] mt-3"
-          >
-            <i
-              className={
-                type === "password" ? "ri-eye-off-line" : "ri-eye-line"
-              }
-            ></i>
-          </span>
-          <Link
-            href={"/recoverPassword"}
-            className="flex justify-end text-xs text-blue-500"
-          >
-            ¿Olvidaste tu Contraseña?
-          </Link>
-        </div>
-        <Button
-          className="font-family-Inter mt-3 w-4/5 rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"
-          type="submit"
-          loading={isLoading}
-        >
-          {isLoading ? "Loading..." : "Sign In"}
-        </Button>
-      </form>
-    </>
-  );
-};
+    const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+        let errorMessage = "";
 
-const AuthShowcase: React.FC = () => {
-  return (
-    <div className="flex w-full justify-center">
-      <button
-        className="font-family-Inter mt-5 flex h-10 w-4/5 flex-row items-center justify-center gap-4 rounded-lg border-2 border-[#D8D8D8] text-black no-underline transition hover:bg-white/20"
-        onClick={() =>
-          void signIn("google", {
-            callbackUrl: "/home",
-          })
+        if (!email || !password) {
+            errorMessage = "Por favor complete todos los campos";
+            setError(true);
+        } else if (!email.includes("@") || !email.includes(".")) {
+            errorMessage = "Por favor ingrese un email valido";
+            setError(true);
+        } else if (password.length < 8) {
+            errorMessage = "La contraseña debe tener al menos 8 caracteres";
+            setError(true);
         }
-      >
-        <LogoGoogle height={20} width={20} />
-        Sign In with Google
-      </button>
-    </div>
-  );
+
+        if (errorMessage) {
+            notifications.show({
+                title: "Error",
+                message: errorMessage,
+                color: "red",
+                autoClose: 5000,
+            });
+            setIsLoading(false);
+        } else {
+            await signIn("credentials", {
+                email,
+                password,
+                method: "signIn",
+                redirect: false,
+            }).then((response) => {
+                if (response?.ok) {
+                    notifications.show({
+                        title: "Éxito",
+                        message: "Inicio de sesión exitoso",
+                        color: "green",
+                        autoClose: 2000,
+                    });
+                    setIsLoading(false);
+                    void router.push("/home");
+                } else {
+                    notifications.show({
+                        title: "Error",
+                        message: response?.error || "Error al iniciar sesión",
+                        color: "red",
+                        autoClose: 5000,
+                    });
+                    setIsLoading(false);
+                    setError(true);
+                }
+            });
+        }
+    };
+
+    return (
+        <>
+            <Head>
+                <title>PrintIT</title>
+                <link rel="icon" href="/Logo.ico" />
+                <meta name="description" content="PrintIT" />
+            </Head>
+            <form
+                className="mx-auto mt-8 flex w-full flex-col items-center justify-center text-center"
+                onSubmit={handleSubmit}
+            >
+                <div className="mb-2 w-4/5">
+                    <Text
+                        fw={500}
+                        className={
+                            error
+                                ? "font-family-Inter justify-left flex text-red-500"
+                                : "font-family-Inter justify-left flex"
+                        }
+
+                    >
+                        Email
+                    </Text>
+                    {
+                        error ?
+                            <Autocomplete
+                                error
+                                value={value}
+                                data={data}
+                                onChange={handleChange}
+                                rightSection={loading ? <Loader size="1rem" /> : null}
+                                placeholder="Your email"
+                            />
+                            :
+                            <Autocomplete
+                                value={value}
+                                data={data}
+                                onChange={handleChange}
+                                rightSection={loading ? <Loader size="1rem" /> : null}
+                                placeholder="Your email"
+                            />
+                    }
+                </div>
+                <div className="mb-2 w-4/5">
+                    <Text
+                        fw={500}
+                        className={
+                            error
+                                ? "font-family-Inter justify-left flex text-red-500"
+                                : "font-family-Inter justify-left flex"
+                        }
+                    >
+                        Password
+                    </Text>
+
+                    {
+                        error ?
+                            <PasswordInput
+                                value={password}
+                                onChange={(event) => setPassword(event.currentTarget.value)}
+                                placeholder="Your password"
+                                className="mb-3"
+                                error
+                            />
+                            :
+                            <PasswordInput
+                                value={password}
+                                onChange={(event) => setPassword(event.currentTarget.value)}
+                                placeholder="Your password"
+                                className="mb-3"
+                            />
+                    }
+
+                    <Link
+                        href={"/recoverPassword"}
+                        className="flex justify-end text-xs text-blue-500"
+                    >
+                        ¿Olvidaste tu Contraseña?
+                    </Link>
+                </div>
+                <Button
+                    className="font-family-Inter mt-3 w-4/5 rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"
+                    type="submit"
+                    loading={isLoading}
+                >
+                    {isLoading ? "Loading..." : "Sign In"}
+                </Button>
+            </form>
+        </>
+    );
 };

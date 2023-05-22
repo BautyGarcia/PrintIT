@@ -1,45 +1,53 @@
-import Link from "next/link";
+import { createStyles, Group, ActionIcon } from '@mantine/core';
+import { IconBrandFacebook, IconBrandDiscord, IconBrandInstagram } from '@tabler/icons-react';
+import { Logo } from './logo';
+import Link from 'next/link';
 
-interface Links {
-  label: string;
-  router: string;
-}
+const useStyles = createStyles((theme) => ({
+  inner: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: `${theme.spacing.md} ${theme.spacing.md}`,
+    backgroundColor: theme.colorScheme === "dark" ? "#1C2333" : '#FFFFFF',
 
-const Links = [
-  {
-    label: "Sobre Nosotros",
-    route: "/about",
+    [theme.fn.smallerThan('sm')]: {
+      flexDirection: 'column',
+    },
   },
-  {
-    label: "Inicio",
-    route: "/home",
-  },
-  {
-    label: "Contactanos",
-    route: "/contact-us",
-  },
-];
 
-export const Footer: React.FC = ({}) => {
+  links: {
+    [theme.fn.smallerThan('sm')]: {
+      marginTop: theme.spacing.lg,
+      marginBottom: theme.spacing.sm,
+    },
+  },
+}));
+
+export const Footer = () => {
+  const { classes } = useStyles();
+
   return (
-    <footer className="absolute h-44 w-full  bg-indigo-600">
-      <h1 className="mt-14 flex items-center justify-center text-4xl text-white">
-        PrintiIT
-      </h1>
-      <h6 className="font-family-nunito mb-6 flex items-center justify-center text-xs text-white">
-        Copyright @ 2023
-      </h6>
-      <div className="absolute flex w-full items-center justify-center gap-24 text-xs">
-        {Links.map(({ label, route }: { label: string; route: string }) => (
-          <Link
-            className="color-white text-underline text-white"
-            key={route}
-            href={route}
-          >
-            {label}
-          </Link>
-        ))}
+      <div className={classes.inner}>
+        <Logo width={40} height={40}/>
+
+        <Group className={classes.links}>
+          <Link href="/about" passHref className="hover:text-gray-200 hover:underline">Sobre Nosotros</Link>
+          <Link href="/" passHref className="hover:text-gray-200 hover:underline">Inicio</Link>
+          <Link href="/contact-us" passHref className="hover:text-gray-200 hover:underline">Contactanos</Link>
+        </Group>
+
+        <Group spacing="xs" position="right" noWrap>
+          <ActionIcon size="lg" variant="default" radius="xl">
+            <IconBrandFacebook size="1.05rem" stroke={1.5} />
+          </ActionIcon>
+          <ActionIcon size="lg" variant="default" radius="xl">
+            <IconBrandInstagram size="1.05rem" stroke={1.5} />
+          </ActionIcon>
+          <ActionIcon size="lg" variant="default" radius="xl">
+            <IconBrandDiscord size="1.05rem" stroke={1.5} />
+          </ActionIcon>
+        </Group>
       </div>
-    </footer>
   );
-};
+}

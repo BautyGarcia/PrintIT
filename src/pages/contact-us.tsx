@@ -1,10 +1,16 @@
-import { type NextPage  } from "next";
+import { type NextPage } from "next";
 import Head from "next/head";
 import { LandingHeader } from "~/components/landingHeader";
 import { Footer } from "~/components/footer";
-import {  type FormEventHandler, useState, useRef } from "react";
+import { type FormEventHandler, useState, useRef } from "react";
 import { ContactIMG } from "~/components/contactImg";
-import { Autocomplete, Loader, useMantineColorScheme, Text, TextInput } from "@mantine/core";
+import {
+  Autocomplete,
+  Loader,
+  useMantineColorScheme,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { useRouter } from "next/router";
 
 const ContactUs: NextPage = () => {
@@ -18,15 +24,13 @@ const ContactUs: NextPage = () => {
       </Head>
       <LandingHeader />
       <main
-        className=
-        {
-          colorScheme === "dark" ?
-          "flex flex-col items-start justify-center bg-[#0E1525] from-[#2e026d] to-[#15162c] h-screen w-full p-10"
-          :
-          "flex flex-col items-start justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c] h-screen w-full p-10"
+        className={
+          colorScheme === "dark"
+            ? "flex h-screen w-full flex-col items-start justify-center bg-[#0E1525] from-[#2e026d] to-[#15162c] p-10"
+            : "flex h-screen w-full flex-col items-start justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c] p-10"
         }
       >
-        <h1 className="text-4xl flex justify-start">Contactate con Nosotros</h1>
+        <h1 className="flex justify-start text-4xl">Contactate con Nosotros</h1>
         <h6 className="text-xs">
           Nos encantaria escuchar tus preguntas o propuestas
         </h6>
@@ -35,7 +39,7 @@ const ContactUs: NextPage = () => {
           <ContactIMG />
         </picture>
       </main>
-      
+
       <Footer />
     </>
   );
@@ -51,7 +55,7 @@ const ContactForm: React.FC = () => {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const timeoutRef = useRef<number>(-1);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<string[]>([]);
   const router = useRouter();
@@ -66,16 +70,20 @@ const ContactForm: React.FC = () => {
     setEmail(val);
     setData([]);
 
-    if (val.trim().length === 0 || val.includes('@')) {
-        setLoading(false);
+    if (val.trim().length === 0 || val.includes("@")) {
+      setLoading(false);
     } else {
-        setLoading(true);
-        timeoutRef.current = window.setTimeout(() => {
-            setLoading(false);
-            setData(['gmail.com', 'outlook.com', 'yahoo.com'].map((provider) => `${val}@${provider}`));
-        }, 500);
+      setLoading(true);
+      timeoutRef.current = window.setTimeout(() => {
+        setLoading(false);
+        setData(
+          ["gmail.com", "outlook.com", "yahoo.com"].map(
+            (provider) => `${val}@${provider}`
+          )
+        );
+      }, 500);
     }
-};
+  };
 
   return (
     <>
@@ -90,128 +98,120 @@ const ContactForm: React.FC = () => {
       >
         <div className="flex w-1/2 flex-row ">
           <div className="mb-2 w-4/5 pr-4">
-                    <Text
-                        fw={500}
-                        className={
-                            error
-                                ? "font-family-Inter justify-left flex text-red-500"
-                                : "font-family-Inter justify-left flex"
-                        }
-
-                    >
-                        Nombre
-                    </Text>
-                    {
-                        error ?
-                            <TextInput
-                                error
-                                value={name}
-                                onChange={(event) => setName(event.currentTarget.value)}
-                                rightSection={loading ? <Loader size="1rem" /> : null}
-                                placeholder="Your Name"
-                            />
-                            :
-                            <TextInput
-                                value={name}
-                                onChange={(event) => setName(event.currentTarget.value)}
-                                rightSection={loading ? <Loader size="1rem" /> : null}
-                                placeholder="Your Name"
-                            />
-                    }
+            <Text
+              fw={500}
+              className={
+                error
+                  ? "font-family-Inter justify-left flex text-red-500"
+                  : "font-family-Inter justify-left flex"
+              }
+            >
+              Nombre
+            </Text>
+            {error ? (
+              <TextInput
+                error
+                value={name}
+                onChange={(event) => setName(event.currentTarget.value)}
+                rightSection={loading ? <Loader size="1rem" /> : null}
+                placeholder="Your Name"
+              />
+            ) : (
+              <TextInput
+                value={name}
+                onChange={(event) => setName(event.currentTarget.value)}
+                rightSection={loading ? <Loader size="1rem" /> : null}
+                placeholder="Your Name"
+              />
+            )}
           </div>
           <div className="mb-2 w-4/5">
-                    <Text
-                        fw={500}
-                        className={
-                            error
-                                ? "font-family-Inter justify-left flex text-red-500"
-                                : "font-family-Inter justify-left flex"
-                        }
-
-                    >
-                        Apellido
-                    </Text>
-                    {
-                        error ?
-                            <TextInput
-                                error
-                                value={surname}
-                                onChange={(event) => setSurname(event.currentTarget.value)}
-                                rightSection={loading ? <Loader size="1rem" /> : null}
-                                placeholder="Your Surname"
-                            />
-                            :
-                            <TextInput
-                                value={surname}
-                                onChange={(event) => setSurname(event.currentTarget.value)}
-                                rightSection={loading ? <Loader size="1rem" /> : null}
-                                placeholder="Your Surname"
-                            />
-                    }
+            <Text
+              fw={500}
+              className={
+                error
+                  ? "font-family-Inter justify-left flex text-red-500"
+                  : "font-family-Inter justify-left flex"
+              }
+            >
+              Apellido
+            </Text>
+            {error ? (
+              <TextInput
+                error
+                value={surname}
+                onChange={(event) => setSurname(event.currentTarget.value)}
+                rightSection={loading ? <Loader size="1rem" /> : null}
+                placeholder="Your Surname"
+              />
+            ) : (
+              <TextInput
+                value={surname}
+                onChange={(event) => setSurname(event.currentTarget.value)}
+                rightSection={loading ? <Loader size="1rem" /> : null}
+                placeholder="Your Surname"
+              />
+            )}
           </div>
         </div>
         <div className="mb-2 w-1/2">
           <div>
-                    <Text
-                        fw={500}
-                        className={
-                            error
-                                ? "font-family-Inter justify-left flex text-red-500"
-                                : "font-family-Inter justify-left flex"
-                        }
-
-                    >
-                        Email
-                    </Text>
-                    {
-                        error ?
-                            <Autocomplete
-                                error
-                                value={value}
-                                data={data}
-                                onChange={handleChange}
-                                rightSection={loading ? <Loader size="1rem" /> : null}
-                                placeholder="Your email"
-                            />
-                            :
-                            <Autocomplete
-                                value={value}
-                                data={data}
-                                onChange={handleChange}
-                                rightSection={loading ? <Loader size="1rem" /> : null}
-                                placeholder="Your email"
-                            />
-                    }
+            <Text
+              fw={500}
+              className={
+                error
+                  ? "font-family-Inter justify-left flex text-red-500"
+                  : "font-family-Inter justify-left flex"
+              }
+            >
+              Email
+            </Text>
+            {error ? (
+              <Autocomplete
+                error
+                value={value}
+                data={data}
+                onChange={handleChange}
+                rightSection={loading ? <Loader size="1rem" /> : null}
+                placeholder="Your email"
+              />
+            ) : (
+              <Autocomplete
+                value={value}
+                data={data}
+                onChange={handleChange}
+                rightSection={loading ? <Loader size="1rem" /> : null}
+                placeholder="Your email"
+              />
+            )}
           </div>
           <div>
-                    <Text
-                        fw={500}
-                        className={
-                            error
-                                ? "font-family-Inter justify-left flex text-red-500"
-                                : "font-family-Inter justify-left flex"
-                        }
-
-                    >
-                        Mensaje
-                    </Text>
-                    {
-                        error ?
-                            <TextInput
-                                error
-                                value={mensaje}
-                                onChange={(event) => setMensaje(event.currentTarget.value)}
-                                rightSection={loading ? <Loader size="1rem" /> : null}
-                                placeholder="Your Message"
-                            />
-                            :
-                            <TextInput
-                                value={mensaje}
-                                onChange={(event) => setMensaje(event.currentTarget.value)}
-                                rightSection={loading ? <Loader size="1rem" /> : null}
-                                placeholder="Your Message"
-                            />
-                    }
+            <Text
+              fw={500}
+              className={
+                error
+                  ? "font-family-Inter justify-left flex text-red-500"
+                  : "font-family-Inter justify-left flex"
+              }
+            >
+              Mensaje
+            </Text>
+            {error ? (
+              <TextInput
+                error
+                value={mensaje}
+                onChange={(event) => setMensaje(event.currentTarget.value)}
+                rightSection={loading ? <Loader size="1rem" /> : null}
+                placeholder="Your Message"
+              />
+            ) : (
+              <TextInput
+                value={mensaje}
+                onChange={(event) => setMensaje(event.currentTarget.value)}
+                rightSection={loading ? <Loader size="1rem" /> : null}
+                placeholder="Your Message"
+              />
+            )}
           </div>
           <div className=" flex-start flex w-full justify-start">
             <button

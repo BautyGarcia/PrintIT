@@ -86,7 +86,8 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export const LandingHeader: React.FC = () => {
-  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
+  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
+    useDisclosure(false);
   const { classes, theme } = useStyles();
   const { colorScheme } = useMantineColorScheme();
 
@@ -100,8 +101,9 @@ export const LandingHeader: React.FC = () => {
         }
       >
         <Group position="apart" sx={{ height: "100%" }}>
-          <Link href="/" passHref>
+          <Link className="flex flex-row items-center gap-4" href="/" passHref>
             <Logo width={40} height={40} />
+            <h1 className="font-family-Inter">PrintIT</h1>
           </Link>
 
           <Group

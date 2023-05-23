@@ -1,12 +1,11 @@
 import { type NextPage } from "next";
 import { Logo } from "~/components/logo";
-import {type FormEventHandler, useState, useRef} from "react";
+import { useState, useRef} from "react";
 import { RecoverIMG } from "~/components/recoverImg";
 import Head from "next/head";
 import { api } from "~/utils/api";
 import { Button } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { useRouter } from "next/router";
 import { Autocomplete, Loader, useMantineColorScheme, Text} from "@mantine/core";
 
 const Recover: NextPage = () => {
@@ -52,7 +51,6 @@ const RecoverForm: React.FC = () => {
     const [value, setValue] = useState('');
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<string[]>([]);
-    const router = useRouter();
     
     const handleChange = (val: string) => {
         window.clearTimeout(timeoutRef.current);

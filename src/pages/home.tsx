@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   AppShell,
   Navbar,
@@ -11,11 +11,29 @@ import HomeHeader from '~/components/homeHeader';
 import { useSession } from 'next-auth/react';
 import Head from "next/head";
 import STLDropzone from '~/components/fileDropzone';
+import { useRouter } from 'next/router';
+import { notifications } from '@mantine/notifications';
 
 const HomePage: NextPage = () => {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const { data: sessionData } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    const redirectTimeout = setTimeout(() => {
+      if (!sessionData) {
+        notifications.show({
+          title: "Error",
+          message: "Debe ingresar a su cuenta primero",
+          color: "red",
+          autoClose: 2000,
+        });
+        void router.push("/signIn");
+      }
+    }, 500);
+    return () => clearTimeout(redirectTimeout);
+  }, [router, sessionData]);
 
   return (
     <>

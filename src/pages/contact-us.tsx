@@ -12,6 +12,7 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useRouter } from "next/router";
+import { set } from "react-hook-form";
 
 const ContactUs: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -53,12 +54,10 @@ const ContactForm: React.FC = () => {
   const [surname, setSurname] = useState("");
   const [mensaje, setMensaje] = useState("");
   const [error, setError] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const timeoutRef = useRef<number>(-1);
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<string[]>([]);
-  const router = useRouter();
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();

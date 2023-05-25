@@ -1,3 +1,4 @@
+import { notifications } from "@mantine/notifications";
 import { useState, type ChangeEvent } from 'react';
 import { StlViewer } from "react-stl-viewer";
 import sliceSTL from '~/utils/fileSlicer';
@@ -21,7 +22,12 @@ const STLDropzone = () => {
         const files = event.target.files;
 
         if (!files || files.length === 0 || !files[0]) {
-            console.log('No files selected.');
+            notifications.show({
+                title: "Error",
+                message: "No se ha seleccionado ningún archivo",
+                color: "red",
+                autoClose: 5000,
+            })
             return;
         }
 
@@ -31,7 +37,12 @@ const STLDropzone = () => {
         const allowedExtensions = ['stl', "STL"];
         const fileExtension = file.name.split('.').pop()?.toLowerCase() as string;
         if (!allowedExtensions.includes(fileExtension)) {
-            console.log('Invalid file extension. Only .stl files are allowed.');
+            notifications.show({
+                title: "Error",
+                message: "El archivo seleccionado no es un archivo STL",
+                color: "red",
+                autoClose: 5000,
+            })
             return;
         }
 

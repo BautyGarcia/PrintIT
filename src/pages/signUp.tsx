@@ -149,26 +149,14 @@ const RegisterForm: React.FC = () => {
           >
             User
           </Text>
-          {
-            error ?
-              <TextInput
-                value={name}
-                type="text"
-                id="user"
-                placeholder="Ingrese su Nombre"
-                onChange={(e) => setName(e.currentTarget.value)}
-                error
-              />
-              :
-              <TextInput
-                value={name}
-                type="text"
-                id="user"
-                placeholder="Ingrese su Nombre"
-                onChange={(e) => setName(e.currentTarget.value)}
-              />
-          }
-
+          <TextInput
+            value={name}
+            type="text"
+            id="user"
+            placeholder="Ingrese su Nombre"
+            onChange={(e) => setName(e.currentTarget.value)}
+            {...(error ? { error } : {})}
+          />
         </div>
         <div className="mb-2 w-4/5">
           <Text
@@ -182,25 +170,14 @@ const RegisterForm: React.FC = () => {
           >
             Email
           </Text>
-          {
-            error ?
-              <Autocomplete
-                error
-                value={value}
-                data={data}
-                onChange={handleChange}
-                rightSection={loading ? <Loader size="1rem" /> : null}
-                placeholder="Your email"
-              />
-              :
-              <Autocomplete
-                value={value}
-                data={data}
-                onChange={handleChange}
-                rightSection={loading ? <Loader size="1rem" /> : null}
-                placeholder="Your email"
-              />
-          }
+          <Autocomplete
+            {...(error ? { error } : {})}
+            value={value}
+            data={data}
+            onChange={handleChange}
+            rightSection={loading ? <Loader size="1rem" /> : null}
+            placeholder="Your email"
+          />
         </div>
         <div className="mb-2 w-4/5">
           <Text
@@ -214,23 +191,13 @@ const RegisterForm: React.FC = () => {
           >
             Password
           </Text>
-          {
-            error ?
-              <PasswordInput
-                value={password}
-                onChange={(event) => setPassword(event.currentTarget.value)}
-                placeholder="Your password"
-                className="mb-3"
-                error
-              />
-              :
-              <PasswordInput
-                value={password}
-                onChange={(event) => setPassword(event.currentTarget.value)}
-                placeholder="Your password"
-                className="mb-3"
-              />
-          }
+          <PasswordInput
+            value={password}
+            onChange={(event) => setPassword(event.currentTarget.value)}
+            placeholder="Your password"
+            className="mb-3"
+            {...(error ? { error } : {})}
+          />
         </div>
         <Button
           className="font-family-Inter mt-3 w-4/5 rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"

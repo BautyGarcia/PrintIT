@@ -114,7 +114,7 @@ export const LandingHeader: React.FC = () => {
             <Link href="/about" className={classes.link}>
               Sobre Nosotros
             </Link>
-            <Link href="/home" className={classes.link}>
+            <Link href="/" className={classes.link}>
               Inicio
             </Link>
             <Link href="/contact-us" className={classes.link}>

@@ -67,6 +67,7 @@ const ContactForm: React.FC = () => {
     setEmail(val);
     setData([]);
 
+    //Autocomplete component function
     if (val.trim().length === 0 || val.includes("@")) {
       setLoading(false);
     } else {
@@ -105,22 +106,13 @@ const ContactForm: React.FC = () => {
             >
               Nombre
             </Text>
-            {error ? (
-              <TextInput
-                error
-                value={name}
-                onChange={(event) => setName(event.currentTarget.value)}
-                rightSection={loading ? <Loader size="1rem" /> : null}
-                placeholder="Your Name"
-              />
-            ) : (
-              <TextInput
-                value={name}
-                onChange={(event) => setName(event.currentTarget.value)}
-                rightSection={loading ? <Loader size="1rem" /> : null}
-                placeholder="Your Name"
-              />
-            )}
+            <TextInput
+              {...(error ? { error } : {})}
+              value={name}
+              onChange={(event) => setName(event.currentTarget.value)}
+              rightSection={loading ? <Loader size="1rem" /> : null}
+              placeholder="Your Name"
+            />
           </div>
           <div className="mb-2 w-4/5">
             <Text
@@ -133,22 +125,13 @@ const ContactForm: React.FC = () => {
             >
               Apellido
             </Text>
-            {error ? (
-              <TextInput
-                error
-                value={surname}
-                onChange={(event) => setSurname(event.currentTarget.value)}
-                rightSection={loading ? <Loader size="1rem" /> : null}
-                placeholder="Your Surname"
-              />
-            ) : (
-              <TextInput
-                value={surname}
-                onChange={(event) => setSurname(event.currentTarget.value)}
-                rightSection={loading ? <Loader size="1rem" /> : null}
-                placeholder="Your Surname"
-              />
-            )}
+            <TextInput
+              {...(error ? { error } : {})}
+              value={surname}
+              onChange={(event) => setSurname(event.currentTarget.value)}
+              rightSection={loading ? <Loader size="1rem" /> : null}
+              placeholder="Your Surname"
+            />
           </div>
         </div>
         <div className="mb-2 w-1/2">
@@ -163,24 +146,14 @@ const ContactForm: React.FC = () => {
             >
               Email
             </Text>
-            {error ? (
-              <Autocomplete
-                error
-                value={value}
-                data={data}
-                onChange={handleChange}
-                rightSection={loading ? <Loader size="1rem" /> : null}
-                placeholder="Your email"
-              />
-            ) : (
-              <Autocomplete
-                value={value}
-                data={data}
-                onChange={handleChange}
-                rightSection={loading ? <Loader size="1rem" /> : null}
-                placeholder="Your email"
-              />
-            )}
+            <Autocomplete
+              {...(error ? { error } : {})}
+              value={value}
+              data={data}
+              onChange={handleChange}
+              rightSection={loading ? <Loader size="1rem" /> : null}
+              placeholder="Your email"
+            />
           </div>
           <div>
             <Text
@@ -193,22 +166,13 @@ const ContactForm: React.FC = () => {
             >
               Mensaje
             </Text>
-            {error ? (
-              <TextInput
-                error
-                value={mensaje}
-                onChange={(event) => setMensaje(event.currentTarget.value)}
-                rightSection={loading ? <Loader size="1rem" /> : null}
-                placeholder="Your Message"
-              />
-            ) : (
-              <TextInput
-                value={mensaje}
-                onChange={(event) => setMensaje(event.currentTarget.value)}
-                rightSection={loading ? <Loader size="1rem" /> : null}
-                placeholder="Your Message"
-              />
-            )}
+            <TextInput
+              {...(error ? { error } : {})}
+              value={mensaje}
+              onChange={(event) => setMensaje(event.currentTarget.value)}
+              rightSection={loading ? <Loader size="1rem" /> : null}
+              placeholder="Your Message"
+            />
           </div>
           <div className=" flex-start flex w-full justify-start">
             <button

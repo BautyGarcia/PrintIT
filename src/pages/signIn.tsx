@@ -149,25 +149,14 @@ const SignInForm: React.FC = () => {
                     >
                         Email
                     </Text>
-                    {
-                        error ?
-                            <Autocomplete
-                                error
-                                value={value}
-                                data={data}
-                                onChange={handleChange}
-                                rightSection={loading ? <Loader size="1rem" /> : null}
-                                placeholder="Your email"
-                            />
-                            :
-                            <Autocomplete
-                                value={value}
-                                data={data}
-                                onChange={handleChange}
-                                rightSection={loading ? <Loader size="1rem" /> : null}
-                                placeholder="Your email"
-                            />
-                    }
+                    <Autocomplete
+                        {...(error ? { error } : {})}
+                        value={value}
+                        data={data}
+                        onChange={handleChange}
+                        rightSection={loading ? <Loader size="1rem" /> : null}
+                        placeholder="Your email"
+                    />
                 </div>
                 <div className="mb-2 w-4/5">
                     <Text
@@ -180,25 +169,13 @@ const SignInForm: React.FC = () => {
                     >
                         Password
                     </Text>
-
-                    {
-                        error ?
-                            <PasswordInput
-                                value={password}
-                                onChange={(event) => setPassword(event.currentTarget.value)}
-                                placeholder="Your password"
-                                className="mb-3"
-                                error
-                            />
-                            :
-                            <PasswordInput
-                                value={password}
-                                onChange={(event) => setPassword(event.currentTarget.value)}
-                                placeholder="Your password"
-                                className="mb-3"
-                            />
-                    }
-
+                    <PasswordInput
+                        value={password}
+                        onChange={(event) => setPassword(event.currentTarget.value)}
+                        placeholder="Your password"
+                        className="mb-3"
+                        {...(error ? { error } : {})}
+                    />
                     <Link
                         href={"/recoverPassword"}
                         className="flex justify-end text-xs text-blue-500"

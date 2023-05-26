@@ -26,10 +26,10 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
         justifyContent: "space-between",
       }}
     >
-      <main className="flex flex-row items-center gap-4">
+      <Group className="flex flex-row items-center gap-4">
         <Logo width={40} height={40} />
         <h1 className="font-family-Inter">PrintIT</h1>
-      </main>
+      </Group>
       <MediaQuery largerThan="sm" styles={{ display: "none" }}>
         <Burger
           opened={opened}

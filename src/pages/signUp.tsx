@@ -111,7 +111,7 @@ const RegisterForm: React.FC = () => {
             autoClose: 2000,
           });
           setIsLoading(false);
-          void router.push("/home");
+          void router.push("/dashboard/subirArchivo");
         } else {
           notifications.show({
             title: "Error",

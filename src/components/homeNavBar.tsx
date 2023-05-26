@@ -12,11 +12,12 @@ import SchemeButton from './schemeButton';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import PrinterPopup from "~/components/addPrinterPopup";
+import { useRouter } from "next/router";
 
 const useStyles = createStyles((theme) => ({
   header: {
     paddingBottom: theme.spacing.md,
-    marginBottom: `calc(${theme.spacing.md} * 1.5)`,
+    marginBottom: `calc(${theme.spacing.xs} * 1.5)`,
     borderBottom: `${rem(1)} solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[2]
       }`,
     display: 'block',
@@ -124,43 +125,77 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const data = [
-  { link: '', label: 'Subir Archivo', icon: IconFile3d },
-  { link: '', label: 'Mis Trabajos', icon: IconShovel },
-  { link: '', label: 'Mis Impresoras', icon: IconPrinter },
-  { link: '', label: 'Mis Pedidos', icon: IconPackage },
-];
-
 const HomeNavBar: React.FC = () => {
-  const { classes, cx } = useStyles();
-  const [active, setActive] = useState('Subir Archivo');
+  const router = useRouter();
+  const realtivePath = (router.pathname).split("/")[2];
+  const setState = realtivePath === "subirArchivo" ? "Subir Archivo" : realtivePath === "misTrabajos" ? "Mis Trabajos" : realtivePath === "misImpresoras" ? "Mis Impresoras" : "Mis Pedidos";
 
-  const links = data.map((item) => (
-    <a
-      className={cx(classes.link, { [classes.linkActive]: item.label === active })}
-      href={item.link}
-      key={item.label}
-      onClick={(event) => {
-        event.preventDefault();
-        setActive(item.label);
-      }}
-    >
-      <item.icon className={classes.linkIcon} stroke={1.5} />
-      <span>{item.label}</span>
-    </a>
-  ));
+  const { classes, cx } = useStyles();
+  const [active, setActive] = useState(setState);
 
   return (
     <>
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
-          <PrinterPopup/>
-          <a href="" className={classes.community} onClick={(event) => event.preventDefault()}>
-            <IconMessage className={classes.communityIcon}/>
+          <PrinterPopup />
+          <Link href="" className={classes.community} onClick={(event) => event.preventDefault()}>
+            <IconMessage className={classes.communityIcon} />
             <span>Comunidad</span>
-          </a>
+          </Link>
         </Group>
-        {links}
+
+        <Link
+          href="/dashboard/subirArchivo"
+          className={cx(classes.link, { [classes.linkActive]: "Subir Archivo" === active })}
+          onClick={(event) => {
+            event.preventDefault();
+            setActive("Subir Archivo");
+            void router.push("/dashboard/subirArchivo");
+          }}
+        >
+          <IconFile3d className={classes.linkIcon} stroke={1.5} />
+          <span>Subir Archivo</span>
+        </Link>
+
+        <Link
+          href="/dashboard/misTrabajos"
+          className={cx(classes.link, { [classes.linkActive]: "Mis Trabajos" === active })}
+          onClick={(event) => {
+            event.preventDefault();
+            setActive("Mis Trabajos");
+            void router.push("/dashboard/misTrabajos");
+          }}
+        >
+          <IconShovel className={classes.linkIcon} stroke={1.5} />
+          <span>Mis Trabajos</span>
+        </Link>
+
+        <Link
+          href="/dashboard/misImpresoras"
+          className={cx(classes.link, { [classes.linkActive]: "Mis Impresoras" === active })}
+          onClick={(event) => {
+            event.preventDefault();
+            setActive("Mis Impresoras");
+            void router.push("/dashboard/misImpresoras");
+          }}
+        >
+          <IconPrinter className={classes.linkIcon} stroke={1.5} />
+          <span>Mis Impresoras</span>
+        </Link>
+
+        <Link
+          href="/dashboard/misPedidos"
+          className={cx(classes.link, { [classes.linkActive]: "Mis Pedidos" === active })}
+          onClick={(event) => {
+            event.preventDefault();
+            setActive("Mis Pedidos");
+            void router.push("/dashboard/misPedidos");
+          }}
+        >
+          <IconPackage className={classes.linkIcon} stroke={1.5} />
+          <span>Mis Pedidos</span>
+        </Link>
+
       </Navbar.Section>
 
       <MediaQuery largerThan="sm" styles={{ display: "none" }}>
@@ -170,7 +205,7 @@ const HomeNavBar: React.FC = () => {
             <span>Logout</span>
           </Link>
           <Group className='flex justify-end'>
-            <SchemeButton/>
+            <SchemeButton />
           </Group>
         </Navbar.Section>
       </MediaQuery>

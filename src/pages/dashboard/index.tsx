@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   AppShell,
   Navbar,
@@ -10,33 +10,20 @@ import HomeNavBar from '~/components/homeNavBar';
 import HomeHeader from '~/components/homeHeader';
 import { useSession } from 'next-auth/react';
 import Head from "next/head";
-import STLDropzone from '~/components/fileDropzone';
-import { useRouter } from 'next/router';
-import { notifications } from '@mantine/notifications';
+import SessionChecker from '~/components/sessionChecker';
 
-const HomePage: NextPage = () => {
+interface DashboardProps {
+  children: React.ReactNode;
+}
+
+const Dashboard: NextPage<DashboardProps> = ({ children }) => {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const { data: sessionData } = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    const redirectTimeout = setTimeout(() => {
-      if (!sessionData) {
-        notifications.show({
-          title: "Error",
-          message: "Debe ingresar a su cuenta primero",
-          color: "red",
-          autoClose: 2000,
-        });
-        void router.push("/signIn");
-      }
-    }, 500);
-    return () => clearTimeout(redirectTimeout);
-  }, [router, sessionData]);
 
   return (
     <>
+      <SessionChecker />
       <Head>
         <title>PrintIT</title>
         <link rel="icon" href="/Logo.ico" />
@@ -61,10 +48,10 @@ const HomePage: NextPage = () => {
           </Header>
         }
       >
-        <STLDropzone />
+        {children}
       </AppShell>
     </>
   );
 }
 
-export default HomePage;
+export default Dashboard;

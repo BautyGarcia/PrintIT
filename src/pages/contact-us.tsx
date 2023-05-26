@@ -11,8 +11,6 @@ import {
   Text,
   TextInput,
 } from "@mantine/core";
-import { useRouter } from "next/router";
-import { set } from "react-hook-form";
 
 const ContactUs: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();

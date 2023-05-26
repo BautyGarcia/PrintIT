@@ -16,7 +16,7 @@ export const AuthShowcase: React.FC = () => {
 
                 onClick={() =>
                     void signIn("google", {
-                        callbackUrl: "/home",
+                        callbackUrl: "/dashboard/subirArchivo",
                     })
                 }
             >

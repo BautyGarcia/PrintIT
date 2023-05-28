@@ -1,0 +1,23 @@
+{
+    "name": "PrintIT",
+    "short_name": "PrintIT",
+    "description": "PrintIT is a web application",
+    "icons": [
+        {
+            "src": "/Logo150px.png",
+            "sizes": "150x150",
+            "type": "image/png"
+        },
+        {
+            "src": "/MaskableLogo.png",
+            "sizes": "150x150",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "start_url": "/",
+    "background_color": "#000000",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#000000"
+}

@@ -152,7 +152,6 @@ const RegisterForm: React.FC = () => {
           <TextInput
             value={name}
             type="text"
-            id="user"
             placeholder="Ingrese su Nombre"
             onChange={(e) => setName(e.currentTarget.value)}
             {...(error ? { error } : {})}

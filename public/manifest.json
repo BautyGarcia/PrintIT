@@ -4,20 +4,20 @@
     "description": "PrintIT is a web application",
     "icons": [
         {
-            "src": "/Logo150px.png",
-            "sizes": "150x150",
+            "src": "/LogoPWA.png",
+            "sizes": "155x155",
             "type": "image/png"
         },
         {
-            "src": "/MaskableLogo.png",
-            "sizes": "150x150",
+            "src": "/MaskableLogoPWA.png",
+            "sizes": "155x155",
             "type": "image/png",
             "purpose": "maskable"
         }
     ],
     "start_url": "/",
-    "background_color": "#000000",
+    "background_color": "#FFFFFF",
     "display": "standalone",
     "scope": "/",
-    "theme_color": "#000000"
+    "theme_color": "#FFFFFF"
 }

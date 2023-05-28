@@ -47,6 +47,7 @@
     "react-query": "^3.39.3",
     "react-stl-viewer": "^2.2.5",
     "remixicon": "^3.3.0",
+    "sharp": "^0.32.1",
     "superjson": "1.12.2",
     "three": "^0.152.2",
     "zod": "^3.21.4"

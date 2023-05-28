@@ -44,5 +44,10 @@ yarn-error.log*
 # PWA
 public/sw.js
 public/workbox-*.js
+public/workbox-588899ac.js
 sw.js
 workbox-*.js
+workbox-588899ac.js
+public\sw.js
+public\workbox-*.js
+public\workbox-588899ac.js

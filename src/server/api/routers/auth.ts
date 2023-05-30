@@ -121,7 +121,7 @@ export const authRouter = createTRPCRouter({
                 data: {
                     email,
                     token,
-                    expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 4),
+                    expiresAt: new Date(Date.now() + 1000 * 60 * 60),
                 },
             });
 
@@ -169,10 +169,10 @@ export const authRouter = createTRPCRouter({
             });
 
             if (!passwordResetToken) {
-                throw new Error("Token not found");
+                return null;
             }
 
-            return passwordResetToken;
+            return passwordResetToken.email;
         }),
     resetPassword: publicProcedure
         .input(z.object({ email: z.string(), password: z.string() }))
@@ -203,4 +203,55 @@ export const authRouter = createTRPCRouter({
 
             return user;
         }),
+    deletePasswordRecoveryRecord: publicProcedure
+        .input(z.object({ token: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { token } = input;
+
+            const passwordResetToken = await ctx.prisma.passwordResetToken.findUnique({
+                where: {
+                    token,
+                },
+            });
+
+            if (!passwordResetToken) {
+                throw new Error("The token do not exist");
+            }
+
+            await ctx.prisma.passwordResetToken.delete({
+                where: {
+                    token,
+                },
+            });
+
+            return true;
+        }
+    ),
+    checkIfTokenIsValid: publicProcedure
+        .input(z.object({ token: z.string() }))
+        .query(async ({ input, ctx }) => {
+            const { token } = input;
+
+            const passwordResetToken = await ctx.prisma.passwordResetToken.findUnique({
+                where: {
+                    token,
+                },
+            });
+
+            if (!passwordResetToken) {
+                return false;
+            }
+
+            if (passwordResetToken.expiresAt < new Date()) {
+                await ctx.prisma.passwordResetToken.delete({
+                    where: {
+                        token,
+                    },
+                });
+                return false;
+            }
+
+            return true;
+        }
+    ),
 });

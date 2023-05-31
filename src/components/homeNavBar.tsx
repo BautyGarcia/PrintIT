@@ -68,9 +68,10 @@ const useStyles = createStyles((theme) => ({
     fontSize: theme.fontSizes.sm,
     color: theme.colorScheme === 'dark' ? "#FFFFFF" : "#717171",
     padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
-    borderRadius: theme.radius.md,
+    borderRadius: "6px",
     fontWeight: 500,
     border: `1px solid ${theme.colorScheme === 'dark' ? "#FFFFFF" : "#717171"}`,
+    height: "44px",
 
     '&:hover': {
       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],

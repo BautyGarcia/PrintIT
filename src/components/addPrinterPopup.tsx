@@ -26,7 +26,7 @@ const PrinterPopup: React.FC = () => {
             {opened && (
                 <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-sm">
                     <div className={colorScheme === "dark" ? "bg-[#1C2333] rounded-lg" : "bg-white rounded-lg"}>
-                        <div className="p-8 max-h-[70vh] max-w-[75vw] min-w-[310px] overflow-y-auto">
+                        <div className="p-8 max-w-[75vw] min-w-[310px] overflow-y-auto">
                             <Stepper active={active} onStepClick={setActive} breakpoint="sm" allowNextStepsSelect={false}>
                                 <Stepper.Step label="Información Personal" description="Nombre, Contacto, etc" icon={<IconUser size="1.1rem" />}>
                                     <Checkbox size="md" checked={isBusiness} className='mt-4' onChange={(e) => setIsBusiness(e.currentTarget.checked)} label="¿Sos una empresa o negocio?" />

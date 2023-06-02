@@ -9,7 +9,6 @@ import { signIn } from "next-auth/react";
 import { Logo } from "~/components/logo";
 import Link from "next/link";
 import Head from "next/head";
-import "remixicon/fonts/remixicon.css";
 
 const SignUpPage: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -165,7 +164,6 @@ const RegisterForm: React.FC = () => {
                 ? "font-family-Inter justify-left flex text-red-500"
                 : "font-family-Inter justify-left flex"
             }
-
           >
             Email
           </Text>
@@ -186,7 +184,6 @@ const RegisterForm: React.FC = () => {
                 ? "font-family-Inter justify-left flex text-red-500"
                 : "font-family-Inter justify-left flex"
             }
-
           >
             Password
           </Text>

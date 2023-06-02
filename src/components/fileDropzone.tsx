@@ -17,7 +17,6 @@ const STLDropzone = () => {
         border: '1px solid black'
     };
 
-
     const handleFileSubmit = async (event: ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
 
@@ -73,7 +72,7 @@ const STLDropzone = () => {
         <div>
             {
                 !isSelected ?
-                    <input type="file" onChange={handleFileSubmit} />
+                    <input type="file" onChange={handleFileSubmit} accept=".stl"/>
 
                     :
 

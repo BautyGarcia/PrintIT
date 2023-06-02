@@ -10,7 +10,6 @@ import { Button } from "@mantine/core";
 import { Logo } from "~/components/logo";
 import Head from "next/head";
 import Link from "next/link";
-import "remixicon/fonts/remixicon.css";
 
 const SignInPage: NextPage = () => {
     const { colorScheme } = useMantineColorScheme();

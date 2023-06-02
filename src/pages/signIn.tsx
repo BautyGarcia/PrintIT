@@ -56,6 +56,7 @@ const SignInForm: React.FC = () => {
 
     const handleChange = (val: string) => {
         window.clearTimeout(timeoutRef.current);
+        setError(false);
         setValue(val);
         setEmail(val);
         setData([]);
@@ -139,12 +140,7 @@ const SignInForm: React.FC = () => {
                 <div className="mb-2 w-4/5">
                     <Text
                         fw={500}
-                        className={
-                            error
-                                ? "font-family-Inter justify-left flex text-red-500"
-                                : "font-family-Inter justify-left flex"
-                        }
-
+                        className="font-family-Inter justify-left flex"
                     >
                         Email
                     </Text>
@@ -160,17 +156,13 @@ const SignInForm: React.FC = () => {
                 <div className="mb-2 w-4/5">
                     <Text
                         fw={500}
-                        className={
-                            error
-                                ? "font-family-Inter justify-left flex text-red-500"
-                                : "font-family-Inter justify-left flex"
-                        }
+                        className="font-family-Inter justify-left flex"
                     >
                         Password
                     </Text>
                     <PasswordInput
                         value={password}
-                        onChange={(event) => setPassword(event.currentTarget.value)}
+                        onChange={(event) => { setPassword(event.currentTarget.value); setError(false) }}
                         placeholder="Your password"
                         className="mb-3"
                         {...(error ? { error } : {})}

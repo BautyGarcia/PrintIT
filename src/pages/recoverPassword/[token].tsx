@@ -159,11 +159,11 @@ const RecoverPassword: NextPage = () => {
 
                 <form onSubmit={handleSubmit}>
                     <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
-                        <Text component="label" htmlFor="your-password" size="sm" weight={500} className={error ? "text-red-500" : ""}>
+                        <Text component="label" htmlFor="your-password" size="sm" weight={500}>
                             Contraseña
                         </Text>
                         <PasswordInput placeholder="********" onChange={(e) => { setPassword(e.target.value); setError(false) }} className="mb-5 mt-1" {...(error ? { error } : {})} disabled={isLoading} />
-                        <Text component="label" htmlFor="your-password" size="sm" weight={500} className={error ? "text-red-500" : ""}>
+                        <Text component="label" htmlFor="your-password" size="sm" weight={500}>
                             Confirmar Contraseña
                         </Text>
                         <PasswordInput placeholder="********" onChange={(e) => { setConfirmPassword(e.target.value); setError(false) }} className="mt-1" {...(error ? { error } : {})} disabled={isLoading} />

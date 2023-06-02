@@ -1,12 +1,12 @@
 import { type NextPage } from "next";
 import { Logo } from "~/components/logo";
-import { useState, useRef} from "react";
+import { useState, useRef } from "react";
 import { RecoverIMG } from "~/components/recoverImg";
 import Head from "next/head";
 import { api } from "~/utils/api";
 import { Button } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { Autocomplete, Loader, useMantineColorScheme, Text} from "@mantine/core";
+import { Autocomplete, Loader, useMantineColorScheme, Text } from "@mantine/core";
 
 const Recover: NextPage = () => {
     const { colorScheme } = useMantineColorScheme();
@@ -18,7 +18,7 @@ const Recover: NextPage = () => {
                 <link rel="icon" href="/Logo.ico" />
                 <meta name="description" content="PrintIT" />
             </Head>
-            <main className={ colorScheme === "dark" ? "h-screen w-full bg-[#1C2333]" : "h-screen w-full bg-[#FFFFFF]" }>
+            <main className={colorScheme === "dark" ? "h-screen w-full bg-[#1C2333]" : "h-screen w-full bg-[#FFFFFF]"}>
                 <div className="absolute ml-5 mt-5 flex items-center gap-2">
                     <Logo width={40} height={40} />
                     <h2>PrintIT</h2>
@@ -51,13 +51,14 @@ const RecoverForm: React.FC = () => {
     const [value, setValue] = useState('');
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<string[]>([]);
-    
+
     const handleChange = (val: string) => {
         window.clearTimeout(timeoutRef.current);
+        setError(false);
         setValue(val);
         setEmail(val);
         setData([]);
-    
+
         if (val.trim().length === 0 || val.includes('@')) {
             setLoading(false);
         } else {
@@ -110,36 +111,20 @@ const RecoverForm: React.FC = () => {
     return (
         <form className="mx-auto mt-8 flex w-full flex-col items-center justify-center text-center" onSubmit={handleSubmit}>
             <div className="mb-2 w-4/5">
-            <Text
-                        fw={500}
-                        className={
-                            error
-                                ? "font-family-Inter justify-left flex text-red-500"
-                                : "font-family-Inter justify-left flex"
-                        }
-
-                    >
-                        Email
-                    </Text>
-                    {
-                        error ?
-                            <Autocomplete
-                                error
-                                value={value}
-                                data={data}
-                                onChange={handleChange}
-                                rightSection={loading ? <Loader size="1rem" /> : null}
-                                placeholder="Your email"
-                            />
-                            :
-                            <Autocomplete
-                                value={value}
-                                data={data}
-                                onChange={handleChange}
-                                rightSection={loading ? <Loader size="1rem" /> : null}
-                                placeholder="Your email"
-                            />
-                    }
+                <Text
+                    fw={500}
+                    className="font-family-Inter justify-left flex"
+                >
+                    Email
+                </Text>
+                <Autocomplete
+                    {...(error ? { error } : {})}
+                    value={value}
+                    data={data}
+                    onChange={handleChange}
+                    rightSection={loading ? <Loader size="1rem" /> : null}
+                    placeholder="Your email"
+                />
             </div>
             <Button
                 className="font-family-Inter mt-3 w-4/5 rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"

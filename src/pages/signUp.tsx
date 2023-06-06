@@ -9,16 +9,19 @@ import { signIn } from "next-auth/react";
 import { Logo } from "~/components/logo";
 import Link from "next/link";
 import Head from "next/head";
+import { useMediaQuery } from '@mantine/hooks';
 
 const SignUpPage: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
+  const largeScreen = useMediaQuery('(min-width: 992px)');
+
   return (
     <main className={colorScheme === "dark" ? "h-screen w-full bg-[#1C2333]" : "h-screen w-full bg-white"}>
       <div className="absolute ml-5 mt-5 flex items-center gap-2">
         <Logo width={40} height={40} />
         <h2>PrintIT</h2>
       </div>
-      <section className="flex h-full w-1/2 flex-col items-center justify-center text-center">
+      <section className= {largeScreen ? "flex h-full w-1/2 flex-col items-center justify-center text-center" : "w-full h-full flex flex-col items-center justify-center"}>
         <h1 className={colorScheme === "dark" ? "font-family-Inter text-4xl text-white" : "font-family-Inter text-4xl text-black"}>
           Bienvenido a PrinIT
         </h1>
@@ -32,7 +35,7 @@ const SignUpPage: NextPage = () => {
           </Link>
         </p>
       </section>
-      <picture className="absolute right-0 top-0 h-screen w-1/2">
+      <picture className={largeScreen ? "absolute right-0 top-0 h-screen w-1/2" : "hidden"}>
         <LogoSignUpIMG />
       </picture>
     </main>

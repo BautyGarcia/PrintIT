@@ -7,9 +7,11 @@ import { api } from "~/utils/api";
 import { Button } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { Autocomplete, Loader, useMantineColorScheme, Text } from "@mantine/core";
+import { useMediaQuery } from '@mantine/hooks';
 
 const Recover: NextPage = () => {
     const { colorScheme } = useMantineColorScheme();
+    const largeScreen = useMediaQuery('(min-width: 992px)');
 
     return (
         <>
@@ -23,7 +25,7 @@ const Recover: NextPage = () => {
                     <Logo width={40} height={40} />
                     <h2>PrintIT</h2>
                 </div>
-                <section className="flex h-full w-1/2 flex-col items-center justify-center text-center">
+                <section className= {largeScreen ? "flex h-full w-1/2 flex-col items-center justify-center text-center" : "w-full h-full flex flex-col items-center justify-center"}>
                     <h1 className={colorScheme === "dark" ? "font-family-Inter text-4xl text-white" : "font-family-Inter text-4xl text-black"}>
                         Recuperar Contraseña
                     </h1>
@@ -32,7 +34,7 @@ const Recover: NextPage = () => {
                     </h3>
                     <RecoverForm />
                 </section>
-                <picture className="absolute right-0 top-0 h-screen w-1/2">
+                <picture className={largeScreen ? "absolute right-0 top-0 h-screen w-1/2" : "hidden"}>
                     <RecoverIMG />
                 </picture>
             </main>

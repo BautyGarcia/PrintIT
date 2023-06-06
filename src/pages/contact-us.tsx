@@ -17,14 +17,12 @@ import { useForm } from '@mantine/form';
           <meta name="description" content="PrintIT" />
         </Head>
         <LandingHeader />
-        <main
-          className={
-            colorScheme === "dark"
+        <main className={colorScheme === "dark" 
               ? "flex h-screen w-full flex-col items-start justify-center bg-[#0E1525] from-[#2e026d] to-[#15162c] p-10"
               : "flex h-screen w-full flex-col items-start justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c] p-10"
           }
         >
-          <div className="w-2/5 absolute left  flex justify-center">
+          <div className="w-1/2 flex justify-center  font-family-Nunito">
           <GetInTouchSimple/>
           </div>
           <picture className="absolute right-0 top-5 h-screen w-1/2">
@@ -60,7 +58,7 @@ import { useForm } from '@mantine/form';
     return (
       <form onSubmit={form.onSubmit(() => {})}>
       
-        <Title
+        <Title className="mt-10"
           order={2}
           size="h1"
           
@@ -68,22 +66,22 @@ import { useForm } from '@mantine/form';
           align="center"
 
         >
-          Contactate con Nosotros
+          <p>Contactate con Nosotros </p>
         </Title>
 
-        <h6 className="text-xs aling-center justify-center flex items-centers mt-2">
+        <h1 className="text-xs aling-center justify-center flex items-centers mb-4 mt-1">
             Nos encantaria escuchar tus preguntas o propuestas
-        </h6>
+        </h1>
   
         <SimpleGrid cols={2} mt="xl" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-          <TextInput
+          <TextInput className="my-2"
             label="Nombre"
             placeholder="Ingresa tu nombre"
             name="nombre"
             variant="filled"
             {...form.getInputProps('nombre')}
           />
-          <TextInput
+          <TextInput className="my-2"
             label="Apellido"
             placeholder="Ingrese su apellido"
             name="apellido"
@@ -92,14 +90,15 @@ import { useForm } from '@mantine/form';
           />
         </SimpleGrid>
   
-        <TextInput
+        <TextInput className="mb-2"
           label="Email"
           placeholder="Ingrese su email"
           name="email"
           variant="filled"
           {...form.getInputProps('email')}
+          
         />
-        <Textarea
+        <Textarea className="mt-2"
           mt="md"
           label="Mensaje"
           placeholder="Ingresa tu mensaje"

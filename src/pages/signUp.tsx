@@ -142,12 +142,7 @@ const RegisterForm: React.FC = () => {
         <div className="mb-2 w-4/5">
           <Text
             fw={500}
-            className={
-              error
-                ? "font-family-Inter justify-left flex text-red-500"
-                : "font-family-Inter justify-left flex"
-            }
-
+            className="font-family-Inter justify-left flex"
           >
             User
           </Text>

@@ -9,7 +9,7 @@ import { useMediaQuery } from '@mantine/hooks';
 
 const ContactUs: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
-  const largeScreen = useMediaQuery('(min-width: 992px)');
+  const largeScreen = useMediaQuery('(min-width: 1300px)');
   return (
     <>
       <Head>
@@ -23,10 +23,10 @@ const ContactUs: NextPage = () => {
         : "flex h-screen w-full flex-row items-start justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c] p-10"
       }
       >
-        <div className="w-1/2 flex justify-center mt-10 mr-32 font-family-Nunito">
+        <div className={largeScreen ? "w-1/2 flex justify-center mt-10 mr-8 font-family-Nunito" : "w-full h-full flex flex-col items-center justify-center"}>
           <GetInTouchSimple />
         </div>
-        <picture className={largeScreen ? "" : "hidden"}>
+        <picture className={largeScreen ? "h-1/2 w-1/3 mt-32  mr-32" : "hidden"}>
         <ContactIMG />
         </picture>
         
@@ -76,14 +76,14 @@ export function GetInTouchSimple() {
       </h1>
 
       <SimpleGrid cols={2} mt="xl" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
-        <TextInput className="my-2"
+        <TextInput className="mt-2"
           label="Nombre"
           placeholder="Ingresa tu nombre"
           name="nombre"
           variant="filled"
           {...form.getInputProps('nombre')}
         />
-        <TextInput className="my-2"
+        <TextInput className="mt-2"
           label="Apellido"
           placeholder="Ingrese su apellido"
           name="apellido"
@@ -92,7 +92,7 @@ export function GetInTouchSimple() {
         />
       </SimpleGrid>
 
-      <TextInput className="mb-2"
+      <TextInput className="mt-4"
         label="Email"
         placeholder="Ingrese su email"
         name="email"
@@ -100,7 +100,7 @@ export function GetInTouchSimple() {
         {...form.getInputProps('email')}
 
       />
-      <Textarea className="mt-2"
+      <Textarea className="mt-4"
         mt="md"
         label="Mensaje"
         placeholder="Ingresa tu mensaje"

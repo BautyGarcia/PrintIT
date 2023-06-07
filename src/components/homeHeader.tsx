@@ -3,6 +3,7 @@ import { Logo } from "./logo";
 import SchemeButton from "./schemeButton";
 import UserBox from "./userBox";
 import { type SetStateAction } from "react";
+import UserToggle from "./userToggleButton";
 
 interface HomeHeaderProps {
   opened: boolean;
@@ -41,6 +42,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
       </MediaQuery>
       <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
         <Group>
+          <UserToggle/>
           <SchemeButton />
           <UserBox user={{ name: username, image: userImage }} />
         </Group>

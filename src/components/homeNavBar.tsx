@@ -14,6 +14,8 @@ import Link from 'next/link';
 import PrinterPopup from "~/components/addPrinterPopup";
 import { useRouter } from "next/router";
 
+
+
 const useStyles = createStyles((theme) => ({
   header: {
     paddingBottom: theme.spacing.md,

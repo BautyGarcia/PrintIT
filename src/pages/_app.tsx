@@ -6,7 +6,7 @@ import "~/styles/globals.css";
 import { MantineProvider, ColorSchemeProvider, type ColorScheme } from "@mantine/core";
 import { useState } from "react";
 import { Notifications } from '@mantine/notifications';
-import { FilterUserProvider } from "~/components/stateProvider";
+import { UserProvider } from "~/contexts/UserTypeRoleContext";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -19,29 +19,29 @@ const MyApp: AppType<{ session: Session | null }> = ({
 
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-      <FilterUserProvider>
-        <MantineProvider 
-        theme={{
-          components: {
-            ActionIcon: {
-              sizes: {
-                lg: () => ({
-                  root: {
-                    width: 36,
-                    height: 36,
-                  }
-                })
+      <UserProvider>
+        <MantineProvider
+          theme={{
+            components: {
+              ActionIcon: {
+                sizes: {
+                  lg: () => ({
+                    root: {
+                      width: 36,
+                      height: 36,
+                    }
+                  })
+                },
               },
             },
-          },
-          colorScheme
-        }} withGlobalStyles withNormalizeCSS>
+            colorScheme
+          }} withGlobalStyles withNormalizeCSS>
           <SessionProvider session={session}>
             <Notifications />
             <Component {...pageProps} />
           </SessionProvider>
         </MantineProvider>
-      </FilterUserProvider>
+      </UserProvider>
     </ColorSchemeProvider>
   );
 };

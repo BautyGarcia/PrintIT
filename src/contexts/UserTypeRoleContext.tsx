@@ -1,5 +1,4 @@
-import { createContext, useContext } from "react";
-import { useLocalStorage } from "usehooks-ts";
+import { createContext, useState, useEffect, useContext } from "react";
 
 type UserTypeRole = "Cliente" | "Vendedor";
 
@@ -8,21 +7,29 @@ type UserContextType = {
     toggleUserTypeRole: () => void;
 };
 
-export const UserContext = createContext<UserContextType>({
-    userTypeRole: "Cliente",
-    toggleUserTypeRole: () => null,
-});
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
 type UserProviderProps = {
     children: React.ReactNode;
 };
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-    const [userTypeRole, setUserTypeRole] = useLocalStorage<UserTypeRole>("userTypeRole", "Cliente");
+    const [userTypeRole, setUserTypeRole] = useState<UserTypeRole>("Cliente");
 
     const toggleUserTypeRole = () => {
-        setUserTypeRole(userTypeRole === "Cliente" ? "Vendedor" : "Cliente");
+        setUserTypeRole((prevRole) => (prevRole === "Cliente" ? "Vendedor" : "Cliente"));
     };
+
+    useEffect(() => {
+        const storedRole = localStorage.getItem("userTypeRole");
+        if (storedRole) {
+            setUserTypeRole(storedRole as UserTypeRole);
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem("userTypeRole", userTypeRole);
+    }, [userTypeRole]);
 
     return (
         <UserContext.Provider value={{ userTypeRole, toggleUserTypeRole }}>
@@ -31,5 +38,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     );
 };
 
-// A custom hook to conveniently access the UserContext
-export const useUserRoleType = () => useContext(UserContext);
+export const useUserRoleType = (): UserContextType => {
+    const context = useContext(UserContext);
+    if (!context) {
+        throw new Error("useUserContext must be used within a UserProvider");
+    }
+    return context;
+};

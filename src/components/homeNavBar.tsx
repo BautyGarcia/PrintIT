@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createStyles, Navbar, Group, getStylesRef, rem, MediaQuery } from '@mantine/core';
 import {
   IconPrinter,
@@ -13,8 +13,7 @@ import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import PrinterPopup from "~/components/addPrinterPopup";
 import { useRouter } from "next/router";
-
-
+import { useUserRoleType } from '~/contexts/UserTypeRoleContext';
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -130,11 +129,22 @@ const useStyles = createStyles((theme) => ({
 
 const HomeNavBar: React.FC = () => {
   const router = useRouter();
-  const realtivePath = (router.pathname).split("/")[2];
-  const setState = realtivePath === "subirArchivo" ? "Subir Archivo" : realtivePath === "misTrabajos" ? "Mis Trabajos" : realtivePath === "misImpresoras" ? "Mis Impresoras" : "Mis Pedidos";
-  
   const { classes, cx } = useStyles();
-  const [active, setActive] = useState(setState);
+
+  const { userTypeRole } = useUserRoleType();
+  const [active, setActive] = useState("Subir Archivo");
+
+  useEffect(() => {
+    if (userTypeRole === "Cliente" && router.pathname === "/dashboard/subirArchivo") {
+      setActive("Subir Archivo");
+    } else if (userTypeRole === "Cliente" && router.pathname === "/dashboard/misPedidos") {
+      setActive("Mis Pedidos");
+    } else if (userTypeRole === "Vendedor" && router.pathname === "/dashboard/misTrabajos") {
+      setActive("Mis Trabajos");
+    } else if (userTypeRole === "Vendedor" && router.pathname === "/dashboard/misImpresoras") {
+      setActive("Mis Impresoras");
+    }
+  }, [userTypeRole]);
 
   return (
     <>
@@ -147,58 +157,65 @@ const HomeNavBar: React.FC = () => {
           </Link>
         </Group>
 
-        <Link
-          href="/dashboard/subirArchivo"
-          className={cx(classes.link, { [classes.linkActive]: "Subir Archivo" === active })}
-          onClick={(event) => {
-            event.preventDefault();
-            setActive("Subir Archivo");
-            void router.push("/dashboard/subirArchivo");
-          }}
-        >
-          <IconFile3d className={classes.linkIcon} stroke={1.5} />
-          <span>Subir Archivo</span>
-        </Link>
+        {userTypeRole === "Cliente" && (
+          <>
+            <Link
+              href="/dashboard/subirArchivo"
+              className={cx(classes.link, { [classes.linkActive]: "Subir Archivo" === active })}
+              onClick={(event) => {
+                event.preventDefault();
+                setActive("Subir Archivo");
+                void router.push("/dashboard/subirArchivo");
+              }}
+            >
+              <IconFile3d className={classes.linkIcon} stroke={1.5} />
+              <span>Subir Archivo</span>
+            </Link>
 
-        <Link
-          href="/dashboard/misTrabajos"
-          className={cx(classes.link, { [classes.linkActive]: "Mis Trabajos" === active })}
-          onClick={(event) => {
-            event.preventDefault();
-            setActive("Mis Trabajos");
-            void router.push("/dashboard/misTrabajos");
-          }}
-        >
-          <IconShovel className={classes.linkIcon} stroke={1.5} />
-          <span>Mis Trabajos</span>
-        </Link>
+            <Link
+              href="/dashboard/misPedidos"
+              className={cx(classes.link, { [classes.linkActive]: "Mis Pedidos" === active })}
+              onClick={(event) => {
+                event.preventDefault();
+                setActive("Mis Pedidos");
+                void router.push("/dashboard/misPedidos");
+              }}
+            >
+              <IconPackage className={classes.linkIcon} stroke={1.5} />
+              <span>Mis Pedidos</span>
+            </Link>
+          </>
+        )}
 
-        <Link
-          href="/dashboard/misImpresoras"
-          className={cx(classes.link, { [classes.linkActive]: "Mis Impresoras" === active })}
-          onClick={(event) => {
-            event.preventDefault();
-            setActive("Mis Impresoras");
-            void router.push("/dashboard/misImpresoras");
-          }}
-        >
-          <IconPrinter className={classes.linkIcon} stroke={1.5} />
-          <span>Mis Impresoras</span>
-        </Link>
+        {userTypeRole === "Vendedor" && (
+          <>
+            <Link
+              href="/dashboard/misTrabajos"
+              className={cx(classes.link, { [classes.linkActive]: "Mis Trabajos" === active })}
+              onClick={(event) => {
+                event.preventDefault();
+                setActive("Mis Trabajos");
+                void router.push("/dashboard/misTrabajos");
+              }}
+            >
+              <IconShovel className={classes.linkIcon} stroke={1.5} />
+              <span>Mis Trabajos</span>
+            </Link>
 
-        <Link
-          href="/dashboard/misPedidos"
-          className={cx(classes.link, { [classes.linkActive]: "Mis Pedidos" === active })}
-          onClick={(event) => {
-            event.preventDefault();
-            setActive("Mis Pedidos");
-            void router.push("/dashboard/misPedidos");
-          }}
-        >
-          <IconPackage className={classes.linkIcon} stroke={1.5} />
-          <span>Mis Pedidos</span>
-        </Link>
-
+            <Link
+              href="/dashboard/misImpresoras"
+              className={cx(classes.link, { [classes.linkActive]: "Mis Impresoras" === active })}
+              onClick={(event) => {
+                event.preventDefault();
+                setActive("Mis Impresoras");
+                void router.push("/dashboard/misImpresoras");
+              }}
+            >
+              <IconPrinter className={classes.linkIcon} stroke={1.5} />
+              <span>Mis Impresoras</span>
+            </Link>
+          </>
+        )}
       </Navbar.Section>
 
       <MediaQuery largerThan="sm" styles={{ display: "none" }}>

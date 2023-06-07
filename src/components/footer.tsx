@@ -39,13 +39,28 @@ export const Footer = () => {
 
         <Group spacing="xs" position="right" noWrap>
           <ActionIcon size="lg" variant="default" radius="xl">
+            <Link 
+            href="https://es-la.facebook.com" 
+            target='_blank'
+            >
             <IconBrandFacebook size="1.05rem" stroke={1.5} />
+            </Link>
           </ActionIcon>
           <ActionIcon size="lg" variant="default" radius="xl">
-            <IconBrandInstagram size="1.05rem" stroke={1.5} />
+            <Link
+             href="https://www.instagram.com"
+             target='_blank'
+             >
+             <IconBrandInstagram size="1.05rem" stroke={1.5} />
+             </Link>
           </ActionIcon>
           <ActionIcon size="lg" variant="default" radius="xl">
-            <IconBrandDiscord size="1.05rem" stroke={1.5} />
+            <Link 
+             href="https://discord.com"
+             target='_blank'
+             >
+             <IconBrandDiscord size="1.05rem" stroke={1.5} />
+             </Link>
           </ActionIcon>
         </Group>
       </div>

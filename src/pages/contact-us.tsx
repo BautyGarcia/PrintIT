@@ -1,19 +1,15 @@
-import { type NextPage } from "next";
+import { NextPage } from "next";
 import Head from "next/head";
 import { LandingHeader } from "~/components/landingHeader";
 import { Footer } from "~/components/footer";
-import { type FormEventHandler, useState, useRef } from "react";
 import { ContactIMG } from "~/components/contactImg";
-import {
-  Autocomplete,
-  Loader,
-  useMantineColorScheme,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import { TextInput, Textarea, SimpleGrid, Group, Title, Button, useMantineColorScheme } from '@mantine/core';
+import { useForm } from '@mantine/form';
+import { useMediaQuery } from '@mantine/hooks';
 
 const ContactUs: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
+  const largeScreen = useMediaQuery('(min-width: 1300px)');
   return (
     <>
       <Head>
@@ -22,21 +18,18 @@ const ContactUs: NextPage = () => {
         <meta name="description" content="PrintIT" />
       </Head>
       <LandingHeader />
-      <main
-        className={
-          colorScheme === "dark"
-            ? "flex h-screen w-full flex-col items-start justify-center bg-[#0E1525] from-[#2e026d] to-[#15162c] p-10"
-            : "flex h-screen w-full flex-col items-start justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c] p-10"
-        }
+      <main className={colorScheme === "dark"
+        ? "flex h-screen w-full flex-row items-start justify-center bg-[#0E1525] from-[#2e026d] to-[#15162c] p-10"
+        : "flex h-screen w-full flex-row items-start justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c] p-10"
+      }
       >
-        <h1 className="flex justify-start text-4xl">Contactate con Nosotros</h1>
-        <h6 className="text-xs">
-          Nos encantaria escuchar tus preguntas o propuestas
-        </h6>
-        <ContactForm />
-        <picture className="absolute right-0 top-5 h-screen w-1/2">
-          <ContactIMG />
+        <div className={largeScreen ? "w-1/2 flex justify-center mt-10 mr-8 font-family-Nunito" : "w-full h-full flex flex-col items-center justify-center"}>
+          <GetInTouchSimple />
+        </div>
+        <picture className={largeScreen ? "h-1/2 w-1/3 mt-32  mr-32" : "hidden"}>
+        <ContactIMG />
         </picture>
+        
       </main>
 
       <Footer />
@@ -46,144 +39,84 @@ const ContactUs: NextPage = () => {
 
 export default ContactUs;
 
-const ContactForm: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [mensaje, setMensaje] = useState("");
-  const [error, setError] = useState(false);
-  const timeoutRef = useRef<number>(-1);
-  const [value, setValue] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<string[]>([]);
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
-  };
+export function GetInTouchSimple() {
+  const form = useForm({
+    initialValues: {
+      nombre: '',
+      apellido: '',
+      email: '',
+      mensaje: '',
+    },
+    validate: {
+      nombre: (value) => value.trim().length < 2,
+      apellido: (value) => value.trim().length < 2,
+      email: (value) => !/^\S+@\S+$/.test(value),
+      mensaje: (value) => value.trim().length < 2,
+    },
+  });
 
-  const handleChange = (val: string) => {
-    window.clearTimeout(timeoutRef.current);
-    setValue(val);
-    setEmail(val);
-    setData([]);
-
-    //Autocomplete component function
-    if (val.trim().length === 0 || val.includes("@")) {
-      setLoading(false);
-    } else {
-      setLoading(true);
-      timeoutRef.current = window.setTimeout(() => {
-        setLoading(false);
-        setData(
-          ["gmail.com", "outlook.com", "yahoo.com"].map(
-            (provider) => `${val}@${provider}`
-          )
-        );
-      }, 500);
-    }
-  };
 
   return (
-    <>
-      <Head>
-        <title>PrintIT</title>
-        <link rel="icon" href="/Logo.ico" />
-        <meta name="description" content="PrintIT" />
-      </Head>
-      <form
-        className="mx-auto mt-20 flex w-full flex-col items-start justify-start text-center"
-        onSubmit={handleSubmit}
+    <form onSubmit={form.onSubmit(() => null)}>
+
+      <Title className="mt-10"
+        order={2}
+        size="h1"
+
+        weight={200}
+        align="center"
+
       >
-        <div className="flex w-1/2 flex-row ">
-          <div className="mb-2 w-4/5 pr-4">
-            <Text
-              fw={500}
-              className={
-                error
-                  ? "font-family-Inter justify-left flex text-red-500"
-                  : "font-family-Inter justify-left flex"
-              }
-            >
-              Nombre
-            </Text>
-            <TextInput
-              {...(error ? { error } : {})}
-              value={name}
-              onChange={(event) => setName(event.currentTarget.value)}
-              rightSection={loading ? <Loader size="1rem" /> : null}
-              placeholder="Your Name"
-            />
-          </div>
-          <div className="mb-2 w-4/5">
-            <Text
-              fw={500}
-              className={
-                error
-                  ? "font-family-Inter justify-left flex text-red-500"
-                  : "font-family-Inter justify-left flex"
-              }
-            >
-              Apellido
-            </Text>
-            <TextInput
-              {...(error ? { error } : {})}
-              value={surname}
-              onChange={(event) => setSurname(event.currentTarget.value)}
-              rightSection={loading ? <Loader size="1rem" /> : null}
-              placeholder="Your Surname"
-            />
-          </div>
-        </div>
-        <div className="mb-2 w-1/2">
-          <div>
-            <Text
-              fw={500}
-              className={
-                error
-                  ? "font-family-Inter justify-left flex text-red-500"
-                  : "font-family-Inter justify-left flex"
-              }
-            >
-              Email
-            </Text>
-            <Autocomplete
-              {...(error ? { error } : {})}
-              value={value}
-              data={data}
-              onChange={handleChange}
-              rightSection={loading ? <Loader size="1rem" /> : null}
-              placeholder="Your email"
-            />
-          </div>
-          <div>
-            <Text
-              fw={500}
-              className={
-                error
-                  ? "font-family-Inter justify-left flex text-red-500"
-                  : "font-family-Inter justify-left flex"
-              }
-            >
-              Mensaje
-            </Text>
-            <TextInput
-              {...(error ? { error } : {})}
-              value={mensaje}
-              onChange={(event) => setMensaje(event.currentTarget.value)}
-              rightSection={loading ? <Loader size="1rem" /> : null}
-              placeholder="Your Message"
-            />
-          </div>
-          <div className=" flex-start flex w-full justify-start">
-            <button
-              className="font-family-Inter mt-8 min-w-full rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"
-              type="submit"
-            >
-              Enviar
-            </button>
-          </div>
-        </div>
-      </form>
-    </>
+        <p>Contactate con Nosotros </p>
+      </Title>
+
+      <h1 className="text-xs aling-center justify-center flex items-centers mb-4 mt-1">
+        Nos encantaria escuchar tus preguntas o propuestas
+      </h1>
+
+      <SimpleGrid cols={2} mt="xl" breakpoints={[{ maxWidth: 'sm', cols: 1 }]}>
+        <TextInput className="mt-2"
+          label="Nombre"
+          placeholder="Ingresa tu nombre"
+          name="nombre"
+          variant="filled"
+          {...form.getInputProps('nombre')}
+        />
+        <TextInput className="mt-2"
+          label="Apellido"
+          placeholder="Ingrese su apellido"
+          name="apellido"
+          variant="filled"
+          {...form.getInputProps('apellido')}
+        />
+      </SimpleGrid>
+
+      <TextInput className="mt-4"
+        label="Email"
+        placeholder="Ingrese su email"
+        name="email"
+        variant="filled"
+        {...form.getInputProps('email')}
+
+      />
+      <Textarea className="mt-4"
+        mt="md"
+        label="Mensaje"
+        placeholder="Ingresa tu mensaje"
+        maxRows={10}
+        minRows={5}
+        autosize
+        name="mensaje"
+        variant="filled"
+        {...form.getInputProps('mensaje')}
+      />
+
+      <Group position="center" mt="xl">
+        <Button type="submit" size="md" className="rounded-lg bg-blue-500 hover:bg-blue-700">
+          Send message
+        </Button>
+      </Group>
+    </form>
   );
-};
+}

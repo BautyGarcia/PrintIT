@@ -1,18 +1,17 @@
-import { useMantineColorScheme, SegmentedControl, Group, Center, Box } from '@mantine/core';
-import { IconHammer, Icon3dCubeSphere } from '@tabler/icons-react';
-
+import { SegmentedControl, Group, Center, Box } from '@mantine/core';
+import { useState } from 'react';
 
 const UserToggle = () => {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-
+  const [userType, setUserType] = useState<'Cliente' | 'Vendedor'>('Cliente');
+  
   return (
     <Group position="center" my="xl">
       <SegmentedControl
-        value={colorScheme}
-        onChange={(value: 'light' | 'dark') => toggleColorScheme(value)}
+        value={userType}
+        onChange={(value) => setUserType(value == 'Cliente' ? 'Vendedor' : 'Cliente')}
         data={[
           {
-            value: 'light',
+            value: 'Cliente',
             label: (
               <Center>
                 <Box>Cliente</Box>
@@ -20,7 +19,7 @@ const UserToggle = () => {
             ),
           },
           {
-            value: 'dark',
+            value: 'Vendedor',
             label: (
               <Center>
                 <Box>Vendedor</Box>

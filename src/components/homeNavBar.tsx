@@ -132,7 +132,8 @@ const HomeNavBar: React.FC = () => {
   const router = useRouter();
   const realtivePath = (router.pathname).split("/")[2];
   const setState = realtivePath === "subirArchivo" ? "Subir Archivo" : realtivePath === "misTrabajos" ? "Mis Trabajos" : realtivePath === "misImpresoras" ? "Mis Impresoras" : "Mis Pedidos";
-
+  const [userType, setUserType] = useState<'Cliente' | 'Vendedor'>('Cliente');
+  
   const { classes, cx } = useStyles();
   const [active, setActive] = useState(setState);
 

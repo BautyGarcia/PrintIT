@@ -1,14 +1,16 @@
 import { SegmentedControl, Group, Center, Box } from '@mantine/core';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { FilterUserContext } from './stateProvider';
 
 const UserToggle = () => {
   const [userType, setUserType] = useState<'Cliente' | 'Vendedor'>('Cliente');
+  const {filters, handlerFilters} = useContext(FilterUserContext)
   
   return (
     <Group position="center" my="xl">
       <SegmentedControl
         value={userType}
-        onChange={(value) => setUserType(value == 'Cliente' ? 'Vendedor' : 'Cliente')}
+        onChange={(value) => setUserType(value === 'Cliente' ? 'Cliente' : 'Vendedor')}
         data={[
           {
             value: 'Cliente',

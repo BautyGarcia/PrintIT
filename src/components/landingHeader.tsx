@@ -10,7 +10,7 @@ import {
   ScrollArea,
   rem,
   useMantineColorScheme,
-} from "@mantine/core";
+}from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Logo } from "./logo";
 import Link from "next/link";

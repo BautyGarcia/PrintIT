@@ -18,7 +18,7 @@ const UserToggle = () => {
   return (
     <Group position="center" my="xl">
       <SegmentedControl
-        className="rounded-xl border-2 bg-transparent"
+        className="bg-transparent"
         value={userTypeRole}
         onChange={handleChange}
         data={[

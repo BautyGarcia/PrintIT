@@ -75,8 +75,7 @@ const RecoverForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
-  const { mutate: sendPasswordEmail } =
-    api.auth.sendPasswordEmail.useMutation();
+  const { mutate: sendPasswordEmail } = api.auth.sendPasswordEmail.useMutation();
   const timeoutRef = useRef<number>(-1);
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);

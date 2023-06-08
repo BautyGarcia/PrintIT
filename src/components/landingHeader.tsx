@@ -125,7 +125,7 @@ export const LandingHeader: React.FC = () => {
           <Group className={classes.hiddenMobile}>
             <SchemeButton />
             <Link href="/signIn" passHref>
-              <Button variant="default">Log in</Button>
+              <Button variant="default">Sign in</Button>
             </Link>
             <Link href="/signUp" passHref>
               <Button variant="undefined" className="bg-indigo-400 text-white">

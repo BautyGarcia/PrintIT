@@ -17,12 +17,11 @@ import {
     rem,
     PasswordInput,
 } from '@mantine/core';
-import { IconArrowLeft } from '@tabler/icons-react';
 import { useMantineColorScheme } from "@mantine/core";
 import Head from "next/head";
 import { Logo } from "~/components/logo";
 import { useMediaQuery } from "@mantine/hooks";
-import { RecoverIMG } from "~/components/recoverImg";
+import { RecoverTokenIMG } from "~/components/recoverToken";
 
 
 
@@ -139,33 +138,38 @@ const RecoverPassword: NextPage = () => {
                 <link rel="icon" href="/Logo.ico" />
                 <meta name="description" content="PrintIT" />
             </Head>
+        <main className={
+            colorScheme === "dark" 
+            ? "h-screen w-full bg-[#1C2333]"
+            : "h-screen w-full bg-[#FFFFFF]"
+            }
+            >
                 <div className="absolute ml-5 mt-5 flex items-center gap-2">
                     <Logo width={40} height={40} href="/" />
                     <h2>PrintIT</h2>
                 </div>
-        <main className={colorScheme === "dark" ? "h-screen w-1/2 bg-[#1C2333] flex flex-col justify-start items-center text-center" : "h-screen w-1/2 bg-[#FFFFFF] flex flex-col justify-start items-center text-center"}>
             <section className={
                 largeScreen
-                 ? "flex h-screen w-full flex-col items-center justify-center text-center align-center"
-                 : "flex h-screen w-full flex-col items-center justify-center text-center align-center"
+                ? "flex h-full w-1/2 flex-col items-center justify-center text-center"
+                : "flex h-full w-full flex-col items-center justify-center"
                 }>
-                <Title className={
-                    colorScheme === "dark"
-                        ? "font-family-Inter text-xl text-white text-center align-center w-4/5"
-                        : "font-family-Inter text-xl text-black text-center align-center w-4/5"
-                    }>
-                    Recuperación de Contraseña
-                </Title>
                 <Text className={
                     colorScheme === "dark"
-                        ? "font-family-Inter text-xs text-white text-center"
-                        : "font-family-Inter text-xs text-black text-center"
+                        ? "font-family-Inter text-4xl text-white text-center align-center w-4/5"
+                        : "flex h-full w-full flex-col text-4xl items-center justify-center"
+                    }>
+                    Recuperación de Contraseña
+                </Text>
+                <Text className={
+                    colorScheme === "dark"
+                        ? "font-family-Inter text-base text-white text-center"
+                        : "font-family-Inter text-base text-black text-center"
                     }>
                     Ingresa tu nueva contraseña
                 </Text>
 
                 <form onSubmit={handleSubmit} className="mx-auto mt-8 flex w-full flex-col items-center justify-center text-center">
-                    <div className="mb-2 w-4/5 shadow">
+                    <div className="mb-2 w-4/5">
                         <Text fw={500} className="font-family-Inter justify-left flex">
                             Contraseña
                         </Text>
@@ -177,8 +181,7 @@ const RecoverPassword: NextPage = () => {
                         <Group position="apart" mt="lg">
                             <Anchor color="dimmed" size="sm">
                                 <Center inline>
-                                    <IconArrowLeft size={rem(12)} stroke={1.5} />
-                                    <Box ml={5} onClick={() => void router.push("/signIn")}>Voler al inicio de sesión</Box>
+                                    <Button className={colorScheme === "dark" ? "bg-[#1864ab] text-white" : "bg-[#1c7ed6]"} ml={5} onClick={() => void router.push("/signIn")}>Voler al inicio de sesión</Button>
                                 </Center>
                             </Anchor>
                             <Button type="submit" className={colorScheme === "dark" ? "bg-[#1864ab]" : "bg-[#1c7ed6]"} loading={isLoading}>Reset password</Button>
@@ -191,7 +194,7 @@ const RecoverPassword: NextPage = () => {
                     largeScreen ? "absolute right-0 top-0 h-screen w-1/2" : "hidden"
                 }
             >
-                <RecoverIMG />
+                <RecoverTokenIMG />
             </picture>
         </main>
         </>

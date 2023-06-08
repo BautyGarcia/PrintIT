@@ -153,7 +153,8 @@ const RegisterForm: React.FC = () => {
             autoClose: 2000,
           });
           setIsLoading(false);
-          void router.push("/dashboard/subirArchivo");
+          window.open("/dashboard/subirArchivo", "_blank")
+          void router.push("/");
         } else {
           notifications.show({
             title: "Error",

@@ -19,32 +19,15 @@ import {
 } from '@mantine/core';
 import { IconArrowLeft } from '@tabler/icons-react';
 import { useMantineColorScheme } from "@mantine/core";
+import Head from "next/head";
+import { Logo } from "~/components/logo";
+import { useMediaQuery } from "@mantine/hooks";
+import { RecoverIMG } from "~/components/recoverImg";
 
-const useStyles = createStyles((theme) => ({
-    title: {
-        fontSize: rem(26),
-        fontWeight: 900,
-        fontFamily: theme.fontFamily,
-    },
 
-    controls: {
-        [theme.fn.smallerThan('xs')]: {
-            flexDirection: 'column-reverse',
-        },
-    },
-
-    control: {
-        [theme.fn.smallerThan('xs')]: {
-            width: '100%',
-            textAlign: 'center',
-        },
-    },
-
-}));
 
 const RecoverPassword: NextPage = () => {
     const router = useRouter();
-    const { classes } = useStyles();
     const { colorScheme } = useMantineColorScheme();
 
     const { token } = router.query;
@@ -63,6 +46,8 @@ const RecoverPassword: NextPage = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    const largeScreen = useMediaQuery("(min-width: 992px)");
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -148,27 +133,49 @@ const RecoverPassword: NextPage = () => {
     };
 
     return (
-        <Group className={colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[F0F1F8]"}>
-            <Container size={460} mt={280} className="flex flex-col w-screen h-screen items-center">
-                <Title className={classes.title} align="center">
+        <>
+            <Head>
+                <title>PrintIT</title>
+                <link rel="icon" href="/Logo.ico" />
+                <meta name="description" content="PrintIT" />
+            </Head>
+                <div className="absolute ml-5 mt-5 flex items-center gap-2">
+                    <Logo width={40} height={40} href="/" />
+                    <h2>PrintIT</h2>
+                </div>
+        <main className={colorScheme === "dark" ? "h-screen w-1/2 bg-[#1C2333] flex flex-col justify-start items-center text-center" : "h-screen w-1/2 bg-[#FFFFFF] flex flex-col justify-start items-center text-center"}>
+            <section className={
+                largeScreen
+                 ? "flex h-screen w-full flex-col items-center justify-center text-center align-center"
+                 : "flex h-screen w-full flex-col items-center justify-center text-center align-center"
+                }>
+                <Title className={
+                    colorScheme === "dark"
+                        ? "font-family-Inter text-xl text-white text-center align-center w-4/5"
+                        : "font-family-Inter text-xl text-black text-center align-center w-4/5"
+                    }>
                     Recuperación de Contraseña
                 </Title>
-                <Text c="dimmed" fz="sm" ta="center">
+                <Text className={
+                    colorScheme === "dark"
+                        ? "font-family-Inter text-xs text-white text-center"
+                        : "font-family-Inter text-xs text-black text-center"
+                    }>
                     Ingresa tu nueva contraseña
                 </Text>
 
-                <form onSubmit={handleSubmit}>
-                    <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
-                        <Text component="label" htmlFor="your-password" size="sm" weight={500}>
+                <form onSubmit={handleSubmit} className="mx-auto mt-8 flex w-full flex-col items-center justify-center text-center">
+                    <div className="mb-2 w-4/5 shadow">
+                        <Text fw={500} className="font-family-Inter justify-left flex">
                             Contraseña
                         </Text>
                         <PasswordInput placeholder="********" onChange={(e) => { setPassword(e.target.value); setError(false) }} className="mb-5 mt-1" {...(error ? { error } : {})} disabled={isLoading} />
-                        <Text component="label" htmlFor="your-password" size="sm" weight={500}>
+                        <Text fw={500} className="font-family-Inter justify-left flex">
                             Confirmar Contraseña
                         </Text>
                         <PasswordInput placeholder="********" onChange={(e) => { setConfirmPassword(e.target.value); setError(false) }} className="mt-1" {...(error ? { error } : {})} disabled={isLoading} />
-                        <Group position="apart" mt="lg" className={classes.controls}>
-                            <Anchor color="dimmed" size="sm" className={classes.control}>
+                        <Group position="apart" mt="lg">
+                            <Anchor color="dimmed" size="sm">
                                 <Center inline>
                                     <IconArrowLeft size={rem(12)} stroke={1.5} />
                                     <Box ml={5} onClick={() => void router.push("/signIn")}>Voler al inicio de sesión</Box>
@@ -176,10 +183,18 @@ const RecoverPassword: NextPage = () => {
                             </Anchor>
                             <Button type="submit" className={colorScheme === "dark" ? "bg-[#1864ab]" : "bg-[#1c7ed6]"} loading={isLoading}>Reset password</Button>
                         </Group>
-                    </Paper>
+                    </div>
                 </form>
-            </Container>
-        </Group>
+            </section>
+            <picture
+                className={
+                    largeScreen ? "absolute right-0 top-0 h-screen w-1/2" : "hidden"
+                }
+            >
+                <RecoverIMG />
+            </picture>
+        </main>
+        </>
     );
 };
 

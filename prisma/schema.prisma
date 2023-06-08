@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,10 +8,17 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Example {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Printer {
+  id        String @id @default(cuid())
+  name      String
+  brand     String
+  model     String
+  type      String
+  printArea String
+  userId    String
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 // Necessary for Next auth
@@ -55,6 +59,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  printers      Printer[]
   password      String?
 }
 

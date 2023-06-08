@@ -10,7 +10,7 @@ import {
   ScrollArea,
   rem,
   useMantineColorScheme,
-}from "@mantine/core";
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Logo } from "./logo";
 import Link from "next/link";
@@ -102,7 +102,7 @@ export const LandingHeader: React.FC = () => {
       >
         <Group position="apart" sx={{ height: "100%" }}>
           <Link className="flex flex-row items-center gap-4" href="/" passHref>
-            <Logo width={40} height={40} />
+            <Logo width={40} height={40} href="/" />
             <h1 className="font-family-Inter">PrintIT</h1>
           </Link>
 

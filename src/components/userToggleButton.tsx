@@ -1,23 +1,29 @@
-import { SegmentedControl, Group, Center, Box } from '@mantine/core';
-import { useRouter } from 'next/router';
-import { useUserRoleType } from '~/contexts/UserTypeRoleContext';
+import { SegmentedControl, Group, Center, Box } from "@mantine/core";
+import { useRouter } from "next/router";
+import { useUserRoleType } from "~/contexts/UserTypeRoleContext";
+
 const UserToggle = () => {
   const { userTypeRole, toggleUserTypeRole } = useUserRoleType();
   const router = useRouter();
 
   const handleChange = () => {
     toggleUserTypeRole();
-    void router.push(userTypeRole === "Cliente" ? "/dashboard/misTrabajos" : "/dashboard/subirArchivo");
+    void router.push(
+      userTypeRole === "Cliente"
+        ? "/dashboard/misTrabajos"
+        : "/dashboard/subirArchivo"
+    );
   };
 
   return (
     <Group position="center" my="xl">
       <SegmentedControl
+        className="rounded-xl border-2 bg-transparent"
         value={userTypeRole}
         onChange={handleChange}
         data={[
           {
-            value: 'Cliente',
+            value: "Cliente",
             label: (
               <Center>
                 <Box>Cliente</Box>
@@ -25,7 +31,7 @@ const UserToggle = () => {
             ),
           },
           {
-            value: 'Vendedor',
+            value: "Vendedor",
             label: (
               <Center>
                 <Box>Vendedor</Box>
@@ -36,6 +42,6 @@ const UserToggle = () => {
       />
     </Group>
   );
-}
+};
 
 export default UserToggle;

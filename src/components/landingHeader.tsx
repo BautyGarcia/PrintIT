@@ -101,9 +101,9 @@ export const LandingHeader: React.FC = () => {
         }
       >
         <Group position="apart" sx={{ height: "100%" }}>
-          <Link className="flex flex-row items-center gap-4" href="/" passHref>
+          <Link className="flex flex-row items-center gap-2" href="/" passHref>
             <Logo width={40} height={40} href="/" />
-            <h1 className="font-family-Inter">PrintIT</h1>
+            <h2 className="font-family-Inter">PrintIT</h2>
           </Link>
 
           <Group

@@ -29,21 +29,21 @@ const ContactUs: NextPage = () => {
       <main
         className={
           colorScheme === "dark"
-            ? "flex h-screen w-full flex-row items-start justify-center bg-[#0E1525] from-[#2e026d] to-[#15162c] p-10"
-            : "flex h-screen w-full flex-row items-start justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c] p-10"
+            ? "flex h-screen w-full flex-row items-start justify-center bg-[#0E1525] from-[#2e026d] to-[#15162c] pr-10 pt-10 pl-10"
+            : "flex h-screen w-full flex-row items-start justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c] pr-10 pt-10 pl-10"
         }
       >
         <div
           className={
             largeScreen
-              ? "font-family-Nunito mr-8 mt-10 flex w-1/2 justify-center"
+              ? "font-family-Nunito mr-8 mt-36 h-full w-1/2 flex  justify-center"
               : "flex h-full w-full flex-col items-center justify-center"
           }
         >
           <GetInTouchSimple />
         </div>
         <picture
-          className={largeScreen ? "mr-32 mt-32 h-1/2  w-1/3" : "hidden"}
+          className={largeScreen ? "mr-32 mt-36 h-1/2  w-1/3" : "hidden"}
         >
           <ContactIMG />
         </picture>
@@ -57,6 +57,7 @@ const ContactUs: NextPage = () => {
 export default ContactUs;
 
 export function GetInTouchSimple() {
+  const largeScreen = useMediaQuery("(min-width: 1300px)");
   const form = useForm({
     initialValues: {
       nombre: "",
@@ -73,64 +74,73 @@ export function GetInTouchSimple() {
   });
 
   return (
-    <form onSubmit={form.onSubmit(() => null)}>
-      <Title className="mt-10" order={2} size="h1" weight={200} align="center">
-        <p>Contactate con Nosotros </p>
-      </Title>
+    <form 
+       className={
+        largeScreen
+          ? "w-2/3"
+          : "w-full"
+      }
+      onSubmit={form.onSubmit(() => null)}
+    >
+    
+        <Title className="mt-10" order={2} size="h1" weight={200} align="center">
+          <p>Contactate con Nosotros </p>
+        </Title>
 
-      <h1 className="aling-center items-centers mb-4 mt-1 flex justify-center text-xs">
-        Nos encantaria escuchar tus preguntas o propuestas
-      </h1>
+        <h1 className="aling-center items-centers mb-4 mt-1 flex justify-center text-xs">
+          Nos encantaria escuchar tus preguntas o propuestas
+        </h1>
+          
+          <SimpleGrid cols={2} mt="xl" breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
+            <TextInput
+              className="mt-0"
+              label="Nombre"
+              placeholder="Ingresa tu nombre"
+              name="nombre"
+              variant="filled"
+              {...form.getInputProps("nombre")}
+            />
+            <TextInput
+              className="mt-0"
+              label="Apellido"
+              placeholder="Ingrese su apellido"
+              name="apellido"
+              variant="filled"
+              {...form.getInputProps("apellido")}
+            />
+          </SimpleGrid>
 
-      <SimpleGrid cols={2} mt="xl" breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
         <TextInput
-          className="mt-2"
-          label="Nombre"
-          placeholder="Ingresa tu nombre"
-          name="nombre"
+          className="mt-4"
+          label="Email"
+          placeholder="Ingrese su email"
+          name="email"
           variant="filled"
-          {...form.getInputProps("nombre")}
+          {...form.getInputProps("email")}
         />
-        <TextInput
-          className="mt-2"
-          label="Apellido"
-          placeholder="Ingrese su apellido"
-          name="apellido"
+        <Textarea
+          className="mt-4"
+          mt="md"
+          label="Mensaje"
+          placeholder="Ingresa tu mensaje"
+          maxRows={10}
+          minRows={5}
+          autosize
+          name="mensaje"
           variant="filled"
-          {...form.getInputProps("apellido")}
+          {...form.getInputProps("mensaje")}
         />
-      </SimpleGrid>
 
-      <TextInput
-        className="mt-4"
-        label="Email"
-        placeholder="Ingrese su email"
-        name="email"
-        variant="filled"
-        {...form.getInputProps("email")}
-      />
-      <Textarea
-        className="mt-4"
-        mt="md"
-        label="Mensaje"
-        placeholder="Ingresa tu mensaje"
-        maxRows={10}
-        minRows={5}
-        autosize
-        name="mensaje"
-        variant="filled"
-        {...form.getInputProps("mensaje")}
-      />
-
-      <Group position="center" mt="xl">
-        <Button
-          type="submit"
-          size="md"
-          className="rounded-lg bg-blue-500 hover:bg-blue-700"
-        >
-          Send message
-        </Button>
-      </Group>
+        <Group position="center" mt="xl">
+          <Button
+            type="submit"
+            size="md"
+            className="rounded-lg bg-blue-500 hover:bg-blue-700"
+          >
+            Send message
+          </Button>
+        </Group>
+        
     </form>
   );
 }

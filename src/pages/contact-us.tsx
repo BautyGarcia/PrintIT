@@ -83,7 +83,7 @@ export function GetInTouchSimple() {
       onSubmit={form.onSubmit(() => null)}
     >
     
-        <Title className="mt-10" order={2} size="h1" weight={200} align="center">
+        <Title className="mt-10" order={2} size="h1" weight={500} align="center">
           <p>Contactate con Nosotros </p>
         </Title>
 

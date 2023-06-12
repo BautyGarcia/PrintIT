@@ -16,15 +16,12 @@ const Landing: NextPage = () => {
       </Head>
       <LandingHeader />
       <main
-        className=
-        {
-          colorScheme === "dark" ?
-          "flex min-h-screen flex-col items-center justify-center bg-[#0E1525] from-[#2e026d] to-[#15162c]"
-          :
-          "flex min-h-screen flex-col items-center justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c]"
+        className={
+          colorScheme === "dark"
+            ? "flex min-h-screen flex-col items-center justify-center bg-[#0E1525] from-[#2e026d] to-[#15162c]"
+            : "flex min-h-screen flex-col items-center justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c]"
         }
-      >
-      </main>
+      ></main>
       <Footer />
     </>
   );

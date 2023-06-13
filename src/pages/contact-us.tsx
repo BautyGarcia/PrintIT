@@ -27,15 +27,15 @@ const ContactUs: NextPage = () => {
       </Head>
       <LandingHeader />
       <main className={colorScheme === "dark"
-        ? "flex h-screen w-full flex-row items-start justify-center bg-[#0E1525] from-[#2e026d] to-[#15162c] pl-10 pr-10 pt-10"
-        : "flex h-screen w-full flex-row items-start justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c] pl-10 pr-10 pt-10"
+        ? "flex h-screen w-full flex-row items-start justify-center bg-[#0E1525] from-[#2e026d] to-[#15162c]"
+        : "flex h-screen w-full flex-row items-start justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c]"
       }
       >
         <div
           className={
             largeScreen
-              ? "font-family-Nunito mr-8 mt-36 h-full w-1/2 flex  justify-center"
-              : "flex h-full w-full flex-col items-center justify-center"
+              ? "font-family-Nunito mr-8 mt-20  w-1/2 flex  justify-center"
+              : "flex h-full w-3/4 flex-col items-center justify-center"
           }
         >
           <GetInTouchSimple />

@@ -27,8 +27,8 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
         justifyContent: "space-between",
       }}
     >
-      <Group className="flex flex-row items-center gap-4">
-        <Logo width={40} height={40} />
+      <Group className="flex flex-row items-center gap-2">
+        <Logo width={40} height={40} href="#" />
         <h1 className="font-family-Inter">PrintIT</h1>
       </Group>
       <MediaQuery largerThan="sm" styles={{ display: "none" }}>
@@ -40,9 +40,11 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
           mr="xxs"
         />
       </MediaQuery>
+      <div className="flex items-center">
+        <UserToggle />
+      </div>
       <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
         <Group>
-          <UserToggle/>
           <SchemeButton />
           <UserBox user={{ name: username, image: userImage }} />
         </Group>

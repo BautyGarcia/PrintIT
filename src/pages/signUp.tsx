@@ -1,6 +1,14 @@
 import { type FormEventHandler, useState, useRef } from "react";
 import { type NextPage } from "next";
-import { Button, useMantineColorScheme, Text, TextInput, Autocomplete, Loader, PasswordInput } from "@mantine/core";
+import {
+  Button,
+  useMantineColorScheme,
+  Text,
+  TextInput,
+  Autocomplete,
+  Loader,
+  PasswordInput,
+} from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { LogoSignUpIMG } from "~/components/signUpImg";
 import { AuthShowcase } from "~/components/googleAuthShowcase";
@@ -9,33 +17,61 @@ import { signIn } from "next-auth/react";
 import { Logo } from "~/components/logo";
 import Link from "next/link";
 import Head from "next/head";
-import { useMediaQuery } from '@mantine/hooks';
+import { useMediaQuery } from "@mantine/hooks";
 
 const SignUpPage: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
-  const largeScreen = useMediaQuery('(min-width: 992px)');
+  const largeScreen = useMediaQuery("(min-width: 992px)");
 
   return (
-    <main className={colorScheme === "dark" ? "h-screen w-full bg-[#1C2333]" : "h-screen w-full bg-white"}>
+    <main
+      className={
+        colorScheme === "dark"
+          ? "h-screen w-full bg-[#1C2333]"
+          : "h-screen w-full bg-white"
+      }
+    >
       <div className="absolute ml-5 mt-5 flex items-center gap-2">
-        <Logo width={40} height={40} />
+        <Logo width={40} height={40} href="/" />
         <h2>PrintIT</h2>
       </div>
-      <section className= {largeScreen ? "flex h-full w-1/2 flex-col items-center justify-center text-center" : "w-full h-full flex flex-col items-center justify-center"}>
-        <h1 className={colorScheme === "dark" ? "font-family-Inter text-4xl text-white" : "font-family-Inter text-4xl text-black"}>
+      <section
+        className={
+          largeScreen
+            ? "flex h-full w-1/2 flex-col items-center justify-center text-center"
+            : "flex h-full w-full flex-col items-center justify-center"
+        }
+      >
+        <h1
+          className={
+            colorScheme === "dark"
+              ? "font-family-Inter text-4xl text-white"
+              : "font-family-Inter text-4xl text-black"
+          }
+        >
           Bienvenido a PrinIT
         </h1>
         <h3 className="font-family-Inter text-#AFAFAF">Ingrese sus datos</h3>
         <RegisterForm />
         <AuthShowcase />
-        <p className={colorScheme === "dark" ? "font-family-Inter p-5 text-white" : "font-family-Inter p-5 text-black"}>
+        <p
+          className={
+            colorScheme === "dark"
+              ? "font-family-Inter p-5 text-white"
+              : "font-family-Inter p-5 text-black"
+          }
+        >
           ¿Ya tenés una cuenta?{" "}
           <Link href={"/signIn"} className="font-family-Inter text-blue-500">
             Ingresá acá
           </Link>
         </p>
       </section>
-      <picture className={largeScreen ? "absolute right-0 top-0 h-screen w-1/2" : "hidden"}>
+      <picture
+        className={
+          largeScreen ? "absolute right-0 top-0 h-screen w-1/2" : "hidden"
+        }
+      >
         <LogoSignUpIMG />
       </picture>
     </main>
@@ -51,7 +87,7 @@ const RegisterForm: React.FC = () => {
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const timeoutRef = useRef<number>(-1);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<string[]>([]);
   const router = useRouter();
@@ -62,13 +98,17 @@ const RegisterForm: React.FC = () => {
     setEmail(val);
     setData([]);
 
-    if (val.trim().length === 0 || val.includes('@')) {
+    if (val.trim().length === 0 || val.includes("@")) {
       setLoading(false);
     } else {
       setLoading(true);
       timeoutRef.current = window.setTimeout(() => {
         setLoading(false);
-        setData(['gmail.com', 'outlook.com', 'yahoo.com'].map((provider) => `${val}@${provider}`));
+        setData(
+          ["gmail.com", "outlook.com", "yahoo.com"].map(
+            (provider) => `${val}@${provider}`
+          )
+        );
       }, 500);
     }
   };
@@ -113,7 +153,8 @@ const RegisterForm: React.FC = () => {
             autoClose: 2000,
           });
           setIsLoading(false);
-          void router.push("/dashboard/subirArchivo");
+          window.open("/dashboard/subirArchivo", "_blank")
+          void router.push("/");
         } else {
           notifications.show({
             title: "Error",
@@ -140,25 +181,22 @@ const RegisterForm: React.FC = () => {
         onSubmit={handleSubmit}
       >
         <div className="mb-2 w-4/5">
-          <Text
-            fw={500}
-            className="font-family-Inter justify-left flex"
-          >
+          <Text fw={500} className="font-family-Inter justify-left flex">
             User
           </Text>
           <TextInput
             value={name}
             type="text"
             placeholder="Ingrese su Nombre"
-            onChange={(e) => { setName(e.currentTarget.value); setError(false)} }
+            onChange={(e) => {
+              setName(e.currentTarget.value);
+              setError(false);
+            }}
             {...(error ? { error } : {})}
           />
         </div>
         <div className="mb-2 w-4/5">
-          <Text
-            fw={500}
-            className="font-family-Inter justify-left flex"
-          >
+          <Text fw={500} className="font-family-Inter justify-left flex">
             Email
           </Text>
           <Autocomplete
@@ -171,15 +209,15 @@ const RegisterForm: React.FC = () => {
           />
         </div>
         <div className="mb-2 w-4/5">
-          <Text
-            fw={500}
-            className="font-family-Inter justify-left flex"
-          >
+          <Text fw={500} className="font-family-Inter justify-left flex">
             Password
           </Text>
           <PasswordInput
             value={password}
-            onChange={(event) => { setPassword(event.currentTarget.value); setError(false) }}
+            onChange={(event) => {
+              setPassword(event.currentTarget.value);
+              setError(false);
+            }}
             placeholder="Your password"
             className="mb-3"
             {...(error ? { error } : {})}

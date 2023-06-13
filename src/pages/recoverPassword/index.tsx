@@ -34,7 +34,6 @@ const Recover: NextPage = () => {
       >
         <div className="absolute ml-5 mt-5 flex items-center gap-2">
           <Logo width={40} height={40} href="/" />
-          <h2>PrintIT</h2>
         </div>
         <section
           className={
@@ -75,7 +74,8 @@ const RecoverForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
-  const { mutate: sendPasswordEmail } = api.auth.sendPasswordEmail.useMutation();
+  const { mutate: sendPasswordEmail } =
+    api.auth.sendPasswordEmail.useMutation();
   const timeoutRef = useRef<number>(-1);
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);

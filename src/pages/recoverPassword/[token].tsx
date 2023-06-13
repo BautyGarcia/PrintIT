@@ -4,17 +4,11 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { api } from "~/utils/api";
 import {
-  createStyles,
-  Paper,
-  Title,
   Text,
   Button,
-  Container,
   Group,
   Anchor,
   Center,
-  Box,
-  rem,
   PasswordInput,
 } from "@mantine/core";
 import { useMantineColorScheme } from "@mantine/core";

@@ -35,7 +35,6 @@ export const Footer = () => {
     <div className={classes.inner}>
       <Group className="flex flex-row items-center gap-4">
         <Logo width={40} height={40} href="/" />
-        <h1 className="font-family-Inter">PrintIT</h1>
       </Group>
 
       <Group className={classes.links}>

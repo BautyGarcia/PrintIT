@@ -32,9 +32,6 @@ const SignInPage: NextPage = () => {
     >
       <div className="absolute ml-5 mt-5 flex items-center gap-2">
         <Logo width={40} height={40} href="/" />
-        <h2 className={colorScheme === "dark" ? "text-white" : "text-black"}>
-          PrintIT
-        </h2>
       </div>
       <section
         className={

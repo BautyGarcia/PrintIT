@@ -29,8 +29,10 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
     >
       <Group className="flex flex-row items-center gap-2">
         <Logo width={40} height={40} href="#" />
-        <h1 className="font-family-Inter">PrintIT</h1>
       </Group>
+      <div className="flex items-center">
+        <UserToggle />
+      </div>
       <MediaQuery largerThan="sm" styles={{ display: "none" }}>
         <Burger
           opened={opened}
@@ -40,9 +42,6 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
           mr="xxs"
         />
       </MediaQuery>
-      <div className="flex items-center">
-        <UserToggle />
-      </div>
       <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
         <Group>
           <SchemeButton />

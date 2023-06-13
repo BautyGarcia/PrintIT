@@ -163,7 +163,6 @@ const Landing: NextPage = () => {
             <h3>
               Ingresa tu mail para recibir noticias de las actualizaciones
             </h3>
-            //Box of emails
           </div>
           <div className="flex w-1/2">
             <HombreNubeTanto />

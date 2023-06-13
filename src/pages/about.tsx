@@ -3,7 +3,7 @@ import Head from "next/head";
 import { LandingHeader } from "~/components/landingHeader";
 import { Footer } from "~/components/footer";
 import { useMantineColorScheme } from "@mantine/core";
-
+import { TopAboutUs } from "~/components/topaboutimg";
 const About: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
 
@@ -24,6 +24,9 @@ const About: NextPage = () => {
           "h-screen w-full bg-[#F0F1F8] from-[#2e026d] to-[#15162c]"
         }
       >
+        <div className="bg-[url('/img/TopAbout.png')]">
+
+        </div>
         <div>
         <AboutUs/>
         </div>
@@ -40,11 +43,10 @@ export function AboutUs(){
 
   return (
     <form> 
+      <div>
 
-      <svg width="500" height="80" viewBox="0 0 500 80" preserveAspectRatio="none">
-      <path d="M500,5000  L0,40 Q250,80 500,40 L500,0 Z"
-       fill="black" />
-      </svg>
+      </div>
+
 
     </form>
   );

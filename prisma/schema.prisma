@@ -8,14 +8,6 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Business {
-  id           String    @id @default(cuid())
-  businessName String
-  memberName   String
-  memberEmail  String
-  printers     Printer[]
-}
-
 model Printer {
   id         String      @id @default(cuid())
   name       String
@@ -26,10 +18,8 @@ model Printer {
   userId     String?
   businessId String?
   user       User?       @relation(fields: [userId], references: [id])
-  business   Business?   @relation(fields: [businessId], references: [id])
 
   @@index([userId])
-  @@index([businessId])
 }
 
 enum PrinterType {

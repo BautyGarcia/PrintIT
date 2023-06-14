@@ -13,6 +13,11 @@ import { PuntodeImpresion } from "~/components/Landing/puntoDeImpresion";
 import { Necesidades } from "~/components/Landing/tusNecesidades";
 import { Objetivo } from "~/components/Landing/objetivo";
 import { Servicio } from "~/components/Landing/servicio";
+import { UsoBlack } from "~/components/Landing/usoPrintItBlack";
+import { UsoWhite } from "~/components/Landing/usoPrintItWhite";
+import { Discord } from "~/components/Landing/discord";
+import { Instagram } from "~/components/Landing/instagram";
+import { FaceBook } from "~/components/Landing/facebook";
 
 const Landing: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -59,15 +64,34 @@ const Landing: NextPage = () => {
           }
         >
           <Impresora />
+          <div className={
+            colorScheme === "dark"
+              ? "from-[#2e026d] to-[#15162c] flex justify-center items-center mb-4"
+              : "hidden"
+          }>
+            <UsoWhite/>
+          </div>
+          <div className={
+            colorScheme === "dark"
+              ? "hidden"
+              : "from-[#2e026d] to-[#15162c] flex justify-center items-center mb-4"
+          }>
+            <UsoBlack/>
+          </div>
           <h3 className="mb-4 mt-0 flex justify-center">
             Nos podes encontrar en redes sociales
           </h3>
+          <div className=" flex w-full h-40 p-2 ">
+            <Instagram/>
+            <Discord/>
+            <FaceBook/>
+          </div>
         </div>
         <div className="flex flex-col items-center">
           <h1>Herramientas que facilitaran tu búsqueda ideal</h1>
           <h3>Beneficios de usar PrintIt</h3>
         </div>
-        <div className="flex flex-row justify-center">
+        <div className="flex flex-row justify-center space-x-60 mb-20 mt-20">
           <div
             className={
               colorScheme === "dark"
@@ -113,7 +137,7 @@ const Landing: NextPage = () => {
             </h3>
           </div>
         </div>
-        <div className="ml-20 flex w-full flex-col items-start justify-center">
+        <div className="ml-96 flex w-screen flex-col items-start justify-center">
           <h2 className="text-blue-500">Nuestro Servicio</h2>
           <h1 className={colorScheme === "dark" ? "text-white" : "text-black"}>
             Te ayudamos a imprimir lo que necesites
@@ -126,12 +150,14 @@ const Landing: NextPage = () => {
             con una amplia red de propietarios de impresoras 3D que ofrecen sus
             servicios de impresión a precios competitivos.
           </h3>
-          <picture className="absolute right-0 w-1/2">
+          <picture className="absolute right-0 w-1/6 mr-48">
             <Servicio />
           </picture>
+          <br></br>
           <button>Sobre nosotros</button>
         </div>
-        <div className="ml-20 flex w-full flex-col items-start justify-center">
+        <br></br>
+        <div className="ml-20 flex w-full flex-col items-end justify-center">
           <h2 className="text-blue-500">Parte de nuestro objetivo</h2>
           <h1 className={colorScheme === "dark" ? "text-white" : "text-black"}>
             Importancia de la impresion 3D
@@ -146,7 +172,7 @@ const Landing: NextPage = () => {
             e incluso la medicina. Se espera que su uso siga creciendo y
             evolucionando en el futuro, innovando el mundo en el que vivimos.
           </h3>
-          <picture className="absolute right-0 w-1/2">
+          <picture className="absolute w-full ml-60 left-0">
             <Objetivo />
           </picture>
         </div>

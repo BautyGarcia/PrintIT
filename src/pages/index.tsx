@@ -1,17 +1,10 @@
 import { type NextPage } from "next";
-import { type FormEventHandler, useState, useRef } from "react";
 import Head from "next/head";
 import { LandingHeader } from "~/components/landingHeader";
 import { Footer } from "~/components/footer";
 import {
-  Button,
   useMantineColorScheme,
-  Autocomplete,
-  Text,
-  Loader,
 } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
-import { notifications } from "@mantine/notifications";
 import { TopLanding } from "~/components/Landing/topLanding";
 import { Impresora } from "~/components/Landing/Impresora";
 import { HombreNubeTanto } from "~/components/Landing/hombreNube";

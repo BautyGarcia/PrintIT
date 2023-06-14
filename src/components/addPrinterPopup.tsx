@@ -1,48 +1,88 @@
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
-import { Button, useMantineColorScheme, Stepper, Checkbox, TextInput } from '@mantine/core';
-import { IconPlus, IconUser, IconPrinter } from '@tabler/icons-react';
+import { Button, useMantineColorScheme, TextInput, Autocomplete, Select } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useState } from 'react';
+import { isNotEmpty, useForm } from '@mantine/form';
+import { notifications } from '@mantine/notifications';
+import { useSession } from "next-auth/react";
+import { Logo } from './logo';
+import { api } from '~/utils/api';
 
 const PrinterPopup: React.FC = () => {
     const [opened, { toggle }] = useDisclosure(false);
     const { colorScheme } = useMantineColorScheme();
     const largeScreen = useMediaQuery('(min-width: 60em)');
-    const [active, setActive] = useState(0);
-    const [isBusiness, setIsBusiness] = useState(false);
-    const [businessName, setBusinessName] = useState("");
-    const [businessEmail, setBusinessEmail] = useState("");
-    const [businessPhone, setBusinessPhone] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const nextStep = () => setActive((current) => (current < 2 ? current + 1 : current));
-    const prevStep = () => setActive((current) => (current > 0 ? current - 1 : current));
+    const { data: SessionData } = useSession();
+    const { mutate: addPrinter } = api.printer.addPrinter.useMutation();
 
     const handlePopupClose = () => {
         toggle();
-        setActive(0);
-        setIsBusiness(false);
-        setBusinessName("");
-        setBusinessEmail("");
-        setBusinessPhone("");
-    }
+        addPrinterForm.reset();
+    };
 
-    const handleSubmit = () => {
-        setIsLoading(true);
-        //Aca se deberia hacer el request a la API y validar las cosas
-        setTimeout(() => {
-            setIsLoading(false);
-            nextStep();
-        }, 2000);
-    }
+    const addPrinterForm = useForm({
+        initialValues: { businessName: '', printerBrand: '', printerModel: '', printerType: '', printerArea: '' },
+        validate: {
+            businessName: isNotEmpty(),          
+            printerBrand: isNotEmpty(),
+            printerModel: isNotEmpty(),
+            printerType: isNotEmpty(),
+            printerArea: (value) => (/^\d{3}x\d{3}x\d{3}$/.test(value) ? null : true),
+        }
+    });
 
-    const validatePersonalInfo = () => {
+    const handleError = (errors: typeof addPrinterForm.errors) => {
+        if (errors.businessName || errors.printerBrand || errors.printerModel || errors.printerType) {
+            notifications.show({
+                title: 'Error',
+                message: 'Por favor complete todos los campos.',
+                color: 'red',
+                autoClose: 5000,
+            });
+        } else if (errors.printerArea) {
+            notifications.show({
+                title: 'Error',
+                message: 'El area de impresion debe tener este formato: 220x220x250',
+                color: 'red',
+                autoClose: 5000,
+            });
+        }
+    };
+
+    const handleFormSubmit = (values: typeof addPrinterForm.values) => {
         setIsLoading(true);
-        //Aca se validan los inputs del form
-        setTimeout(() => {
-            setIsLoading(false);
-            nextStep();
-        }, 2000);
-    }
+        
+        addPrinter({
+            userEmail: SessionData?.user?.email as string,
+            printerOwner: values.businessName,
+            printerBrand: values.printerBrand,
+            printerModel: values.printerModel,
+            printerType: values.printerType,
+            printerArea: values.printerArea,
+        }, {
+            onSuccess: () => {
+                notifications.show({
+                    title: 'Impresora registrada',
+                    message: 'La impresora se registro correctamente.',
+                    color: 'green',
+                    autoClose: 5000,
+                });
+                setIsLoading(false);
+                handlePopupClose();
+            },
+            onError: (error) => {
+                notifications.show({
+                    title: 'Error',
+                    message: error.message,
+                    color: 'red',
+                    autoClose: 5000,
+                });
+                setIsLoading(false);
+            }
+        });
+    };
 
     return (
         <>
@@ -53,116 +93,68 @@ const PrinterPopup: React.FC = () => {
 
             {opened && (
                 <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 backdrop-blur-sm">
-                    <div className={colorScheme === "dark" ? "bg-[#1C2333] rounded-lg" : "bg-white rounded-lg"}>
-                        <div className={largeScreen ? "p-8 w-[477px] min-w-[310px] overflow-y-auto" : "p-8 max-h-[70vh] max-w-[75vw] min-w-[310px] overflow-y-auto"}>
-                            <Stepper active={active} onStepClick={setActive} breakpoint="sm" size='sm' allowNextStepsSelect={false}>
-                                <Stepper.Step label="Información Personal" description="Nombre, Contacto, etc" icon={<IconUser size="1.1rem" />}>
-                                    <Checkbox size="md" checked={isBusiness} className='mt-4' onChange={(e) => setIsBusiness(e.currentTarget.checked)} label="¿Sos una empresa o negocio?" />
-                                    {isBusiness &&
-                                        <>
-                                            <div className="flex flex-col mt-4">
-                                                <label className="text-left mb-1">Nombre del Negocio</label>
-                                                <TextInput
-                                                    placeholder="Globant, GroupIT, etc"
-                                                    size="md"
-                                                    onChange={(e) => setBusinessName(e.currentTarget.value)}
-                                                />
-                                            </div>
-                                            <div className="flex flex-col mt-4">
-                                                <label className="text-left mb-1">Email del Negocio</label>
-                                                <TextInput
-                                                    placeholder="ejemplo@globant.com.ar"
-                                                    size="md"
-                                                    onChange={(e) => setBusinessEmail(e.currentTarget.value)}
-                                                />
-                                            </div>
-                                            <div className="flex flex-col mt-4">
-                                                <label className="text-left mb-1">Teléfono del Negocio</label>
-                                                <TextInput
-                                                    placeholder="11 1234 5678"
-                                                    size="md"
-                                                    onChange={(e) => setBusinessPhone(e.currentTarget.value)}
-                                                />
-                                            </div>
-                                        </>
-                                    }
-                                </Stepper.Step>
-                                <Stepper.Step label="Impresora" description="Marca, Modelo, etc" icon={<IconPrinter size="1.1rem" />}>
-                                    <div className="flex flex-col mt-4">
-                                        <label className="text-left mb-1">Marca</label>
-                                        <TextInput
-                                            placeholder="Creality, Ultimaker, etc"
-                                            size="md"
-                                            onChange={(e) => setBusinessName(e.currentTarget.value)}
-                                        />
-                                    </div>
-                                    <div className="flex flex-col mt-4">
-                                        <label className="text-left mb-1">Modelo</label>
-                                        <TextInput
-                                            placeholder="Ender 3, Ender 3 V2, etc"
-                                            size="md"
-                                            onChange={(e) => setBusinessName(e.currentTarget.value)}
-                                        />
-                                    </div>
-                                    <div className="flex flex-col mt-4">
-                                        <label className="text-left mb-1">Tipo</label>
-                                        <TextInput
-                                            placeholder="FDM, Resina"
-                                            size="md"
-                                            onChange={(e) => setBusinessName(e.currentTarget.value)}
-                                        />
-                                    </div>
-                                    <div className="flex flex-col mt-4">
-                                        <label className="text-left mb-1">Area de Impresion</label>
-                                        <TextInput
-                                            placeholder="220x220x250mm"
-                                            size="md"
-                                            onChange={(e) => setBusinessName(e.currentTarget.value)}
-                                        />
-                                    </div>
-                                </Stepper.Step>
-                                <Stepper.Completed>
-                                    Felicitaciones, ya se registro tu impresora! Podes verla en la sección de <Link href="/dashboard/misImpresoras" passHref className='text-[#3b82f6]'><b>Mis Impresoras.</b></Link>
-                                </Stepper.Completed>
-                            </Stepper>
-
+                    <div className={colorScheme === 'dark' ? 'bg-[#1C2333] rounded-lg' : 'bg-white rounded-lg'}>
+                        <div className={largeScreen ? 'p-8 w-[477px] min-w-[310px] overflow-y-auto' : 'p-8 max-h-[70vh] max-w-[75vw] min-w-[310px] overflow-y-auto'}>
+                            <form id='addPrinterForm' onSubmit={addPrinterForm.onSubmit(handleFormSubmit, handleError)}>
+                                <Logo width={40} height={40} href='' />
+                                <div className="flex flex-col mt-4">
+                                    <label className="text-left mb-1">Nombre del Propietario</label>
+                                    <Autocomplete
+                                        placeholder="Manuel, Rulo3D, Globant, etc"
+                                        size="md"
+                                        data={SessionData?.user?.name ? [SessionData.user.name] : []}
+                                        {...addPrinterForm.getInputProps('businessName')}
+                                    />
+                                </div>
+                                <div className="flex flex-col mt-4">
+                                    <label className="text-left mb-1">Marca</label>
+                                    <TextInput
+                                        placeholder="Creality, Ultimaker, etc"
+                                        size="md"
+                                        {...addPrinterForm.getInputProps('printerBrand')}
+                                    />
+                                </div>
+                                <div className="flex flex-col mt-4">
+                                    <label className="text-left mb-1">Modelo</label>
+                                    <TextInput
+                                        placeholder="Ender 3, Ender 3 V2, etc"
+                                        size="md"
+                                        {...addPrinterForm.getInputProps('printerModel')}
+                                    />
+                                </div>
+                                <div className="flex flex-col mt-4">
+                                    <label className="text-left mb-1">Tipo</label>
+                                    <Select
+                                        placeholder="FDM, Resina"
+                                        size="md"
+                                        data={[{ value: "FDM", label: "FDM" }, { value: "Resina", label: "Resina" }]}
+                                        {...addPrinterForm.getInputProps('printerType')}
+                                    />
+                                </div>
+                                <div className="flex flex-col mt-4">
+                                    <label className="text-left mb-1">Area de Impresion (mm)</label>
+                                    <TextInput
+                                        placeholder="220x220x250"
+                                        size="md"
+                                        {...addPrinterForm.getInputProps('printerArea')}
+                                    />
+                                </div>
+                            </form>
                             <div className="flex justify-between mt-6">
-                                {
-                                    active === 0 ? (
-                                        <Button className="bg-[#3B82F6]" onClick={handlePopupClose}>
-                                            Cerrar
-                                        </Button>
-                                    ) : active === 2 ? (
-                                        <div/>
-                                    ) : (
-                                        <Button className="bg-[#3B82F6]" onClick={prevStep}>
-                                            Atrás
-                                        </Button>
-                                    )
-                                }
-                                {
-                                    active === 2 ? (
-                                        <Button className="bg-[#3B82F6]" onClick={handlePopupClose}>
-                                            Cerrar
-                                        </Button>
-                                    ) : active === 1 ? (
-                                        <Button className="bg-[#3B82F6]" onClick={handleSubmit} loading={isLoading}>
-                                            Enviar
-                                        </Button>
-                                    ) : (
-                                        <Button className="bg-[#3B82F6]" onClick={validatePersonalInfo} loading={isLoading}>
-                                            Siguiente
-                                        </Button>
-                                    )
-                                }
+                                <Button className="bg-[#3B82F6]" onClick={handlePopupClose}>
+                                    Cerrar
+                                </Button>
+                                <Button className="bg-[#3B82F6]" type="submit" form='addPrinterForm' loading={isLoading}>
+                                    Enviar
+                                </Button>
                             </div>
                         </div>
                     </div>
                 </div>
-
             )}
         </>
     );
 };
 
 export default PrinterPopup;
+

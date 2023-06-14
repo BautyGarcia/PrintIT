@@ -81,7 +81,7 @@ const Landing: NextPage = () => {
           <h3 className="mb-4 mt-0 flex justify-center">
             Nos podes encontrar en redes sociales
           </h3>
-          <div className=" flex w-full h-40 p-2 ">
+          <div className=" flex w-full h-40 p-2">
             <Instagram/>
             <Discord/>
             <FaceBook/>
@@ -137,45 +137,51 @@ const Landing: NextPage = () => {
             </h3>
           </div>
         </div>
-        <div className="ml-96 flex w-screen flex-col items-start justify-center">
-          <h2 className="text-blue-500">Nuestro Servicio</h2>
-          <h1 className={colorScheme === "dark" ? "text-white" : "text-black"}>
-            Te ayudamos a imprimir lo que necesites
-          </h1>
-          <h3 className="w-1/2">
-            De forma rápida, fácil y accesible. Nuestra plataforma conecta a los
-            usuarios con una amplia red de propietarios de impresoras 3D que
-            ofrecen sus servicios de impresión a precios competitivos. de forma
-            rápida, fácil y accesible. Nuestra plataforma conecta a los usuarios
-            con una amplia red de propietarios de impresoras 3D que ofrecen sus
-            servicios de impresión a precios competitivos.
-          </h3>
-          <picture className="absolute right-0 w-1/6 mr-48">
+        <div className="ml-20 flex w-full flex-row items-start">
+          <div className="flex flex-col w-1/2 ml-28">
+            <h2 className="text-blue-500 flex items-start">Nuestro Servicio</h2>
+            <h1 className={colorScheme === "dark" ? "text-white flex items-center" : "text-black flex items-center"}>
+              Te ayudamos a imprimir lo que necesites
+            </h1>
+            <h3>
+              De forma rápida, fácil y accesible. Nuestra plataforma conecta a los
+              usuarios con una amplia red de propietarios de impresoras 3D que
+              ofrecen sus servicios de impresión a precios competitivos. de forma
+              rápida, fácil y accesible. Nuestra plataforma conecta a los usuarios
+              con una amplia red de propietarios de impresoras 3D que ofrecen sus
+              servicios de impresión a precios competitivos.
+            </h3>
+            <br></br>
+            <button className="rounded-lg bg-blue-500 py-2 items-center text-white hover:bg-blue-700 font-family-Inter flex flex-col w-1/6">Sobre nosotros</button>
+          </div>
+          <picture className="right-0 w-1/3 ml-64">
             <Servicio />
           </picture>
           <br></br>
-          <button>Sobre nosotros</button>
         </div>
         <br></br>
-        <div className="ml-20 flex w-full flex-col items-end justify-center">
-          <h2 className="text-blue-500">Parte de nuestro objetivo</h2>
-          <h1 className={colorScheme === "dark" ? "text-white" : "text-black"}>
-            Importancia de la impresion 3D
-          </h1>
-          <h3 className="w-1/2">
-            Nosotros creemos que la impresion 3D es una tecnología que vino para
-            quedarse. Este permite crear objetos tridimensionales a partir de
-            modelos digitales. La consideramos una tecnologia emergente la cual
-            esta revolucionando la forma en que se diseñan y producen objetos y
-            tienen una gran importancia en varios campos, entre los que se
-            incluyen la educación, la industria, diseños de productos personales
-            e incluso la medicina. Se espera que su uso siga creciendo y
-            evolucionando en el futuro, innovando el mundo en el que vivimos.
-          </h3>
-          <picture className="absolute w-full ml-60 left-0">
+        <div className="ml-20 flex w-full flex-row items-end ">
+          <picture className=" w-1/3 ml-28 left-0">
             <Objetivo />
           </picture>
+          <div className=" flex flex-col  w-1/2">
+            <h2 className="text-blue-500 flex items-start">Parte de nuestro objetivo</h2>
+            <h1 className={colorScheme === "dark" ? "text-white flex items-center" : "text-black flex items-center"}>
+              Importancia de la impresion 3D
+            </h1>
+            <h3>
+              Nosotros creemos que la impresion 3D es una tecnología que vino para
+              quedarse. Este permite crear objetos tridimensionales a partir de
+              modelos digitales. La consideramos una tecnologia emergente la cual
+              esta revolucionando la forma en que se diseñan y producen objetos y
+              tienen una gran importancia en varios campos, entre los que se
+              incluyen la educación, la industria, diseños de productos personales
+              e incluso la medicina. Se espera que su uso siga creciendo y
+              evolucionando en el futuro, innovando el mundo en el que vivimos.
+            </h3>
+          </div>
         </div>
+        <br></br>
         <div className="flex">
           <div className="flex w-1/2 flex-col items-center">
             <h1>Mantenete al Tanto</h1>

@@ -8,33 +8,17 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Business {
-  id           String    @id @default(cuid())
-  businessName String
-  memberName   String
-  memberEmail  String
-  printers     Printer[]
-}
-
 model Printer {
-  id         String      @id @default(cuid())
-  name       String
-  brand      String
-  model      String
-  type       PrinterType
-  bedSize    String
-  userId     String?
-  businessId String?
-  user       User?       @relation(fields: [userId], references: [id])
-  business   Business?   @relation(fields: [businessId], references: [id])
+  id      String  @id @default(cuid())
+  name    String
+  brand   String
+  model   String
+  type    String
+  bedSize String
+  userId  String?
+  user    User?   @relation(fields: [userId], references: [id])
 
   @@index([userId])
-  @@index([businessId])
-}
-
-enum PrinterType {
-  FDM
-  Resin
 }
 
 // Necessary for Next auth

@@ -9,21 +9,16 @@ datasource db {
 }
 
 model Printer {
-  id      String      @id @default(cuid())
+  id      String  @id @default(cuid())
   name    String
   brand   String
   model   String
-  type    PrinterType
+  type    String
   bedSize String
   userId  String?
-  user    User?       @relation(fields: [userId], references: [id])
+  user    User?   @relation(fields: [userId], references: [id])
 
   @@index([userId])
-}
-
-enum PrinterType {
-  FDM
-  Resin
 }
 
 // Necessary for Next auth

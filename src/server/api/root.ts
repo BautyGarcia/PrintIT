@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "~/server/api/trpc";
 import { authRouter } from "~/server/api/routers/auth";
+import { printerRouter } from "./routers/printers";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +9,7 @@ import { authRouter } from "~/server/api/routers/auth";
  */
 export const appRouter = createTRPCRouter({
   auth: authRouter,
+  printer: printerRouter
 });
 
 // export type definition of API

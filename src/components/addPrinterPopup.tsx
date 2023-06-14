@@ -3,10 +3,11 @@ import { Button, useMantineColorScheme, TextInput, Autocomplete, Select } from '
 import { IconPlus } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { isEmail, isNotEmpty, useForm } from '@mantine/form';
+import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useSession } from "next-auth/react";
 import { Logo } from './logo';
+import { api } from '~/utils/api';
 
 const PrinterPopup: React.FC = () => {
     const [opened, { toggle }] = useDisclosure(false);
@@ -14,6 +15,7 @@ const PrinterPopup: React.FC = () => {
     const largeScreen = useMediaQuery('(min-width: 60em)');
     const [isLoading, setIsLoading] = useState(false);
     const { data: SessionData } = useSession();
+    const { mutate: addPrinter } = api.printer.addPrinter.useMutation();
 
     const handlePopupClose = () => {
         toggle();
@@ -51,11 +53,35 @@ const PrinterPopup: React.FC = () => {
 
     const handleFormSubmit = (values: typeof addPrinterForm.values) => {
         setIsLoading(true);
-        console.log(values);
-        setTimeout(() => {
-            setIsLoading(false);
-            handlePopupClose();
-        }, 2000);
+        
+        addPrinter({
+            userEmail: SessionData?.user?.email as string,
+            printerOwner: values.businessName,
+            printerBrand: values.printerBrand,
+            printerModel: values.printerModel,
+            printerType: values.printerType,
+            printerArea: values.printerArea,
+        }, {
+            onSuccess: () => {
+                notifications.show({
+                    title: 'Impresora registrada',
+                    message: 'La impresora se registro correctamente.',
+                    color: 'green',
+                    autoClose: 5000,
+                });
+                setIsLoading(false);
+                handlePopupClose();
+            },
+            onError: (error) => {
+                notifications.show({
+                    title: 'Error',
+                    message: error.message,
+                    color: 'red',
+                    autoClose: 5000,
+                });
+                setIsLoading(false);
+            }
+        });
     };
 
     return (

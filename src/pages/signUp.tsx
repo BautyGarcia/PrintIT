@@ -33,7 +33,6 @@ const SignUpPage: NextPage = () => {
     >
       <div className="absolute ml-5 mt-5 flex items-center gap-2">
         <Logo width={40} height={40} href="/" />
-        <h2>PrintIT</h2>
       </div>
       <section
         className={
@@ -153,7 +152,7 @@ const RegisterForm: React.FC = () => {
             autoClose: 2000,
           });
           setIsLoading(false);
-          window.open("/dashboard/subirArchivo", "_blank")
+          window.open("/dashboard/subirArchivo", "_blank");
           void router.push("/");
         } else {
           notifications.show({

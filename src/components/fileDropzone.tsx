@@ -12,8 +12,8 @@ const STLDropzone = () => {
     const [depth, setDepth] = useState(0 as number);
 
     const styles = {
-        width: '500px',
-        height: '500px',
+        width: '700px',
+        height: '700px',
         border: '1px solid black'
     };
 
@@ -77,7 +77,7 @@ const STLDropzone = () => {
                     :
 
                     <>
-                        <StlViewer url={stlViewerURL} style={styles} orbitControls />
+                        <StlViewer url={stlViewerURL} style={styles} orbitControls/>
                         <Text>Volume: {volume} cm3</Text>
                         <Text>Width: {width} cm</Text>
                         <Text>Height: {height} cm</Text>

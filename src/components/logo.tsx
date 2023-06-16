@@ -24,13 +24,14 @@ export const Logo: React.FC<LogoProps> = ({ width, height, href }) => {
   }
 
   return (
-    <Link href={href} passHref>
+    <Link className="flex items-center" href={href} passHref>
       <Image
         src={colorScheme === "light" ? "/Logo.png" : "/LogoWhite.png"}
         alt="logo"
         width={width}
         height={height}
       />
+      <h2 className="font-family-Inter p-2">PrintIT</h2>
     </Link>
   );
 };

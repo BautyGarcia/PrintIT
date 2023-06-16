@@ -16,7 +16,8 @@ import { UsoWhite } from "~/components/Landing/usoPrintItWhite";
 import { Discord } from "~/components/Landing/discord";
 import { Instagram } from "~/components/Landing/instagram";
 import { FaceBook } from "~/components/Landing/facebook";
-import Carousel from "~/components/Landing/carousel";
+//import Carousel from "~/components/Landing/carousel";
+import { Contacto } from "~/components/Landing/contacto";
 
 const Landing: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -211,16 +212,17 @@ const Landing: NextPage = () => {
         </div>
         <br></br>
         <div>
-          <Carousel />
+          <h1>Carusel</h1>
         </div>
-        <div className="flex w-full flex-row justify-center ">
+        <div className="ml-20 flex w-full flex-row items-start">
           <div className="ml-28 flex w-1/2 flex-col items-start">
             <h1 className="flex items-start">Mantenete al Tanto</h1>
             <h3 className="flex items-start">
               Ingresa tu mail para recibir noticias de las actualizaciones
             </h3>
+            <Contacto/>
           </div>
-          <div className="right-0 ml-64 w-1/2 items-end">
+          <div className="right-0 ml-96 w-1/3 mb-8">
             <HombreNubeTanto />
           </div>
         </div>

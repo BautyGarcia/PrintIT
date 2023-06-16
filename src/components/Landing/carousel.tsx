@@ -1,72 +1,27 @@
-import { RefObject, useEffect, useRef, useState } from "react";
+// import React, { useEffect, useState } from 'react';
+// import { Impresora } from './Impresora';
+// import { Servicio } from './servicio';
+// import { Proveedores } from './proveedores';
 
-const Carousel: React.FC = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+// const images = [
+//   <Impresora/>,
+//   <Servicio/>,
+//   <Proveedores/>
+// ];
 
-  const carouselRef: RefObject<HTMLDivElement> = useRef(null);
+// const Carousel: React.FC = () => {
+//   const [activeIndex, setActiveIndex] = useState(0);
 
-  const images = ["Impresora.png", "Impresora.png", "Impresora.png"];
+//   useEffect(() => {
+//     const interval = setInterval(() => {
+//       setActiveIndex((prevIndex) => (prevIndex + 1) % images.length);
+//     }, 3000); // Change slide every 3 seconds
 
-  const nextSlide = (): void => {
-    if (!isTransitioning) {
-      setIsTransitioning(true);
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }
-  };
+//     return () => clearInterval(interval);
+//   }, []);
 
-  const prevSlide = (): void => {
-    if (!isTransitioning) {
-      setIsTransitioning(true);
-      setCurrentIndex((prevIndex) =>
-        prevIndex === 0 ? images.length - 1 : prevIndex - 1
-      );
-    }
-  };
+//   return (
 
-  useEffect(() => {
-    if (carouselRef.current) {
-      carouselRef.current.style.transform = `translateX(-${
-        currentIndex * carouselRef.current.clientWidth
-      }px)`;
-      carouselRef.current.addEventListener("transitionend", () =>
-        setIsTransitioning(false)
-      );
-    }
-  }, [currentIndex]);
+//   )
 
-  return (
-    <div className="relative">
-      <div
-        className="flex transition-transform duration-500 ease-in-out"
-        ref={carouselRef}
-      >
-        {images.map((imageUrl, index) => (
-          <div
-            key={index}
-            className="h-64 w-full bg-cover bg-center"
-            style={{
-              backgroundImage: `url(${imageUrl})`,
-              transform: `translateX(-${currentIndex * 100}%)`,
-            }}
-          />
-        ))}
-      </div>
-
-      <button
-        className="absolute left-2 top-1/2 -translate-y-1/2 transform rounded-full bg-white p-2 shadow-md"
-        onClick={prevSlide}
-      >
-        Prev
-      </button>
-      <button
-        className="absolute right-2 top-1/2 -translate-y-1/2 transform rounded-full bg-white p-2 shadow-md"
-        onClick={nextSlide}
-      >
-        Next
-      </button>
-    </div>
-  );
-};
-
-export default Carousel;
+// export default Carousel;

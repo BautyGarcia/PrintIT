@@ -16,7 +16,6 @@ export const Logo: React.FC<LogoProps> = ({ width, height, href }) => {
 
   useEffect(() => {
     setIsClient(true);
-    console.log(href);
   }, []);
 
   if (!isClient) {

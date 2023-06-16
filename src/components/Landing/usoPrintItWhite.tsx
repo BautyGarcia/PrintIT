@@ -5,8 +5,8 @@ export const UsoWhite: React.FC = ({}) => {
     <Image
       src="/UsoPrintItWhite.png"
       alt="UsoPrintItWhite"
-      width={200}
-      height={200}
+      width={500}
+      height={300}
     />
   );
 };

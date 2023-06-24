@@ -4,6 +4,8 @@ import { StlViewer } from "react-stl-viewer";
 import sliceSTL from '~/utils/fileSlicer';
 import { Text } from "@mantine/core";
 import pako from 'pako';
+import { api } from "~/utils/api";
+import { useSession } from "next-auth/react";
 const STLDropzone = () => {
     const [isSelected, setIsSelected] = useState(false);
     const [stlViewerURL, setSTLViewerURL] = useState('' as string);
@@ -12,6 +14,9 @@ const STLDropzone = () => {
     const [height, setHeight] = useState(0 as number);
     const [depth, setDepth] = useState(0 as number);
     const [compressedFile, setCompressedFile] = useState<File | null>(null);
+
+    const { mutate: testGetSTL } = api.printer.getPrinterForSTL.useMutation();
+    const { data: sessionData } = useSession();
 
     const styles = {
         width: '700px',
@@ -109,12 +114,25 @@ const STLDropzone = () => {
         setCompressedFile(null);
     }
 
+    const handleTest = () => {
+        testGetSTL({ userEmail: sessionData?.user.email as string, printerType: "FDM", bedSize: "050x050x050" }, {
+            onSuccess: (data) => {
+                console.log(data);
+            },
+            onError: (error) => {
+                console.log(error);
+            }
+        });
+    }
+
     return (
         <div>
             {
                 !isSelected ?
-                    <input type="file" onChange={handleFileSubmit} accept=".stl" />
-
+                    <>
+                        <input type="file" onChange={handleFileSubmit} accept=".stl" />
+                        <button className="bg-[#1c2333] p-2 rounded-md mt-5" onClick={handleTest}>Test</button>
+                    </>
                     :
 
                     <>

@@ -32,13 +32,18 @@ export const printerRouter = createTRPCRouter({
             return newPrinter;
         }),
     getPrinterForSTL: publicProcedure
-        .input(z.object({ bedSize: z.string(), printerType: z.string() }))
-        .query(async ({ input, ctx }) => {
-            const { bedSize, printerType } = input;
+        .input(z.object({ bedSize: z.string(), printerType: z.string(), userEmail: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { bedSize, printerType, userEmail } = input;
 
             const printers = await ctx.prisma.printer.findMany({
                 where: {
                     type: printerType,
+                    NOT: {
+                        user: {
+                            email: userEmail,
+                        },
+                    }
                 }
             })
 
@@ -50,6 +55,9 @@ export const printerRouter = createTRPCRouter({
                 const printerBedSize = printer.bedSize.split("x");
                 const stlBedSize = bedSize.split("x");
 
+                console.log("printerBedSize", printerBedSize);
+                console.log("stlBedSize", stlBedSize);
+
                 if (Number(printerBedSize[0]) >= Number(stlBedSize[0]) && Number(printerBedSize[1]) >= Number(stlBedSize[1]) && Number(printerBedSize[2]) >= Number(stlBedSize[2])) {
                     return true;
                 }
@@ -57,16 +65,18 @@ export const printerRouter = createTRPCRouter({
                 return false;
             })
 
-            return printers;
+            return printersForSTL;
         }),
     getMyPrinters: publicProcedure
-        .input(z.object({ userId: z.string() }))
+        .input(z.object({ userEmail: z.string() }))
         .query(async ({ input, ctx }) => {
-            const { userId } = input;
+            const { userEmail } = input;
 
             const printers = await ctx.prisma.printer.findMany({
                 where: {
-                    userId: userId,
+                    user: {
+                        email: userEmail,
+                    },
                 }
             })
 

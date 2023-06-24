@@ -9,14 +9,15 @@ datasource db {
 }
 
 model Printer {
-  id      String  @id @default(cuid())
-  name    String
-  brand   String
-  model   String
-  type    String
-  bedSize String
-  userId  String?
-  user    User?   @relation(fields: [userId], references: [id])
+  id          String  @id @default(cuid())
+  name        String
+  brand       String
+  model       String
+  type        String
+  bedSize     String
+  userId      String?
+  isAvailable Boolean @default(true)
+  user        User?   @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }

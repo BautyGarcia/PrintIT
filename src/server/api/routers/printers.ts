@@ -39,6 +39,7 @@ export const printerRouter = createTRPCRouter({
             const printers = await ctx.prisma.printer.findMany({
                 where: {
                     type: printerType,
+                    isAvailable: true,
                     NOT: {
                         user: {
                             email: userEmail,

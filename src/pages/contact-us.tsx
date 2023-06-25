@@ -29,14 +29,15 @@ const ContactUs: NextPage = () => {
       <main
         className={
           colorScheme === "dark"
-            ? "flex h-screen w-full flex-row items-start justify-center bg-[#0E1525] from-[#2e026d] to-[#15162c] pl-10 pr-10 pt-10"
-            : "flex h-screen w-full flex-row items-start justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c] pl-10 pr-10 pt-10"
+            ? "flex h-[93vh] w-full flex-row items-start justify-center bg-[#0E1525] from-[#2e026d] to-[#15162c] pl-10 pr-10"
+            : "flex h-[93vh] w-full flex-row items-start justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c] pl-10 pr-10"
         }
       >
+
         <div
           className={
             largeScreen
-              ? "font-family-Nunito mr-8 mt-36 flex h-full w-1/2  justify-center"
+              ? "font-family-Nunito mr-8 mt-36 flex w-1/2  justify-center"
               : "flex h-full w-full flex-col items-center justify-center"
           }
         >
@@ -49,6 +50,7 @@ const ContactUs: NextPage = () => {
         </picture>
       </main>
       <Footer />
+
     </>
   );
 };

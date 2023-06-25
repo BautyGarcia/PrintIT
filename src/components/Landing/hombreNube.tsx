@@ -5,8 +5,9 @@ export const HombreNubeTanto: React.FC = ({}) => {
     <Image
       src="/HombreNubeTanto.png"
       alt="HombreNubeTanto"
-      width={280}
-      height={80}
+      width={480}
+      height={220}
+      className="mr-40"
     />
   );
 };

@@ -1,4 +1,4 @@
-import { type NextPage } from "next";
+import { NextPage } from "next";
 import Head from "next/head";
 import { LandingHeader } from "~/components/landingHeader";
 import { Footer } from "~/components/footer";

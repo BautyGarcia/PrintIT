@@ -13,7 +13,11 @@ export default {
       xl: { raw: "(max-width: 1280px)" },
       custom: { raw: "( max-width: 1680px )" },
     },
-    extend: {},
+    extend: {
+      backgroundImage:  {
+        'TopAboutUs': "url('/img/TopAbout.png')" 
+      }
+    },
   },
   plugins: [],
 } satisfies Config;

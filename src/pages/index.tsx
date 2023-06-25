@@ -2,9 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { LandingHeader } from "~/components/landingHeader";
 import { Footer } from "~/components/footer";
-import {
-  useMantineColorScheme,
-} from "@mantine/core";
+import { useMantineColorScheme } from "@mantine/core";
 import { TopLanding } from "~/components/Landing/topLanding";
 import { Impresora } from "~/components/Landing/Impresora";
 import { HombreNubeTanto } from "~/components/Landing/hombreNube";
@@ -18,6 +16,8 @@ import { UsoWhite } from "~/components/Landing/usoPrintItWhite";
 import { Discord } from "~/components/Landing/discord";
 import { Instagram } from "~/components/Landing/instagram";
 import { FaceBook } from "~/components/Landing/facebook";
+//import Carousel from "~/components/Landing/carousel";
+import Contacto from "~/components/Landing/contacto";
 
 const Landing: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -63,35 +63,47 @@ const Landing: NextPage = () => {
               : "relative  from-[#2e026d] to-[#15162c] text-black"
           }
         >
-          <Impresora />
-          <div className={
-            colorScheme === "dark"
-              ? "from-[#2e026d] to-[#15162c] flex justify-center items-center mb-4"
-              : "hidden"
-          }>
-            <UsoWhite/>
+          <div className=" -mb-28">
+            <Impresora />
           </div>
-          <div className={
-            colorScheme === "dark"
-              ? "hidden"
-              : "from-[#2e026d] to-[#15162c] flex justify-center items-center mb-4"
-          }>
-            <UsoBlack/>
+          <div
+            className={
+              colorScheme === "dark"
+                ? "mb-4 flex items-center justify-center from-[#2e026d] to-[#15162c]"
+                : "hidden"
+            }
+          >
+            <UsoWhite />
           </div>
-          <h3 className="mb-4 mt-0 flex justify-center">
+          <div
+            className={
+              colorScheme === "dark"
+                ? "hidden"
+                : "mb-4 flex items-center justify-center from-[#2e026d] to-[#15162c]"
+            }
+          >
+            <UsoBlack />
+          </div>
+          <h3 className="-mb-12 mt-0 flex justify-center">
             Nos podes encontrar en redes sociales
           </h3>
-          <div className=" flex w-full h-40 p-2 ">
-            <Instagram/>
-            <Discord/>
-            <FaceBook/>
+          <div className=" flex w-full items-center justify-between p-4">
+            <div>
+              <Instagram />
+            </div>
+            <div>
+              <Discord />
+            </div>
+            <div>
+              <FaceBook />
+            </div>
           </div>
         </div>
         <div className="flex flex-col items-center">
           <h1>Herramientas que facilitaran tu búsqueda ideal</h1>
           <h3>Beneficios de usar PrintIt</h3>
         </div>
-        <div className="flex flex-row justify-center space-x-60 mb-20 mt-20">
+        <div className="mb-20 mt-20 flex flex-row justify-center space-x-60">
           <div
             className={
               colorScheme === "dark"
@@ -137,53 +149,80 @@ const Landing: NextPage = () => {
             </h3>
           </div>
         </div>
-        <div className="ml-96 flex w-screen flex-col items-start justify-center">
-          <h2 className="text-blue-500">Nuestro Servicio</h2>
-          <h1 className={colorScheme === "dark" ? "text-white" : "text-black"}>
-            Te ayudamos a imprimir lo que necesites
-          </h1>
-          <h3 className="w-1/2">
-            De forma rápida, fácil y accesible. Nuestra plataforma conecta a los
-            usuarios con una amplia red de propietarios de impresoras 3D que
-            ofrecen sus servicios de impresión a precios competitivos. de forma
-            rápida, fácil y accesible. Nuestra plataforma conecta a los usuarios
-            con una amplia red de propietarios de impresoras 3D que ofrecen sus
-            servicios de impresión a precios competitivos.
-          </h3>
-          <picture className="absolute right-0 w-1/6 mr-48">
+        <div className="ml-20 flex w-full flex-row items-start">
+          <div className="ml-28 flex w-1/2 flex-col">
+            <h2 className="flex items-start text-blue-500">Nuestro Servicio</h2>
+            <h1
+              className={
+                colorScheme === "dark"
+                  ? "flex items-center text-white"
+                  : "flex items-center text-black"
+              }
+            >
+              Te ayudamos a imprimir lo que necesites
+            </h1>
+            <h3>
+              De forma rápida, fácil y accesible. Nuestra plataforma conecta a
+              los usuarios con una amplia red de propietarios de impresoras 3D
+              que ofrecen sus servicios de impresión a precios competitivos. de
+              forma rápida, fácil y accesible. Nuestra plataforma conecta a los
+              usuarios con una amplia red de propietarios de impresoras 3D que
+              ofrecen sus servicios de impresión a precios competitivos.
+            </h3>
+            <br></br>
+            <button className="font-family-Inter flex w-1/6 flex-col items-center rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700">
+              Sobre nosotros
+            </button>
+          </div>
+          <picture className="right-0 ml-64 w-1/3">
             <Servicio />
           </picture>
           <br></br>
-          <button>Sobre nosotros</button>
         </div>
         <br></br>
-        <div className="ml-20 flex w-full flex-col items-end justify-center">
-          <h2 className="text-blue-500">Parte de nuestro objetivo</h2>
-          <h1 className={colorScheme === "dark" ? "text-white" : "text-black"}>
-            Importancia de la impresion 3D
-          </h1>
-          <h3 className="w-1/2">
-            Nosotros creemos que la impresion 3D es una tecnología que vino para
-            quedarse. Este permite crear objetos tridimensionales a partir de
-            modelos digitales. La consideramos una tecnologia emergente la cual
-            esta revolucionando la forma en que se diseñan y producen objetos y
-            tienen una gran importancia en varios campos, entre los que se
-            incluyen la educación, la industria, diseños de productos personales
-            e incluso la medicina. Se espera que su uso siga creciendo y
-            evolucionando en el futuro, innovando el mundo en el que vivimos.
-          </h3>
-          <picture className="absolute w-full ml-60 left-0">
+        <div className="ml-20 flex w-full flex-row items-end ">
+          <picture className=" left-0 ml-28 w-1/3">
             <Objetivo />
           </picture>
-        </div>
-        <div className="flex">
-          <div className="flex w-1/2 flex-col items-center">
-            <h1>Mantenete al Tanto</h1>
+          <div className=" flex w-1/2  flex-col">
+            <h2 className="flex items-start text-blue-500">
+              Parte de nuestro objetivo
+            </h2>
+            <h1
+              className={
+                colorScheme === "dark"
+                  ? "flex items-center text-white"
+                  : "flex items-center text-black"
+              }
+            >
+              Importancia de la impresion 3D
+            </h1>
             <h3>
-              Ingresa tu mail para recibir noticias de las actualizaciones
+              Nosotros creemos que la impresion 3D es una tecnología que vino
+              para quedarse. Este permite crear objetos tridimensionales a
+              partir de modelos digitales. La consideramos una tecnologia
+              emergente la cual esta revolucionando la forma en que se diseñan y
+              producen objetos y tienen una gran importancia en varios campos,
+              entre los que se incluyen la educación, la industria, diseños de
+              productos personales e incluso la medicina. Se espera que su uso
+              siga creciendo y evolucionando en el futuro, innovando el mundo en
+              el que vivimos.
             </h3>
           </div>
-          <div className="flex w-1/2">
+        </div>
+        <br></br>
+        <div>
+          <h1>Carusel</h1>
+        </div>
+        <div className="ml-20 flex w-full flex-row items-start">
+          <div className="ml-28 flex w-1/2 flex-col items-start">
+            <h1 className="flex items-start">Mantenete al Tanto</h1>
+            <h3 className="flex items-start">
+              Ingresa tu mail para recibir noticias de las actualizaciones
+            </h3>
+            <Contacto/>
+          </div>
+          <div className="right-0 ml-96 w-1/3 mb-8">
             <HombreNubeTanto />
           </div>
         </div>

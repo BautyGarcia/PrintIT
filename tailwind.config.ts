@@ -15,7 +15,7 @@ export default {
     },
     extend: {
       backgroundImage:  {
-        'TopAboutUs': "url('/img/TopAbout.png')" 
+        'TopAboutUs': "url('./TopAbout.png')" 
       }
     },
   },

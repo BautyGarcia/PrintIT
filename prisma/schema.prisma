@@ -17,24 +17,24 @@ model Printer {
   bedSize     String
   userId      String
   isAvailable Boolean @default(true)
-  user        User   @relation(fields: [userId], references: [id])
+  user        User    @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
 
-model Trabajo {
-  id       String        @id @default(cuid())
-  status   TrabajoStatus
+model Work {
+  id       String     @id @default(cuid())
+  status   WorkStatus
   clientId String
   workerId String
-  client   User          @relation("ClientRelation", fields: [clientId], references: [id])
-  worker   User          @relation("WorkerRelation", fields: [workerId], references: [id])
+  client   User       @relation("ClientRelation", fields: [clientId], references: [id])
+  worker   User       @relation("WorkerRelation", fields: [workerId], references: [id])
 
   @@index([clientId])
   @@index([workerId])
 }
 
-enum TrabajoStatus {
+enum WorkStatus {
   CANCELED
   NEGOTIATING
   PRINTING
@@ -72,17 +72,17 @@ model Session {
 }
 
 model User {
-  id               String    @id @default(cuid())
-  name             String?
-  email            String?   @unique
-  emailVerified    DateTime?
-  image            String?
-  password         String?
-  accounts         Account[]
-  sessions         Session[]
-  printers         Printer[]
-  trabajosAsClient Trabajo[] @relation("ClientRelation")
-  trabajosAsWorker Trabajo[] @relation("WorkerRelation")
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  accounts      Account[]
+  sessions      Session[]
+  printers      Printer[]
+  worksAsClient Work[]    @relation("ClientRelation")
+  worksAsWorker Work[]    @relation("WorkerRelation")
 }
 
 model VerificationToken {

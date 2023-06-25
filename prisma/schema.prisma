@@ -15,11 +15,30 @@ model Printer {
   model       String
   type        String
   bedSize     String
-  userId      String?
+  userId      String
   isAvailable Boolean @default(true)
-  user        User?   @relation(fields: [userId], references: [id])
+  user        User   @relation(fields: [userId], references: [id])
 
   @@index([userId])
+}
+
+model Trabajo {
+  id       String        @id @default(cuid())
+  status   TrabajoStatus
+  clientId String
+  workerId String
+  client   User          @relation("ClientRelation", fields: [clientId], references: [id])
+  worker   User          @relation("WorkerRelation", fields: [workerId], references: [id])
+
+  @@index([clientId])
+  @@index([workerId])
+}
+
+enum TrabajoStatus {
+  CANCELED
+  NEGOTIATING
+  PRINTING
+  FINISHED
 }
 
 // Necessary for Next auth
@@ -53,15 +72,17 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-  printers      Printer[]
-  password      String?
+  id               String    @id @default(cuid())
+  name             String?
+  email            String?   @unique
+  emailVerified    DateTime?
+  image            String?
+  password         String?
+  accounts         Account[]
+  sessions         Session[]
+  printers         Printer[]
+  trabajosAsClient Trabajo[] @relation("ClientRelation")
+  trabajosAsWorker Trabajo[] @relation("WorkerRelation")
 }
 
 model VerificationToken {

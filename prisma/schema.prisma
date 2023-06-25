@@ -18,20 +18,24 @@ model Printer {
   userId      String
   isAvailable Boolean @default(true)
   user        User    @relation(fields: [userId], references: [id])
+  Work        Work[]
 
   @@index([userId])
 }
 
 model Work {
-  id       String     @id @default(cuid())
-  status   WorkStatus
-  clientId String
-  workerId String
-  client   User       @relation("ClientRelation", fields: [clientId], references: [id])
-  worker   User       @relation("WorkerRelation", fields: [workerId], references: [id])
+  id        String     @id @default(cuid())
+  status    WorkStatus
+  clientId  String
+  workerId  String
+  printerId String
+  printer   Printer    @relation(fields: [printerId], references: [id])
+  client    User       @relation("ClientRelation", fields: [clientId], references: [id])
+  worker    User       @relation("WorkerRelation", fields: [workerId], references: [id])
 
   @@index([clientId])
   @@index([workerId])
+  @@index([printerId])
 }
 
 enum WorkStatus {

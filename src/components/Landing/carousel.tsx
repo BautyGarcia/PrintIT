@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 
-// Define your array of images
 const images = [
   "Carousel1.png",
   "Carousel2.png",
   "Carousel3.png",
   "Carousel4.png",
   "Carousel5.png",
-  // Add more image URLs as needed
 ];
 
 const Carousel: React.FC = () => {

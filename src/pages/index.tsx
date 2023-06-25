@@ -19,6 +19,7 @@ import { FaceBook } from "~/components/Landing/facebook";
 import Carousel from "~/components/Landing/carousel";
 import Contacto from "~/components/Landing/contacto";
 import { useMediaQuery } from "@mantine/hooks";
+import { cn } from "../utils/util";
 
 const Landing: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -113,28 +114,36 @@ const Landing: NextPage = () => {
           }
         >
           <div
-            className={
-              colorScheme === "dark"
-                ? "mb-2 ml-2 mr-2 mt-2 flex w-1/6 flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white"
-                : "mb-2 ml-2 mr-2 mt-2 flex w-1/6 flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-black"
-            }
+            className={cn(
+              "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-black",
+              {
+                "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white":
+                  colorScheme === "dark",
+                "w-1/6": largeScreen === true,
+                "w-full items-start": largeScreen === false,
+              }
+            )}
           >
             <PuntodeImpresion />
             <h1>Punto de Impresion</h1>
-            <h3 className={largeScreen ? "" : ""}>
+            <h3>
               Nuestras página web también esta enfocada en aquellos que buscan
               vender sus productos 3D o simplemente poner en uso su impresora 3D
             </h3>
           </div>
           <div
-            className={
-              colorScheme === "dark"
-                ? "mb-2 ml-2 mr-2 mt-2 flex w-1/6 flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white"
-                : "mb-2 ml-2 mr-2 mt-2 flex w-1/6 flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-black"
-            }
+            className={cn(
+              "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-black",
+              {
+                "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white":
+                  colorScheme === "dark",
+                "w-1/6": largeScreen === true,
+                "w-full items-start": largeScreen === false,
+              }
+            )}
           >
             <Necesidades />
-            <h1>Tus Necesidades</h1>
+            <h1>TTus Necesidades</h1>
             <h3>
               Te brindamos la posibilidad de ahorrar mucho tiempo y dinero al no
               tener que comprar tu propia impresora 3D y los materiales
@@ -142,11 +151,15 @@ const Landing: NextPage = () => {
             </h3>
           </div>
           <div
-            className={
-              colorScheme === "dark"
-                ? "mb-2 ml-2 mr-2 mt-2 flex w-1/6 flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white"
-                : "mb-2 ml-2 mr-2 mt-2 flex w-1/6 flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-black"
-            }
+            className={cn(
+              "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-black",
+              {
+                "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white":
+                  colorScheme === "dark",
+                "w-1/6": largeScreen === true,
+                "w-full items-start": largeScreen === false,
+              }
+            )}
           >
             <Proveedores />
             <h1>Proveedores</h1>
@@ -158,7 +171,13 @@ const Landing: NextPage = () => {
           </div>
         </div>
         <div className="flex w-full flex-row items-start">
-          <div className="ml-52 flex w-1/2 flex-col">
+          <div
+            className={
+              largeScreen
+                ? "ml-52 flex w-1/2 flex-col"
+                : "ml-20 flex w-1/2 flex-col"
+            }
+          >
             <h2 className="flex items-start text-blue-500">Nuestro Servicio</h2>
             <h1
               className={
@@ -182,17 +201,31 @@ const Landing: NextPage = () => {
               Sobre nosotros
             </button>
           </div>
-          <picture className="right-0 ml-64 w-1/3">
+          <picture
+            className={
+              largeScreen ? "right-0 ml-64 w-1/3" : "right-0 ml-20 w-1/3"
+            }
+          >
             <Servicio />
           </picture>
           <br></br>
         </div>
         <br></br>
         <div className="mb-8 flex w-full flex-row items-end ">
-          <picture className=" left-0 ml-52 w-1/3">
+          <picture
+            className={
+              largeScreen ? "left-0 ml-52 w-1/3" : "left-0 ml-20 w-1/3"
+            }
+          >
             <Objetivo />
           </picture>
-          <div className=" flex w-1/2  flex-col">
+          <div
+            className={
+              largeScreen
+                ? "flex w-1/2  flex-col"
+                : "ml-10 flex  w-1/2 flex-col"
+            }
+          >
             <h2 className="flex items-start text-blue-500">
               Parte de nuestro objetivo
             </h2>
@@ -222,7 +255,13 @@ const Landing: NextPage = () => {
         <div className="mb-10">
           <Carousel />
         </div>
-        <div className="flex w-full flex-row items-center">
+        <div
+          className={
+            largeScreen
+              ? "flex w-full flex-row items-center"
+              : "-mt-28 mb-12 flex w-full flex-row items-center"
+          }
+        >
           <div
             className={
               largeScreen

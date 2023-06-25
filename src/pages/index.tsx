@@ -17,7 +17,7 @@ import { Discord } from "~/components/Landing/discord";
 import { Instagram } from "~/components/Landing/instagram";
 import { FaceBook } from "~/components/Landing/facebook";
 //import Carousel from "~/components/Landing/carousel";
-import { Contacto } from "~/components/Landing/contacto";
+import Contacto from "~/components/Landing/contacto";
 
 const Landing: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();

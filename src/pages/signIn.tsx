@@ -31,7 +31,7 @@ const SignInPage: NextPage = () => {
       }
     >
       <div className="absolute ml-5 mt-5 flex items-center gap-2">
-        <Logo width={40} height={40} href="/"/>
+        <Logo width={40} height={40} href="/" />
       </div>
       <section
         className={
@@ -103,7 +103,7 @@ const SignInForm: React.FC = () => {
       timeoutRef.current = window.setTimeout(() => {
         setLoading(false);
         setData(
-          ["gmail.com", "outlook.com", "yahoo.com"].map(
+          ["gmail.com", "outlook.com", "yahoo.com", "icloud.com"].map(
             (provider) => `${val}@${provider}`
           )
         );

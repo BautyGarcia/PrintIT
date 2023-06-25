@@ -60,7 +60,7 @@ const recoverPasswordTemplate = (username: string, redirectURL: string) => `
                     <h1>Recuperación de contraseña</h1>
                     <p>Hola <b>${username}</b>,</p>
                     <p>Hemos recibido una solicitud para restablecer tu contraseña. Para continuar, por favor haz clic en el siguiente botón:</p>
-                    <a href="${redirectURL}" class="button">Restablecer Contraseña</a>
+                    <a href="${redirectURL}" class="button text-white">Restablecer Contraseña</a>
                     <p>Si no solicitaste restablecer la contraseña, por favor ignora este correo electrónico.</p>
                     <p>Gracias,</p>
                     <p>El equipo de PrintIT</p>
@@ -68,6 +68,6 @@ const recoverPasswordTemplate = (username: string, redirectURL: string) => `
             </div>
         </body>
     </html>
-`
+`;
 
 export default recoverPasswordTemplate;

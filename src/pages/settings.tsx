@@ -14,12 +14,7 @@ interface SettingsProps {
   userImage: string;
 }
 
-const settings: React.FC<SettingsProps> = ({
-  userImage,
-  username,
-  opened,
-  setOpened,
-}) => {
+const Settings: React.FC<SettingsProps> = ({}) => {
   const { colorScheme } = useMantineColorScheme();
   const { data: sessionData } = useSession();
 
@@ -53,4 +48,4 @@ const settings: React.FC<SettingsProps> = ({
   );
 };
 
-export default settings;
+export default Settings;

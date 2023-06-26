@@ -16,11 +16,14 @@ import { UsoWhite } from "~/components/Landing/usoPrintItWhite";
 import { Discord } from "~/components/Landing/discord";
 import { Instagram } from "~/components/Landing/instagram";
 import { FaceBook } from "~/components/Landing/facebook";
-//import Carousel from "~/components/Landing/carousel";
+import Carousel from "~/components/Landing/carousel";
 import Contacto from "~/components/Landing/contacto";
+import { useMediaQuery } from "@mantine/hooks";
+import { cn } from "../utils/util";
 
 const Landing: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
+  const largeScreen = useMediaQuery("(min-width: 1300px)");
 
   return (
     <>
@@ -41,11 +44,11 @@ const Landing: NextPage = () => {
         <div
           className={
             colorScheme === "dark"
-              ? "relative z-20 ml-24 flex h-[700px] w-full flex-col items-start justify-center from-[#2e026d] to-[#15162c] text-white"
-              : "relative z-20 ml-24 flex h-[700px] w-full flex-col items-start justify-center from-[#2e026d] to-[#15162c] text-black"
+              ? "relative z-20 flex h-[700px] w-full flex-col items-start justify-center from-[#2e026d] to-[#15162c] text-white"
+              : "relative z-20 flex h-[700px] w-full flex-col items-start justify-center from-[#2e026d] to-[#15162c] text-black"
           }
         >
-          <div className="items-center">
+          <div className="ml-24 items-center">
             <h1>
               Encuentra tus productos 3D favoritos de una forma fácil y segura
             </h1>
@@ -103,13 +106,23 @@ const Landing: NextPage = () => {
           <h1>Herramientas que facilitaran tu búsqueda ideal</h1>
           <h3>Beneficios de usar PrintIt</h3>
         </div>
-        <div className="mb-20 mt-20 flex flex-row justify-center space-x-60">
+        <div
+          className={
+            largeScreen
+              ? "mb-20 ml-44 mr-44 mt-20 flex flex-row justify-between"
+              : "flex w-3/4 flex-col items-center justify-center"
+          }
+        >
           <div
-            className={
-              colorScheme === "dark"
-                ? "mb-2 ml-2 mr-2 mt-2 flex w-1/6 flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white"
-                : "mb-2 ml-2 mr-2 mt-2 flex w-1/6 flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-black"
-            }
+            className={cn(
+              "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-black",
+              {
+                "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white":
+                  colorScheme === "dark",
+                "w-1/6": largeScreen === true,
+                "w-full items-start": largeScreen === false,
+              }
+            )}
           >
             <PuntodeImpresion />
             <h1>Punto de Impresion</h1>
@@ -119,14 +132,18 @@ const Landing: NextPage = () => {
             </h3>
           </div>
           <div
-            className={
-              colorScheme === "dark"
-                ? "mb-2 ml-2 mr-2 mt-2 flex w-1/6 flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white"
-                : "mb-2 ml-2 mr-2 mt-2 flex w-1/6 flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-black"
-            }
+            className={cn(
+              "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-black",
+              {
+                "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white":
+                  colorScheme === "dark",
+                "w-1/6": largeScreen === true,
+                "w-full items-start": largeScreen === false,
+              }
+            )}
           >
             <Necesidades />
-            <h1>Tus Necesidades</h1>
+            <h1>TTus Necesidades</h1>
             <h3>
               Te brindamos la posibilidad de ahorrar mucho tiempo y dinero al no
               tener que comprar tu propia impresora 3D y los materiales
@@ -134,11 +151,15 @@ const Landing: NextPage = () => {
             </h3>
           </div>
           <div
-            className={
-              colorScheme === "dark"
-                ? "mb-2 ml-2 mr-2 mt-2 flex w-1/6 flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white"
-                : "mb-2 ml-2 mr-2 mt-2 flex w-1/6 flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-black"
-            }
+            className={cn(
+              "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-black",
+              {
+                "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white":
+                  colorScheme === "dark",
+                "w-1/6": largeScreen === true,
+                "w-full items-start": largeScreen === false,
+              }
+            )}
           >
             <Proveedores />
             <h1>Proveedores</h1>
@@ -149,8 +170,14 @@ const Landing: NextPage = () => {
             </h3>
           </div>
         </div>
-        <div className="ml-20 flex w-full flex-row items-start">
-          <div className="ml-28 flex w-1/2 flex-col">
+        <div className="flex w-full flex-row items-start">
+          <div
+            className={
+              largeScreen
+                ? "ml-52 flex w-1/2 flex-col"
+                : "ml-20 flex w-1/2 flex-col"
+            }
+          >
             <h2 className="flex items-start text-blue-500">Nuestro Servicio</h2>
             <h1
               className={
@@ -174,17 +201,31 @@ const Landing: NextPage = () => {
               Sobre nosotros
             </button>
           </div>
-          <picture className="right-0 ml-64 w-1/3">
+          <picture
+            className={
+              largeScreen ? "right-0 ml-64 w-1/3" : "right-0 ml-20 w-1/3"
+            }
+          >
             <Servicio />
           </picture>
           <br></br>
         </div>
         <br></br>
-        <div className="ml-20 flex w-full flex-row items-end ">
-          <picture className=" left-0 ml-28 w-1/3">
+        <div className="mb-8 flex w-full flex-row items-end ">
+          <picture
+            className={
+              largeScreen ? "left-0 ml-52 w-1/3" : "left-0 ml-20 w-1/3"
+            }
+          >
             <Objetivo />
           </picture>
-          <div className=" flex w-1/2  flex-col">
+          <div
+            className={
+              largeScreen
+                ? "flex w-1/2  flex-col"
+                : "ml-10 flex  w-1/2 flex-col"
+            }
+          >
             <h2 className="flex items-start text-blue-500">
               Parte de nuestro objetivo
             </h2>
@@ -211,18 +252,46 @@ const Landing: NextPage = () => {
           </div>
         </div>
         <br></br>
-        <div>
-          <h1>Carusel</h1>
+        <div className="mb-10">
+          <Carousel />
         </div>
-        <div className="ml-20 flex w-full flex-row items-start">
-          <div className="ml-28 flex w-1/2 flex-col items-start">
-            <h1 className="flex items-start">Mantenete al Tanto</h1>
-            <h3 className="flex items-start">
+        <div
+          className={
+            largeScreen
+              ? "flex w-full flex-row items-center"
+              : "-mt-28 mb-12 flex w-full flex-row items-center"
+          }
+        >
+          <div
+            className={
+              largeScreen
+                ? "ml-28 flex w-1/2 flex-col items-center"
+                : "flex w-screen flex-col items-center"
+            }
+          >
+            <h1 className="mb-4 flex items-center text-5xl">
+              Mantenete al Tanto
+            </h1>
+            <h1 className="mb-8 flex items-center text-sm">
               Ingresa tu mail para recibir noticias de las actualizaciones
-            </h3>
-            <Contacto/>
+            </h1>
+            <div
+              className={
+                largeScreen
+                  ? "ml-28 flex w-full flex-col items-center justify-center"
+                  : "mb-8 flex w-2/3 flex-col items-center"
+              }
+            >
+              <Contacto />
+            </div>
           </div>
-          <div className="right-0 ml-96 w-1/3 mb-8">
+          <div
+            className={
+              largeScreen
+                ? "right-0 mb-12 flex w-1/2 items-end justify-end"
+                : "hidden"
+            }
+          >
             <HombreNubeTanto />
           </div>
         </div>
@@ -233,94 +302,3 @@ const Landing: NextPage = () => {
 };
 
 export default Landing;
-
-//Hacerlo un Component
-// const Notis = () => {
-//   const [email, setEmail] = useState("");
-//   const [error, setError] = useState(false);
-//   const [isLoading, setIsLoading] = useState(false);
-//   const timeoutRef = useRef<number>(-1);
-//   const [value, setValue] = useState("");
-//   const [loading, setLoading] = useState(false);
-//   const [data, setData] = useState<string[]>([]);
-
-//   const handleChange = (val: string) => {
-//     window.clearTimeout(timeoutRef.current);
-//     setValue(val);
-//     setEmail(val);
-//     setData([]);
-
-//     if (val.trim().length === 0 || val.includes("@")) {
-//       setLoading(false);
-//     } else {
-//       setLoading(true);
-//       timeoutRef.current = window.setTimeout(() => {
-//         setLoading(false);
-//         setData(
-//           ["gmail.com", "outlook.com", "yahoo.com"].map(
-//             (provider) => `${val}@${provider}`
-//           )
-//         );
-//       }, 500);
-//     }
-//   };
-
-//   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
-//     e.preventDefault();
-//     setIsLoading(true);
-//     let errorMessage = "";
-
-//     if (email === "") {
-//       errorMessage = "Por favor complete el campos";
-//       setError(true);
-//     } else if (!email.includes("@") || !email.includes(".")) {
-//       errorMessage = "Por favor ingrese un email valido";
-//       setError(true);
-//     }
-
-//     if (errorMessage) {
-//       notifications.show({
-//         title: "Error",
-//         message: errorMessage,
-//         color: "red",
-//         autoClose: 5000,
-//       });
-//       setIsLoading(false);
-//     }
-
-//     return (
-//       <>
-//         <Head>
-//           <title>PrintIT</title>
-//           <link rel="icon" href="/Logo.ico" />
-//           <meta name="description" content="PrintIT" />
-//         </Head>
-//         <form
-//           className="mx-auto mt-8 flex w-full flex-col items-center justify-center text-center"
-//           onSubmit={handleSubmit}
-//         >
-//           <div className="mb-2 w-4/5">
-//             <Text fw={500} className="font-family-Inter justify-left flex">
-//               Email
-//             </Text>
-//             <Autocomplete
-//               {...(error ? { error } : {})}
-//               value={value}
-//               data={data}
-//               onChange={handleChange}
-//               rightSection={loading ? <Loader size="1rem" /> : null}
-//               placeholder="Your email"
-//             />
-//           </div>
-//           <Button
-//             className="font-family-Inter mt-3 w-4/5 rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"
-//             type="submit"
-//             loading={isLoading}
-//           >
-//             Send
-//           </Button>
-//         </form>
-//       </>
-//     );
-//   };
-// };

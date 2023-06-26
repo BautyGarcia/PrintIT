@@ -17,6 +17,32 @@ import UserBox from "./userBox";
 import { useSession } from "next-auth/react";
 
 const useStyles = createStyles((theme) => ({
+  link: {
+    display: "flex",
+    alignItems: "center",
+    height: "100%",
+    paddingLeft: theme.spacing.md,
+    paddingRight: theme.spacing.md,
+    textDecoration: "none",
+    color: theme.colorScheme === "dark" ? theme.white : theme.black,
+    fontWeight: 500,
+    fontSize: theme.fontSizes.sm,
+
+    [theme.fn.smallerThan("sm")]: {
+      height: rem(42),
+      display: "flex",
+      alignItems: "center",
+      width: "100%",
+    },
+
+    ...theme.fn.hover({
+      backgroundColor:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[6]
+          : theme.colors.gray[0],
+    }),
+  },
+
   dropdownFooter: {
     backgroundColor:
       theme.colorScheme === "dark"
@@ -62,16 +88,18 @@ export const SettingsHeader: React.FC = () => {
       >
         <Group position="apart" sx={{ height: "100%" }}>
           <Link className="flex flex-row items-center gap-2" href="/" passHref>
-            <Logo width={40} height={40} href="/dashboard" />
+            <Logo width={40} height={40} href="/#" />
           </Link>
 
-          <SchemeButton />
-          <UserBox
-            user={{
-              name: sessionData?.user.name as string,
-              image: sessionData?.user.image as string,
-            }}
-          />
+          <Group>
+            <SchemeButton />
+            <UserBox
+              user={{
+                name: sessionData?.user.name as string,
+                image: sessionData?.user.image as string,
+              }}
+            />
+          </Group>
           <Burger
             opened={drawerOpened}
             onClick={toggleDrawer}

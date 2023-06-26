@@ -1,10 +1,9 @@
-import { type NextPage } from "next";
 import Head from "next/head";
 import { SettingsHeader } from "~/components/settingsHeader";
 import { useMantineColorScheme } from "@mantine/core";
 import UserSetting from "~/components/userSettings";
 import { type SetStateAction } from "react";
-import { Burger, Group, MediaQuery } from "@mantine/core";
+import { Group, MediaQuery } from "@mantine/core";
 import { useSession } from "next-auth/react";
 
 interface SettingsProps {

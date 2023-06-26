@@ -13,51 +13,10 @@ import { useDisclosure } from "@mantine/hooks";
 import { Logo } from "./logo";
 import Link from "next/link";
 import SchemeButton from "./schemeButton";
+import UserBox from "./userBox";
+import { useSession } from "next-auth/react";
 
 const useStyles = createStyles((theme) => ({
-  link: {
-    display: "flex",
-    alignItems: "center",
-    height: "100%",
-    paddingLeft: theme.spacing.md,
-    paddingRight: theme.spacing.md,
-    textDecoration: "none",
-    color: theme.colorScheme === "dark" ? theme.white : theme.black,
-    fontWeight: 500,
-    fontSize: theme.fontSizes.sm,
-    justifyContent: "center",
-
-    [theme.fn.smallerThan("sm")]: {
-      height: rem(42),
-      display: "flex",
-      alignItems: "center",
-      width: "100%",
-      justifyContent: "center",
-    },
-
-    ...theme.fn.hover({
-      backgroundColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[6]
-          : theme.colors.gray[0],
-    }),
-  },
-
-  subLink: {
-    width: "100%",
-    padding: `${theme.spacing.xs} ${theme.spacing.md}`,
-    borderRadius: theme.radius.md,
-
-    ...theme.fn.hover({
-      backgroundColor:
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[7]
-          : theme.colors.gray[0],
-    }),
-
-    "&:active": theme.activeStyles,
-  },
-
   dropdownFooter: {
     backgroundColor:
       theme.colorScheme === "dark"
@@ -90,6 +49,7 @@ export const SettingsHeader: React.FC = () => {
     useDisclosure(false);
   const { classes, theme } = useStyles();
   const { colorScheme } = useMantineColorScheme();
+  const { data: sessionData } = useSession();
 
   return (
     <>
@@ -106,6 +66,12 @@ export const SettingsHeader: React.FC = () => {
           </Link>
 
           <SchemeButton />
+          <UserBox
+            user={{
+              name: sessionData?.user.name as string,
+              image: sessionData?.user.image as string,
+            }}
+          />
           <Burger
             opened={drawerOpened}
             onClick={toggleDrawer}
@@ -128,19 +94,6 @@ export const SettingsHeader: React.FC = () => {
             my="sm"
             color={theme.colorScheme === "dark" ? "dark.5" : "gray.1"}
           />
-
-          <Link href="/about" className={classes.link}>
-            Sobre Nosotros
-          </Link>
-          <Link href="/" className={classes.link}>
-            Inicio
-          </Link>
-          <Link href="/contact-us" className={classes.link}>
-            Contactanos
-          </Link>
-          <Link href="/dashboard" className={classes.link}>
-            DashBoard
-          </Link>
 
           <Divider
             my="sm"

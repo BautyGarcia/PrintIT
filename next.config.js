@@ -9,13 +9,13 @@ const withPWA = require('next-pwa')({
   //...
 })
 
-module.exports = withPWA({
-  reactStrictMode: true,
-  i18n: {
-    locales: ["en"],
-    defaultLocale: "en",
-  },
-  images: {
-    domains: ["storage.googleapis.com", "storage.cloud.google.com"]
-  },
-})
+ module.exports = withPWA({
+   reactStrictMode: true,
+   i18n: {
+     locales: ["en"],
+     defaultLocale: "en",
+   },
+   images: {
+     domains: ["storage.googleapis.com", "storage.cloud.google.com"]
+   },
+ })

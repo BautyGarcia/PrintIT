@@ -60,7 +60,7 @@ const Contacto = () => {
         <Button
           type="submit"
           size="md"
-          className="rounded-lg bg-blue-500 hover:bg-blue-700"
+          className="w-11/12 rounded-lg bg-blue-500 hover:bg-blue-700"
         >
           Contactate
         </Button>

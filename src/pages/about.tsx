@@ -6,6 +6,7 @@ import { useMantineColorScheme } from "@mantine/core";
 import { TopAboutUs } from "~/components/topaboutimg";
 import { useMediaQuery } from "@mantine/hooks";
 import Image from "next/image";
+import { LinkedinLOGO } from "~/components/linkedinlogo";
 
 const About: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -31,7 +32,7 @@ const About: NextPage = () => {
         <div         
           className={
             largeScreen
-              ? "font-family-Nunito mr-8  flex w-full h-full justify-center"
+              ? "font-family-Nunito mr-8 flex w-full h-full justify-center"
               : "flex h-full w-full items-center justify-center"
           }>
         <AboutUs/>
@@ -89,14 +90,30 @@ export function AboutUs(){
               src="/AboutUsImg.png"
               width={700}
               height={600}
-              alt="Picture of the author"
+              alt="Group of people"
             /> 
             </div>
 
           <div className="flex flex-row w-full h-full">
 
-              <div className="bg-[#E3E3E3] h-[30vh] w-1/4">
+              <div className="bg-[#F7F6FF] rounded-xl h-[21vh] shadow-lg w-1/4 flex flex-col">
+                <div className="p-1.5">
+                  <Image
+                  src="/BautyImg.png"
+                  width={700}
+                  height={600}
+                  alt="Bauty image"
+                  /> 
+                </div>
+                <div className=" flex flex-row">
+                <div className="p-1.5 flex flex-row">
+                  <h3>Bautista Garcia</h3>
 
+                </div>
+                <div className=" w-2/12">
+                    <LinkedinLOGO />
+                </div> 
+                </div>
               </div>
           </div>
 

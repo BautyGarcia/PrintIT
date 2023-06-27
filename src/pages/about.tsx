@@ -43,7 +43,7 @@ const About: NextPage = () => {
 };
 
 export default About;
-//<div className="bg-[url('/TopAbout.png')]"></div>
+
 
 export function AboutUs(){
   const largeScreen = useMediaQuery("(min-width: 1300px)");
@@ -51,7 +51,7 @@ export function AboutUs(){
   return (
     <form> 
       <div>
-        <div id="imagentop">
+        <div className="bg-[url('/TopAbout.png')] h-screen w-screen">
 
         </div>
 
@@ -60,8 +60,7 @@ export function AboutUs(){
           <h1>
             Como surgió PrintIT
           </h1>
-
-            <div className={largeScreen ? "": "ml-5"}>
+            <div className={largeScreen ? "": "ml-5"}> 
             <br></br> 
 
             <h3>

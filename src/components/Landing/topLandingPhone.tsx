@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useMediaQuery } from "@mantine/hooks";
 
-export const TopLanding: React.FC = ({}) => {
+export const TopLandingPhone: React.FC = ({}) => {
   const largeScreen = useMediaQuery("(min-width: 1300px)");
   return (
     <Image
@@ -9,7 +9,7 @@ export const TopLanding: React.FC = ({}) => {
       src="/TopLanding.png"
       alt="TopLanding"
       width={1920}
-      height={680}
+      height={880}
     />
   );
 };

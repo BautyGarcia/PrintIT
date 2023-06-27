@@ -20,6 +20,7 @@ import Carousel from "~/components/Landing/carousel";
 import Contacto from "~/components/Landing/contacto";
 import { useMediaQuery } from "@mantine/hooks";
 import { cn } from "../utils/util";
+import { TopLandingPhone } from "~/components/Landing/topLandingPhone";
 
 const Landing: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -40,15 +41,31 @@ const Landing: NextPage = () => {
             : "flex min-h-screen flex-col items-center justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c]"
         }
       >
-        <TopLanding />
+        <div className={largeScreen ? "" : "hidden"}>
+          <TopLanding />
+        </div>
+        <div className={largeScreen ? "hidden" : ""}>
+          <TopLandingPhone />
+        </div>
         <div
-          className={
-            colorScheme === "dark"
-              ? "relative z-20 flex h-[700px] w-full flex-col items-start justify-center from-[#2e026d] to-[#15162c] text-white"
-              : "relative z-20 flex h-[700px] w-full flex-col items-start justify-center from-[#2e026d] to-[#15162c] text-black"
-          }
+          className={cn(
+            "relative z-20 flex h-[700px] w-full flex-col items-start justify-center from-[#2e026d] to-[#15162c] text-black",
+            {
+              "relative z-20 flex h-[700px] w-full flex-col items-start justify-center from-[#2e026d] to-[#15162c] text-white":
+                colorScheme === "dark",
+              "": largeScreen === true,
+              "relative z-20 -mb-80 w-full items-start text-sm":
+                largeScreen === false,
+            }
+          )}
         >
-          <div className="ml-24 items-center">
+          <div
+            className={
+              largeScreen
+                ? "ml-24 items-center"
+                : "absolute left-0 top-0 ml-4 mt-28 items-start text-xs"
+            }
+          >
             <h1>
               Encuentra tus productos 3D favoritos de una forma fácil y segura
             </h1>
@@ -66,7 +83,7 @@ const Landing: NextPage = () => {
               : "relative  from-[#2e026d] to-[#15162c] text-black"
           }
         >
-          <div className=" -mb-28">
+          <div className={largeScreen ? " -mb-28" : " -mb-20 -mt-44"}>
             <Impresora />
           </div>
           <div
@@ -102,10 +119,23 @@ const Landing: NextPage = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-center">
-          <h1>Herramientas que facilitaran tu búsqueda ideal</h1>
-          <h3>Beneficios de usar PrintIt</h3>
+        <div
+          className={
+            largeScreen
+              ? "flex flex-col items-center"
+              : "flex flex-col items-center justify-center "
+          }
+        >
+          <div
+            className={largeScreen ? "flex flex-col items-center" : "hidden"}
+          >
+            <h1>Herramientas que facilitaran tu búsqueda ideal</h1>
+          </div>
+          <h2 className={largeScreen ? "" : "text-xl"}>
+            Beneficios de usar PrintIt
+          </h2>
         </div>
+        <br></br>
         <div
           className={
             largeScreen
@@ -143,7 +173,7 @@ const Landing: NextPage = () => {
             )}
           >
             <Necesidades />
-            <h1>TTus Necesidades</h1>
+            <h1>Tus Necesidades</h1>
             <h3>
               Te brindamos la posibilidad de ahorrar mucho tiempo y dinero al no
               tener que comprar tu propia impresora 3D y los materiales
@@ -170,89 +200,103 @@ const Landing: NextPage = () => {
             </h3>
           </div>
         </div>
-        <div className="flex w-full flex-row items-start">
+        <div
+          className={
+            largeScreen
+              ? "flex w-full flex-col items-start"
+              : "flex w-full flex-col items-start "
+          }
+        >
           <div
             className={
               largeScreen
-                ? "ml-52 flex w-1/2 flex-col"
-                : "ml-20 flex w-1/2 flex-col"
+                ? "flex w-full flex-row items-start"
+                : "flex w-full flex-row items-start"
             }
           >
-            <h2 className="flex items-start text-blue-500">Nuestro Servicio</h2>
-            <h1
+            <div
               className={
-                colorScheme === "dark"
-                  ? "flex items-center text-white"
-                  : "flex items-center text-black"
+                largeScreen
+                  ? "ml-52 flex w-1/2 flex-col"
+                  : "ml-14 mr-6 flex w-full flex-col"
               }
             >
-              Te ayudamos a imprimir lo que necesites
-            </h1>
-            <h3>
-              De forma rápida, fácil y accesible. Nuestra plataforma conecta a
-              los usuarios con una amplia red de propietarios de impresoras 3D
-              que ofrecen sus servicios de impresión a precios competitivos. de
-              forma rápida, fácil y accesible. Nuestra plataforma conecta a los
-              usuarios con una amplia red de propietarios de impresoras 3D que
-              ofrecen sus servicios de impresión a precios competitivos.
-            </h3>
+              <h2 className="flex items-start text-blue-500">
+                Nuestro Servicio
+              </h2>
+              <h1
+                className={
+                  colorScheme === "dark"
+                    ? "flex items-center text-white"
+                    : "flex items-center text-black"
+                }
+              >
+                Te ayudamos a imprimir lo que necesites
+              </h1>
+              <h3>
+                De forma rápida, fácil y accesible. Nuestra plataforma conecta a
+                los usuarios con una amplia red de propietarios de impresoras 3D
+                que ofrecen sus servicios de impresión a precios competitivos.
+                de forma rápida, fácil y accesible. Nuestra plataforma conecta a
+                los usuarios con una amplia red de propietarios de impresoras 3D
+                que ofrecen sus servicios de impresión a precios competitivos.
+              </h3>
+              <br></br>
+              <button
+                className={
+                  largeScreen
+                    ? "font-family-Inter flex w-1/6 flex-col items-center rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"
+                    : "font-family-Inter flex w-2/3 flex-col items-center rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"
+                }
+              >
+                Sobre nosotros
+              </button>
+            </div>
+            <picture className={largeScreen ? "right-0 ml-64 w-1/3" : "hidden"}>
+              <Servicio />
+            </picture>
             <br></br>
-            <button className="font-family-Inter flex w-1/6 flex-col items-center rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700">
-              Sobre nosotros
-            </button>
           </div>
-          <picture
-            className={
-              largeScreen ? "right-0 ml-64 w-1/3" : "right-0 ml-20 w-1/3"
-            }
-          >
-            <Servicio />
-          </picture>
           <br></br>
-        </div>
-        <br></br>
-        <div className="mb-8 flex w-full flex-row items-end ">
-          <picture
-            className={
-              largeScreen ? "left-0 ml-52 w-1/3" : "left-0 ml-20 w-1/3"
-            }
-          >
-            <Objetivo />
-          </picture>
-          <div
-            className={
-              largeScreen
-                ? "flex w-1/2  flex-col"
-                : "ml-10 flex  w-1/2 flex-col"
-            }
-          >
-            <h2 className="flex items-start text-blue-500">
-              Parte de nuestro objetivo
-            </h2>
-            <h1
+          <div className="mb-8 flex w-full flex-row items-end ">
+            <picture className={largeScreen ? "left-0 ml-52 w-1/3" : "hidden"}>
+              <Objetivo />
+            </picture>
+            <div
               className={
-                colorScheme === "dark"
-                  ? "flex items-center text-white"
-                  : "flex items-center text-black"
+                largeScreen
+                  ? "flex w-1/2  flex-col"
+                  : "ml-14 mr-6  flex w-full flex-col"
               }
             >
-              Importancia de la impresion 3D
-            </h1>
-            <h3>
-              Nosotros creemos que la impresion 3D es una tecnología que vino
-              para quedarse. Este permite crear objetos tridimensionales a
-              partir de modelos digitales. La consideramos una tecnologia
-              emergente la cual esta revolucionando la forma en que se diseñan y
-              producen objetos y tienen una gran importancia en varios campos,
-              entre los que se incluyen la educación, la industria, diseños de
-              productos personales e incluso la medicina. Se espera que su uso
-              siga creciendo y evolucionando en el futuro, innovando el mundo en
-              el que vivimos.
-            </h3>
+              <h2 className="flex items-start text-blue-500">
+                Parte de nuestro objetivo
+              </h2>
+              <h1
+                className={
+                  colorScheme === "dark"
+                    ? "flex items-center text-white"
+                    : "flex items-center text-black"
+                }
+              >
+                Importancia de la impresion 3D
+              </h1>
+              <h3>
+                Nosotros creemos que la impresion 3D es una tecnología que vino
+                para quedarse. Este permite crear objetos tridimensionales a
+                partir de modelos digitales. La consideramos una tecnologia
+                emergente la cual esta revolucionando la forma en que se diseñan
+                y producen objetos y tienen una gran importancia en varios
+                campos, entre los que se incluyen la educación, la industria,
+                diseños de productos personales e incluso la medicina. Se espera
+                que su uso siga creciendo y evolucionando en el futuro,
+                innovando el mundo en el que vivimos.
+              </h3>
+            </div>
           </div>
         </div>
         <br></br>
-        <div className="mb-10">
+        <div className={largeScreen ? "mb-10 " : "-mt-44 mb-10"}>
           <Carousel />
         </div>
         <div
@@ -266,13 +310,13 @@ const Landing: NextPage = () => {
             className={
               largeScreen
                 ? "ml-28 flex w-1/2 flex-col items-center"
-                : "flex w-screen flex-col items-center"
+                : "-mt-28 flex w-screen flex-col items-center"
             }
           >
             <h1 className="mb-4 flex items-center text-5xl">
               Mantenete al Tanto
             </h1>
-            <h1 className="mb-8 flex items-center text-sm">
+            <h1 className="mb-8 flex items-center text-xs">
               Ingresa tu mail para recibir noticias de las actualizaciones
             </h1>
             <div

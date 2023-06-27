@@ -37,7 +37,7 @@ const ContactUs: NextPage = () => {
         <div
           className={
             largeScreen
-              ? "font-family-Nunito mr-8 mt-36 flex w-1/2  justify-center"
+              ? "font-family-Nunito mr-8 mt-20 flex w-1/2  justify-center"
               : "flex h-full w-full flex-col items-center justify-center"
           }
         >

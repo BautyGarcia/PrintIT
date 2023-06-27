@@ -6,8 +6,8 @@ export const LinkedinLOGO: React.FC = () => {
       
       src="/LinkedinLogo.png"
       alt="Linkedin Logo"
-      width={680}
-      height={880}
+      width={28}
+      height={28}
     />
   );
 };

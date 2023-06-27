@@ -24,15 +24,15 @@ const About: NextPage = () => {
         className=
         {
           colorScheme === "dark" 
-          ? "flex h-[93vh] w-full bg-[#0E1525] from-[#2e026d] to-[#15162c] p-10 pt-20"
-          : "flex h-[93vh] w-full bg-[#F0F1F8] from-[#2e026d] to-[#15162c] p-10 pt-20"
+          ? "flex h-full w-full bg-[#0E1525] from-[#2e026d] to-[#15162c] p-10 pt-20"
+          : "flex h-full w-full bg-[#F0F1F8] from-[#2e026d] to-[#15162c] p-10 pt-20"
         }
       >
 
         <div         
           className={
             largeScreen
-              ? "font-family-Nunito mr-8 flex w-full h-full justify-center"
+              ? "font-family-Nunito mr-8 flex w-full h-screen justify-center"
               : "flex h-full w-full items-center justify-center"
           }>
         <AboutUs/>
@@ -50,10 +50,10 @@ export function AboutUs(){
   const largeScreen = useMediaQuery("(min-width: 1300px)");
 
   return (
-    <form> 
-      <div>
-        <div className="bg-[url('/TopAbout.png')] h-screen w-screen">
-
+    <form className=""> 
+      <div className="">
+        <div className="bg-[url('/TopAbout.png')] h- w-full bg-cover ">
+            <h3></h3>
         </div>
 
         <div className={largeScreen ? "flex flex-row w-full h-full": "flex flex-col h-full w-full justify-center items-center"}>
@@ -96,7 +96,7 @@ export function AboutUs(){
 
           <div className="flex flex-row w-full h-full">
 
-              <div className="bg-[#F7F6FF] rounded-xl h-[21vh] shadow-lg w-1/4 flex flex-col">
+              <div className="bg-[#F7F6FF] rounded-xl h-[30 %] shadow-lg w-1/4 flex flex-col">
                 <div className="p-1.5">
                   <Image
                   src="/BautyImg.png"
@@ -105,14 +105,71 @@ export function AboutUs(){
                   alt="Bauty image"
                   /> 
                 </div>
-                <div className=" flex flex-row">
-                <div className="p-1.5 flex flex-row">
-                  <h3>Bautista Garcia</h3>
+                <div className="w-full flex flex-row items-center justify-between pt-2 pb-2 pl-4 pr-4">
+                  <div className=" flex flex-row font-bold text-[#000000] ">
+                    <h3>Bautista Garcia</h3>
 
+                  </div>
+                  <div className="flex ">
+                      <LinkedinLOGO />
+                  </div> 
                 </div>
-                <div className=" w-2/12">
-                    <LinkedinLOGO />
-                </div> 
+              </div>
+              <div className="bg-[#F7F6FF] rounded-xl h-[30 %] shadow-lg w-1/4 flex flex-col ml-4 mr-4">
+                <div className="p-1.5">
+                  <Image
+                  src="/BautiImg.png"
+                  width={700}
+                  height={600}
+                  alt="Bautista image"
+                  /> 
+                </div>
+                <div className="w-full flex flex-row items-center justify-between pt-2 pb-2 pl-4 pr-4">
+                  <div className=" flex flex-row font-bold text-[#000000] ">
+                    <h3>Bautista Malumian</h3>
+
+                  </div>
+                  <div className="flex ">
+                      <LinkedinLOGO />
+                  </div> 
+                </div>
+              </div>
+              <div className="bg-[#F7F6FF] rounded-xl h-[30 %] shadow-lg w-1/4 flex flex-col mr-4">
+                <div className="p-1.5">
+                  <Image
+                  src="/FrancoImg.png"
+                  width={700}
+                  height={600}
+                  alt="Franco image"
+                  /> 
+                </div>
+                <div className="w-full flex flex-row items-center justify-between pt-2 pb-2 pl-4 pr-4">
+                  <div className=" flex flex-row font-bold text-[#000000] ">
+                    <h3>Franco Bugna</h3>
+
+                  </div>
+                  <div className="flex ">
+                      <LinkedinLOGO />
+                  </div> 
+                </div>
+              </div>
+              <div className="bg-[#F7F6FF] rounded-xl h-[30 %] shadow-lg w-1/4 flex flex-col">
+                <div className="p-1.5">
+                  <Image
+                  src="/EnzoImg.png"
+                  width={700}
+                  height={600}
+                  alt="Enzo image"
+                  /> 
+                </div>
+                <div className="w-full flex flex-row items-center justify-between pt-2 pb-2 pl-4 pr-4">
+                  <div className=" flex flex-row font-bold text-[#000000] ">
+                    <h3>Enzo Villela Molloy</h3>
+
+                  </div>
+                  <div className="flex ">
+                      <LinkedinLOGO />
+                  </div> 
                 </div>
               </div>
           </div>

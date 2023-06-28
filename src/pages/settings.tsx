@@ -1,7 +1,7 @@
 import Head from "next/head";
-import { SettingsHeader } from "~/components/settingsHeader";
+import { SettingsHeader } from "~/components/Settingss/settingsHeader";
 import { useMantineColorScheme } from "@mantine/core";
-import UserSetting from "~/components/userSettings";
+import UserSetting from "~/components/Settingss/userSettings";
 import { type SetStateAction } from "react";
 import { Group, MediaQuery } from "@mantine/core";
 import { useSession } from "next-auth/react";

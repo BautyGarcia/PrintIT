@@ -4,7 +4,7 @@ import {
   IconBrandDiscord,
   IconBrandInstagram,
 } from "@tabler/icons-react";
-import { Logo } from "./logo";
+import { Logo } from "../Logos/logo";
 import Link from "next/link";
 
 const useStyles = createStyles((theme) => ({

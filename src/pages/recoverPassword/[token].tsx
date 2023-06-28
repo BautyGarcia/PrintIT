@@ -13,9 +13,9 @@ import {
 } from "@mantine/core";
 import { useMantineColorScheme } from "@mantine/core";
 import Head from "next/head";
-import { Logo } from "~/components/logo";
+import { Logo } from "~/components/Logos/logo";
 import { useMediaQuery } from "@mantine/hooks";
-import { RecoverTokenIMG } from "~/components/recoverToken";
+import { RecoverTokenIMG } from "~/components/Recover/recoverToken";
 import Link from "next/link";
 
 const RecoverPassword: NextPage = () => {

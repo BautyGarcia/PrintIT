@@ -1,8 +1,8 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { LandingHeader } from "~/components/landingHeader";
-import { Footer } from "~/components/footer";
-import { ContactIMG } from "~/components/contactImg";
+import { LandingHeader } from "~/components/Landing/landingHeader";
+import { Footer } from "~/components/Landing/footer";
+import { ContactIMG } from "~/components/Contact/contactImg";
 import {
   TextInput,
   Textarea,
@@ -33,7 +33,6 @@ const ContactUs: NextPage = () => {
             : "flex h-[93vh] w-full flex-row items-start justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c] pl-10 pr-10"
         }
       >
-
         <div
           className={
             largeScreen
@@ -50,7 +49,6 @@ const ContactUs: NextPage = () => {
         </picture>
       </main>
       <Footer />
-
     </>
   );
 };

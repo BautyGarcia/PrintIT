@@ -7,13 +7,13 @@ import {
   Text,
   PasswordInput,
 } from "@mantine/core";
-import { LogosignInIMG } from "~/components/signInImg";
+import { LogosignInIMG } from "~/components/Sign/signInImg";
 import { notifications } from "@mantine/notifications";
-import { AuthShowcase } from "~/components/googleAuthShowcase";
+import { AuthShowcase } from "~/components/Sign/googleAuthShowcase";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import { Button } from "@mantine/core";
-import { Logo } from "~/components/logo";
+import { Logo } from "~/components/Logos/logo";
 import Head from "next/head";
 import Link from "next/link";
 import { useMediaQuery } from "@mantine/hooks";

@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { isNotEmpty, useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useSession } from "next-auth/react";
-import { Logo } from './logo';
+import { Logo } from './Logos/logo';
 import { api } from '~/utils/api';
 
 const PrinterPopup: React.FC = () => {

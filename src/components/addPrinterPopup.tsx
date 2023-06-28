@@ -25,7 +25,7 @@ const PrinterPopup: React.FC = () => {
     const addPrinterForm = useForm({
         initialValues: { businessName: '', printerBrand: '', printerModel: '', printerType: '', printerArea: '' },
         validate: {
-            businessName: isNotEmpty(),          
+            businessName: isNotEmpty(),
             printerBrand: isNotEmpty(),
             printerModel: isNotEmpty(),
             printerType: isNotEmpty(),
@@ -53,7 +53,7 @@ const PrinterPopup: React.FC = () => {
 
     const handleFormSubmit = (values: typeof addPrinterForm.values) => {
         setIsLoading(true);
-        
+
         addPrinter({
             userEmail: SessionData?.user?.email as string,
             printerOwner: values.businessName,
@@ -96,7 +96,9 @@ const PrinterPopup: React.FC = () => {
                     <div className={colorScheme === 'dark' ? 'bg-[#1C2333] rounded-lg' : 'bg-white rounded-lg'}>
                         <div className={largeScreen ? 'p-8 w-[477px] min-w-[310px] overflow-y-auto' : 'p-8 max-h-[70vh] max-w-[75vw] min-w-[310px] overflow-y-auto'}>
                             <form id='addPrinterForm' onSubmit={addPrinterForm.onSubmit(handleFormSubmit, handleError)}>
-                                <Logo width={40} height={40} href='' />
+                                <Link className="flex flex-row items-center gap-2" href="" passHref>
+                                    <Logo width={40} height={40} />
+                                </Link>
                                 <div className="flex flex-col mt-4">
                                     <label className="text-left mb-1">Nombre del Propietario</label>
                                     <Autocomplete

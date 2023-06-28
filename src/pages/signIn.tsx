@@ -31,7 +31,9 @@ const SignInPage: NextPage = () => {
       }
     >
       <div className="absolute ml-5 mt-5 flex items-center gap-2">
-        <Logo width={40} height={40} href="/" />
+        <Link className="flex flex-row items-center gap-2" href="/" passHref>
+          <Logo width={40} height={40} />
+        </Link>
       </div>
       <section
         className={

@@ -144,7 +144,7 @@ const HomeNavBar: React.FC = () => {
     } else if (userTypeRole === "Vendedor" && router.pathname === "/dashboard/misImpresoras") {
       setActive("Mis Impresoras");
     }
-  }, [userTypeRole]);
+  }, [userTypeRole, router.pathname]);
 
   return (
     <>

@@ -106,5 +106,4 @@ export const emailRouter = createTRPCRouter({
                     throw new Error("No se pudo enviar el Email");
                 }
             }),
-
 });

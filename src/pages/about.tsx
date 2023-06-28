@@ -1,9 +1,8 @@
-import { NextPage } from "next";
+import { type NextPage } from "next";
 import Head from "next/head";
 import { LandingHeader } from "~/components/Landing/landingHeader";
 import { Footer } from "~/components/Landing/footer";
 import { useMantineColorScheme } from "@mantine/core";
-import { TopAboutUs } from "~/components/About/topaboutimg";
 import { useMediaQuery } from "@mantine/hooks";
 import Image from "next/image";
 

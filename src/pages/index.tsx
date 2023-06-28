@@ -25,7 +25,7 @@ import { TopLandingPhone } from "~/components/Landing/topLandingPhone";
 const Landing: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
   const largeScreen = useMediaQuery("(min-width: 1300px)");
-
+  
   return (
     <>
       <Head>

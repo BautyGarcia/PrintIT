@@ -19,11 +19,15 @@ import { FaceBook } from "~/components/Landing/facebook";
 import Carousel from "~/components/Landing/carousel";
 import Contacto from "~/components/Landing/contacto";
 import { useMediaQuery } from "@mantine/hooks";
+import { api } from "~/utils/api";
+import { useState } from "react";
 
 const Landing: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
   const largeScreen = useMediaQuery("(min-width: 1300px)");
-
+  const { mutate: sendContactEmail } = api.email.sendUsEmail.useMutation();
+  const [ email, setEmail ] = useState("");
+  
   return (
     <>
       <Head>

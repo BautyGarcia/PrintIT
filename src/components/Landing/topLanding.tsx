@@ -3,7 +3,7 @@ import Image from "next/image";
 export const TopLanding: React.FC = ({}) => {
   return (
     <Image
-      className="absolute left-0 top-0"
+      className="absolute left-0 top-0 w-screen"
       src="/TopLanding.png"
       alt="TopLanding"
       width={1920}

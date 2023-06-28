@@ -1,17 +1,14 @@
 import { useMantineColorScheme } from "@mantine/core";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface LogoProps {
   width: number;
   height: number;
-  href: string;
 }
 
-export const Logo: React.FC<LogoProps> = ({ width, height, href }) => {
+export const Logo: React.FC<LogoProps> = ({ width, height }) => {
   const { colorScheme } = useMantineColorScheme();
-
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -23,7 +20,7 @@ export const Logo: React.FC<LogoProps> = ({ width, height, href }) => {
   }
 
   return (
-    <Link className="flex items-center" href={href} passHref>
+    <div className="flex items-center">
       <Image
         src={colorScheme === "light" ? "/Logo.png" : "/LogoWhite.png"}
         alt="logo"
@@ -31,6 +28,6 @@ export const Logo: React.FC<LogoProps> = ({ width, height, href }) => {
         height={height}
       />
       <h2 className="font-family-Inter p-2">PrintIT</h2>
-    </Link>
+    </div>
   );
 };

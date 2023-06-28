@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { LandingHeader } from "~/components/landingHeader";
-import { Footer } from "~/components/footer";
+import { LandingHeader } from "~/components/Landing/landingHeader";
+import { Footer } from "~/components/Landing/footer";
 import { useMantineColorScheme } from "@mantine/core";
 import { TopLanding } from "~/components/Landing/topLanding";
 import { Impresora } from "~/components/Landing/Impresora";

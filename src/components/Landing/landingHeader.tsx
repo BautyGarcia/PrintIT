@@ -12,7 +12,7 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Logo } from "./logo";
+import { Logo } from "../Logos/logo";
 import Link from "next/link";
 import SchemeButton from "./schemeButton";
 

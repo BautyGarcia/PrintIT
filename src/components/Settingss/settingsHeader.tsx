@@ -10,14 +10,13 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Logo } from "./logo";
+import { Logo } from "../Logos/logo";
 import Link from "next/link";
-import SchemeButton from "./schemeButton";
-import UserBox from "./userBox";
+import SchemeButton from "../Landing/schemeButton";
+import UserBox from "../Dashboard/userBox";
 import { useSession } from "next-auth/react";
 
 const useStyles = createStyles((theme) => ({
-
   dropdownFooter: {
     backgroundColor:
       theme.colorScheme === "dark"

@@ -58,7 +58,7 @@ export const emailRouter = createTRPCRouter({
 
             //Set mail options
             const mailOptions = {
-                from: 'PrintIT <contact.printit.app@gmail.com>',
+                from: `PrintIT <${env.MAILUSER}>`,
                 to: email,
                 subject: 'PrintIT - Olvidaste tu contraseña',
                 html: recoverPasswordTemplate(emailName, redirectURL),
@@ -90,8 +90,8 @@ export const emailRouter = createTRPCRouter({
     
                 //Set mail options
                 const mailOptions = {
-                    from: 'PrintIT <contact.printit.app@gmail.com>',
-                    to: 'PrintIT <contact.printit.app@gmail.com>',
+                    from: `PrintIT <${env.MAILUSER}>`,
+                    to: `PrintIT <${env.MAILUSER}>`,
                     subject: subject,
                     html: `<p>De: ${email}</p><p>${message}</p>`,
                 };

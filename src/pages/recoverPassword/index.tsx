@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
-import { Logo } from "~/components/logo";
+import { Logo } from "~/components/Logos/logo";
 import { useState, useRef } from "react";
-import { RecoverIMG } from "~/components/recoverImg";
+import { RecoverIMG } from "~/components/Recover/recoverImg";
 import Head from "next/head";
 import { api } from "~/utils/api";
 import { Button } from "@mantine/core";

@@ -1,6 +1,6 @@
 import { Burger, Group, MediaQuery } from "@mantine/core";
-import { Logo } from "./logo";
-import SchemeButton from "./schemeButton";
+import { Logo } from "../Logos/logo";
+import SchemeButton from "../Landing/schemeButton";
 import UserBox from "./userBox";
 import { type SetStateAction } from "react";
 import UserToggle from "./userToggleButton";

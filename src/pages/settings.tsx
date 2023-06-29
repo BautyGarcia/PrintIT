@@ -33,20 +33,10 @@ const Settings: React.FC<SettingsProps> = ({}) => {
             : "flex min-h-screen flex-col items-center justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c]"
         }
       >
-        <h1 className="-mt-44 mb-1 flex w-full items-center justify-start">
+        <h1 className="mt-16 flex w-full items-center justify-start">
           Configuración
         </h1>
         <SettingsTab />
-        <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-          <Group className=" flex flex-col">
-            <UserSetting
-              user={{
-                name: sessionData?.user.name as string,
-                image: sessionData?.user.image as string,
-              }}
-            />
-          </Group>
-        </MediaQuery>
       </main>
     </>
   );

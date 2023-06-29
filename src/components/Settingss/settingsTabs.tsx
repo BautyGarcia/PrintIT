@@ -4,12 +4,7 @@ import { useMantineColorScheme } from "@mantine/core";
 import { Group, MediaQuery } from "@mantine/core";
 import UserSetting from "~/components/Settingss/userSettings";
 
-interface SettingsProps {
-  username: string;
-  userImage: string;
-}
-
-const Datos: React.FC<SettingsProps> = ({}) => {
+const Datos: React.FC = ({}) => {
   const { colorScheme } = useMantineColorScheme();
   const { data: sessionData } = useSession();
 
@@ -46,11 +41,11 @@ function SettingsTab() {
       </Tabs.List>
 
       <Tabs.Panel value="first" pt="xs">
-        Datos
+        <Datos />
       </Tabs.Panel>
 
       <Tabs.Panel value="second" pt="xs">
-        2do
+        <Datos />
       </Tabs.Panel>
     </Tabs>
   );

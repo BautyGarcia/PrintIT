@@ -12,7 +12,7 @@ import {
   useMantineColorScheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { Logo } from "./logo";
+import { Logo } from "../Logos/logo";
 import Link from "next/link";
 import SchemeButton from "./schemeButton";
 
@@ -102,7 +102,7 @@ export const LandingHeader: React.FC = () => {
       >
         <Group position="apart" sx={{ height: "100%" }}>
           <Link className="flex flex-row items-center gap-2" href="/" passHref>
-            <Logo width={40} height={40} href="/" />
+            <Logo width={40} height={40} />
           </Link>
 
           <Group

@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { LandingHeader } from "~/components/landingHeader";
-import { Footer } from "~/components/footer";
+import { LandingHeader } from "~/components/Landing/landingHeader";
+import { Footer } from "~/components/Landing/footer";
 import { useMantineColorScheme } from "@mantine/core";
 import { TopLanding } from "~/components/Landing/topLanding";
 import { Impresora } from "~/components/Landing/Impresora";
@@ -25,7 +25,7 @@ import { TopLandingPhone } from "~/components/Landing/topLandingPhone";
 const Landing: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
   const largeScreen = useMediaQuery("(min-width: 1300px)");
-
+  
   return (
     <>
       <Head>
@@ -63,7 +63,7 @@ const Landing: NextPage = () => {
             className={
               largeScreen
                 ? "ml-24 items-center"
-                : "absolute left-0 top-0 ml-4 mt-28 items-start text-xs"
+                : "absolute left-0 top-0 ml-4 mt-20 items-start text-[10px]"
             }
           >
             <h1>
@@ -139,7 +139,7 @@ const Landing: NextPage = () => {
         <div
           className={
             largeScreen
-              ? "mb-20 ml-44 mr-44 mt-20 flex flex-row justify-between"
+              ? "mb-20 ml-44 mr-44 mt-20 flex flex-row justify-around"
               : "flex w-3/4 flex-col items-center justify-center"
           }
         >
@@ -149,17 +149,21 @@ const Landing: NextPage = () => {
               {
                 "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white":
                   colorScheme === "dark",
-                "w-1/6": largeScreen === true,
-                "w-full items-start": largeScreen === false,
+                "h-[26rem] w-1/5 rounded-lg shadow-lg": largeScreen === true,
+                "mb-8 mt-8 w-full items-start": largeScreen === false,
               }
             )}
           >
             <PuntodeImpresion />
             <h1>Punto de Impresion</h1>
-            <h3>
+            <p
+              className={
+                largeScreen ? "w-4/6 text-justify" : "w-full text-justify"
+              }
+            >
               Nuestras página web también esta enfocada en aquellos que buscan
               vender sus productos 3D o simplemente poner en uso su impresora 3D
-            </h3>
+            </p>
           </div>
           <div
             className={cn(
@@ -167,18 +171,22 @@ const Landing: NextPage = () => {
               {
                 "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white":
                   colorScheme === "dark",
-                "w-1/6": largeScreen === true,
-                "w-full items-start": largeScreen === false,
+                "h-[26rem] w-1/5 rounded-xl shadow-lg": largeScreen === true,
+                "mb-8 mt-8 w-full items-start ": largeScreen === false,
               }
             )}
           >
             <Necesidades />
             <h1>Tus Necesidades</h1>
-            <h3>
+            <p
+              className={
+                largeScreen ? "w-4/6 text-justify" : "w-full text-justify"
+              }
+            >
               Te brindamos la posibilidad de ahorrar mucho tiempo y dinero al no
               tener que comprar tu propia impresora 3D y los materiales
               necesarios para imprimir
-            </h3>
+            </p>
           </div>
           <div
             className={cn(
@@ -186,18 +194,22 @@ const Landing: NextPage = () => {
               {
                 "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white":
                   colorScheme === "dark",
-                "w-1/6": largeScreen === true,
-                "w-full items-start": largeScreen === false,
+                "h-[26rem] w-1/5 rounded-xl shadow-lg": largeScreen === true,
+                "mb-8 mt-8 w-full items-start": largeScreen === false,
               }
             )}
           >
             <Proveedores />
             <h1>Proveedores</h1>
-            <h3>
+            <p
+              className={
+                largeScreen ? "w-4/6 text-justify" : "w-full text-justify"
+              }
+            >
               Adicionalmente te ofrecemos los medios para contactarte con
               personas que buscan poner sus impresoras a disposición, con el fin
               de conseguir un beneficio mutuo
-            </h3>
+            </p>
           </div>
         </div>
         <div
@@ -217,8 +229,8 @@ const Landing: NextPage = () => {
             <div
               className={
                 largeScreen
-                  ? "ml-52 flex w-1/2 flex-col"
-                  : "ml-14 mr-6 flex w-full flex-col"
+                  ? "ml-44 flex w-1/2 flex-col"
+                  : "mb-8 ml-9 mr-9 mt-8 flex w-full flex-col text-justify"
               }
             >
               <h2 className="flex items-start text-blue-500">
@@ -246,27 +258,29 @@ const Landing: NextPage = () => {
                 className={
                   largeScreen
                     ? "font-family-Inter flex w-1/6 flex-col items-center rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"
-                    : "font-family-Inter flex w-2/3 flex-col items-center rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"
+                    : "font-family-Inter flex w-5/6 flex-col items-center rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"
                 }
               >
                 Sobre nosotros
               </button>
             </div>
-            <picture className={largeScreen ? "right-0 ml-64 w-1/3" : "hidden"}>
+            <picture
+              className={largeScreen ? "right-0 -mt-20 ml-96 w-1/3" : "hidden"}
+            >
               <Servicio />
             </picture>
             <br></br>
           </div>
           <br></br>
           <div className="mb-8 flex w-full flex-row items-end ">
-            <picture className={largeScreen ? "left-0 ml-52 w-1/3" : "hidden"}>
+            <picture className={largeScreen ? "left-0 ml-44 w-1/3" : "hidden"}>
               <Objetivo />
             </picture>
             <div
               className={
                 largeScreen
                   ? "flex w-1/2  flex-col"
-                  : "ml-14 mr-6  flex w-full flex-col"
+                  : "ml-9 mr-9 flex w-full flex-col text-justify"
               }
             >
               <h2 className="flex items-start text-blue-500">
@@ -313,17 +327,31 @@ const Landing: NextPage = () => {
                 : "-mt-28 flex w-screen flex-col items-center"
             }
           >
-            <h1 className="mb-4 flex items-center text-5xl">
-              Mantenete al Tanto
-            </h1>
-            <h1 className="mb-8 flex items-center text-xs">
-              Ingresa tu mail para recibir noticias de las actualizaciones
-            </h1>
+            <div className="items-center justify-center">
+              <h1
+                className={
+                  largeScreen
+                    ? "mb-4 ml-28 text-5xl"
+                    : "mb-4 items-center text-4xl"
+                }
+              >
+                Mantenete al Tanto
+              </h1>
+              <h1
+                className={
+                  largeScreen
+                    ? "mb-4 ml-40 text-xs"
+                    : "mb-4 ml-7 items-center text-[10px]"
+                }
+              >
+                Ingresa tu mail para recibir noticias de las actualizaciones
+              </h1>
+            </div>
             <div
               className={
                 largeScreen
                   ? "ml-28 flex w-full flex-col items-center justify-center"
-                  : "mb-8 flex w-2/3 flex-col items-center"
+                  : "mb-8 flex w-5/6 flex-col items-center"
               }
             >
               <Contacto />

@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
-import { Logo } from "~/components/logo";
+import { Logo } from "~/components/Logos/logo";
 import { useState, useRef } from "react";
-import { RecoverIMG } from "~/components/recoverImg";
+import { RecoverIMG } from "~/components/Recover/recoverImg";
 import Head from "next/head";
 import { api } from "~/utils/api";
 import { Button } from "@mantine/core";
@@ -13,6 +13,7 @@ import {
   Text,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import Link from "next/link";
 
 const Recover: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -33,7 +34,9 @@ const Recover: NextPage = () => {
         }
       >
         <div className="absolute ml-5 mt-5 flex items-center gap-2">
-          <Logo width={40} height={40} href="/" />
+          <Link className="flex flex-row items-center gap-2" href="/" passHref>
+            <Logo width={40} height={40} />
+          </Link>
         </div>
         <section
           className={
@@ -74,8 +77,7 @@ const RecoverForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
-  const { mutate: sendPasswordEmail } =
-    api.auth.sendPasswordEmail.useMutation();
+  const { mutate: sendPasswordEmail } = api.email.sendPasswordEmail.useMutation();
   const timeoutRef = useRef<number>(-1);
   const [value, setValue] = useState("");
   const [loading, setLoading] = useState(false);

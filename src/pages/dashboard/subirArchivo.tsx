@@ -1,12 +1,11 @@
 import { type NextPage } from "next";
 import Dashboard from ".";
-import STLDropzone from "~/components/fileDropzone";
+import STLDropzone from "~/components/Dashboard/fileDropzone";
 
 const SubirArchivo: NextPage = () => {
-
   return (
     <Dashboard>
-        <STLDropzone />
+      <STLDropzone />
     </Dashboard>
   );
 };

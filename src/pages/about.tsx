@@ -1,9 +1,8 @@
-import { NextPage } from "next";
+import { type NextPage } from "next";
 import Head from "next/head";
-import { LandingHeader } from "~/components/landingHeader";
-import { Footer } from "~/components/footer";
+import { LandingHeader } from "~/components/Landing/landingHeader";
+import { Footer } from "~/components/Landing/footer";
 import { useMantineColorScheme } from "@mantine/core";
-import { TopAboutUs } from "~/components/topaboutimg";
 import { useMediaQuery } from "@mantine/hooks";
 import Image from "next/image";
 import { LinkedinLOGO } from "~/components/linkedinlogo";
@@ -21,21 +20,23 @@ const About: NextPage = () => {
       </Head>
       <LandingHeader />
       <main
+
         className=
         {
           colorScheme === "dark" 
           ? "flex h-full w-full bg-[#0E1525] from-[#2e026d] to-[#15162c] p-10 pt-20"
           : "flex h-full w-full bg-[#F0F1F8] from-[#2e026d] to-[#15162c] p-10 pt-20"
-        }
-      >
 
-        <div         
+      >
+        <div
           className={
             largeScreen
+
               ? "font-family-Nunito mr-8 flex w-full h-screen justify-center"
               : "flex h-full w-full items-center justify-center"
-          }>
-        <AboutUs/>
+          }
+        >
+          <AboutUs />
         </div>
       </main>
       <Footer />
@@ -46,10 +47,11 @@ const About: NextPage = () => {
 export default About;
 
 
-export function AboutUs(){
+export function AboutUs() {
   const largeScreen = useMediaQuery("(min-width: 1300px)");
 
   return (
+
     <form className=""> 
       <div className="">
         <div className="bg-[url('/TopAbout.png')] h- w-full bg-cover ">
@@ -79,17 +81,69 @@ export function AboutUs(){
             <br></br>
             <h3>
 
-            Decidimos aprovechar nuestras habilidades técnicas y conocimientos en programación para crear una solución que abordara este problema. 
-            Así nació PrintIT, una plataforma diseñada para brindar un espacio de comunicación y colaboración entre clientes y proveedores de impresiones 3D.
-            </h3>
+
+        <div
+          className={
+            largeScreen
+              ? "flex h-full w-full flex-row"
+              : "flex h-full w-full flex-col items-center justify-center"
+          }
+        >
+          <div
+            className={
+              largeScreen
+                ? "ml-10 flex h-full w-1/2 flex-col"
+                : "flex h-full w-full flex-col items-center justify-center"
+            }
+          >
+            <h1>Como surgió PrintIT</h1>
+
+            <div className={largeScreen ? "" : "ml-5"}>
+              <br></br>
+
+              <h3>
+                Somos un grupo de cuatro estudiantes entusiastas de 17 años del
+                Colegio ORT que comparten una pasión por la tecnología y la
+                innovación. Hemos decidido unir fuerzas y crear esta plataforma
+                con el objetivo de facilitar la comunicación entre clientes y
+                proveedores de impresiones 3D.
+              </h3>
+
+              <br></br>
+              <h3>
+                Nuestra historia comenzó cuando nos dimos cuenta de la creciente
+                demanda de servicios de impresión 3D en nuestra comunidad. Nos
+                emocionó la idea de hacer que esta tecnología estuviera al
+                alcance de todos, permitiendo a las personas convertir sus ideas
+                en objetos tangibles. Sin embargo, también nos dimos cuenta de
+                que había una falta de conectividad entre los clientes que
+                necesitaban servicios de impresión 3D y los proveedores que
+                podían ofrecerlos.
+              </h3>
+
+              <br></br>
+              <h3>
+                Decidimos aprovechar nuestras habilidades técnicas y
+                conocimientos en programación para crear una solución que
+                abordara este problema. Así nació PrintIT, una plataforma
+                diseñada para brindar un espacio de comunicación y colaboración
+                entre clientes y proveedores de impresiones 3D.
+              </h3>
             </div>
           </div>
 
-            <div className={largeScreen ? "flex w-1/2 ml-20 justify-center items-center" : "hidden"}>
+          <div
+            className={
+              largeScreen
+                ? "ml-20 flex w-1/2 items-center justify-center"
+                : "hidden"
+            }
+          >
             <Image
               src="/AboutUsImg.png"
               width={700}
               height={600}
+
               alt="Group of people"
             /> 
             </div>
@@ -172,11 +226,14 @@ export function AboutUs(){
                   </div> 
                 </div>
               </div>
+
           </div>
 
+          <div className="flex h-full w-full flex-row">
+            <div className="h-[30vh] w-1/4 bg-[#E3E3E3]"></div>
+          </div>
         </div>
       </div>
-
     </form>
   );
 }

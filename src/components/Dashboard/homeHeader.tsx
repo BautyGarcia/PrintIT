@@ -1,9 +1,10 @@
 import { Burger, Group, MediaQuery } from "@mantine/core";
-import { Logo } from "./logo";
-import SchemeButton from "./schemeButton";
+import { Logo } from "../Logos/logo";
+import SchemeButton from "../Landing/schemeButton";
 import UserBox from "./userBox";
 import { type SetStateAction } from "react";
 import UserToggle from "./userToggleButton";
+import Link from "next/link";
 
 interface HomeHeaderProps {
   opened: boolean;
@@ -28,7 +29,9 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
       }}
     >
       <Group className="flex flex-row items-center gap-2">
-        <Logo width={40} height={40} href="#" />
+        <Link className="flex flex-row items-center gap-2" href="#" passHref>
+          <Logo width={40} height={40} />
+        </Link>
       </Group>
       <div className="flex items-center">
         <UserToggle />

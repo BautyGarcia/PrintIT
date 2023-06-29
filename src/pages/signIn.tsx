@@ -7,13 +7,13 @@ import {
   Text,
   PasswordInput,
 } from "@mantine/core";
-import { LogosignInIMG } from "~/components/signInImg";
+import { LogosignInIMG } from "~/components/Sign/signInImg";
 import { notifications } from "@mantine/notifications";
-import { AuthShowcase } from "~/components/googleAuthShowcase";
+import { AuthShowcase } from "~/components/Sign/googleAuthShowcase";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
 import { Button } from "@mantine/core";
-import { Logo } from "~/components/logo";
+import { Logo } from "~/components/Logos/logo";
 import Head from "next/head";
 import Link from "next/link";
 import { useMediaQuery } from "@mantine/hooks";
@@ -31,7 +31,9 @@ const SignInPage: NextPage = () => {
       }
     >
       <div className="absolute ml-5 mt-5 flex items-center gap-2">
-        <Logo width={40} height={40} href="/" />
+        <Link className="flex flex-row items-center gap-2" href="/" passHref>
+          <Logo width={40} height={40} />
+        </Link>
       </div>
       <section
         className={

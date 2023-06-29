@@ -1,25 +1,16 @@
 import { Group, Button, Autocomplete, Loader } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import { type FormEventHandler, useState, useRef } from "react";
-
+import { notifications } from "@mantine/notifications";
 const Contacto = () => {
   const [data, setData] = useState<string[]>([]);
   const [error, setError] = useState(false);
   const [value, setValue] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const timeoutRef = useRef<number>(-1);
   const largeScreen = useMediaQuery("(min-width: 1300px)");
-
-  const form = useForm({
-    initialValues: {
-      email: "",
-    },
-    validate: {
-      email: (value) => !/^\S+@\S+$/.test(value),
-    },
-  });
 
   const handleChange = (val: string) => {
     window.clearTimeout(timeoutRef.current);
@@ -43,10 +34,33 @@ const Contacto = () => {
     }
   };
 
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    setIsSending(true);
+
+    const regex = new RegExp(
+      "^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$"
+    );
+
+    if (!regex.test(email)) {
+      setError(true);
+      notifications.show({
+        title: "Error",
+        message: "Por favor ingrese un email valido",
+        color: "red",
+        autoClose: 5000,
+      });
+      setIsSending(false);
+      return;
+    }
+
+    setIsSending(false);
+  };
+
   return (
     <form
       className={largeScreen ? "w-2/3" : "w-full"}
-      onSubmit={form.onSubmit(() => null)}
+      onSubmit={handleSubmit}
     >
       <Autocomplete
         {...(error ? { error } : {})}
@@ -60,7 +74,8 @@ const Contacto = () => {
         <Button
           type="submit"
           size="md"
-          className="rounded-lg bg-blue-500 hover:bg-blue-700"
+          className="w-11/12 rounded-lg bg-blue-500 hover:bg-blue-700"
+          loading={isSending}
         >
           Contactate
         </Button>

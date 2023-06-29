@@ -13,9 +13,10 @@ import {
 } from "@mantine/core";
 import { useMantineColorScheme } from "@mantine/core";
 import Head from "next/head";
-import { Logo } from "~/components/logo";
+import { Logo } from "~/components/Logos/logo";
 import { useMediaQuery } from "@mantine/hooks";
-import { RecoverTokenIMG } from "~/components/recoverToken";
+import { RecoverTokenIMG } from "~/components/Recover/recoverToken";
+import Link from "next/link";
 
 const RecoverPassword: NextPage = () => {
   const router = useRouter();
@@ -140,7 +141,9 @@ const RecoverPassword: NextPage = () => {
         }
       >
         <div className="absolute ml-5 mt-5 flex items-center gap-2">
-          <Logo width={40} height={40} href="/" />
+          <Link className="flex flex-row items-center gap-2" href="/" passHref>
+            <Logo width={40} height={40} />
+          </Link>
         </div>
         <section
           className={

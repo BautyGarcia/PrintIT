@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames";
+import Image from "next/image";
 
 const images = [
-  "Carousel1.png",
-  "Carousel2.png",
-  "Carousel3.png",
-  "Carousel4.png",
-  "Carousel5.png",
+  "/Carousel1.png",
+  "/Carousel2.png",
+  "/Carousel3.png",
+  "/Carousel4.png",
+  "/Carousel5.png",
 ];
 
 const Carousel: React.FC = () => {
@@ -23,7 +24,7 @@ const Carousel: React.FC = () => {
   return (
     <div className="flex h-screen w-full items-center justify-center">
       {images.map((image, index) => (
-        <img
+        <Image
           key={index}
           src={image}
           alt={`Image ${index + 1}`}
@@ -31,6 +32,8 @@ const Carousel: React.FC = () => {
             "absolute w-full transition-opacity duration-1000",
             index === activeIndex ? "opacity-100" : "opacity-0"
           )}
+          width={3840}
+          height={2160}
         />
       ))}
     </div>

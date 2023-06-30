@@ -139,7 +139,9 @@ const PrinterPopup: React.FC = () => {
                   handleError
                 )}
               >
-                <Logo width={40} height={40} href="" />
+                <Link className="flex flex-row items-center gap-2" href="" passHref>
+                  <Logo width={40} height={40} />
+                </Link>
                 <div className="mt-4 flex flex-col">
                   <label className="mb-1 text-left">
                     Nombre del Propietario

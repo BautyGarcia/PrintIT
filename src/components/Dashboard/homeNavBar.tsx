@@ -182,7 +182,7 @@ const HomeNavBar: React.FC = () => {
     ) {
       setActive("Mis Impresoras");
     }
-  }, [userTypeRole]);
+  }, [userTypeRole, router.pathname]);
 
   return (
     <>

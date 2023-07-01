@@ -28,7 +28,8 @@ const About: NextPage = () => {
         <div
           className={
             largeScreen
-              ? "font-family-Nunito mr-8  flex h-full w-full justify-center"
+
+              ? "font-family-Nunito mr-8 flex w-full h-screen justify-center"
               : "flex h-full w-full items-center justify-center"
           }
         >

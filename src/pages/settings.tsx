@@ -5,6 +5,7 @@ import UserSetting from "~/components/Settingss/userSettings";
 import { type SetStateAction } from "react";
 import { Group, MediaQuery } from "@mantine/core";
 import { useSession } from "next-auth/react";
+import SettingsTab from "~/components/Settingss/settingsTabs";
 
 interface SettingsProps {
   opened: boolean;
@@ -32,16 +33,10 @@ const Settings: React.FC<SettingsProps> = ({}) => {
             : "flex min-h-screen flex-col items-center justify-center bg-[#F0F1F8] from-[#2e026d] to-[#15162c]"
         }
       >
-        <MediaQuery smallerThan="sm" styles={{ display: "none" }}>
-          <Group className=" flex flex-col">
-            <UserSetting
-              user={{
-                name: sessionData?.user.name as string,
-                image: sessionData?.user.image as string,
-              }}
-            />
-          </Group>
-        </MediaQuery>
+        <h1 className="mt-16 flex w-full items-center justify-start">
+          Configuración
+        </h1>
+        <SettingsTab />
       </main>
     </>
   );

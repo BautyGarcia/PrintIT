@@ -87,4 +87,21 @@ export const printerRouter = createTRPCRouter({
 
             return printers;
         }),
+    deletePrinter: publicProcedure
+        .input(z.object({ printerId: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { printerId } = input;
+
+            const deletedPrinter = await ctx.prisma.printer.delete({
+                where: {
+                    id: printerId,
+                }
+            })
+
+            if (!deletedPrinter) {
+                throw new Error("No existe la impresora para eliminar");
+            }
+
+            return deletedPrinter;
+        }),
 })

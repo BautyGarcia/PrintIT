@@ -4,7 +4,6 @@ import { LandingHeader } from "~/components/Landing/landingHeader";
 import { Footer } from "~/components/Landing/footer";
 import { useMantineColorScheme } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
-import { LinkedinLOGO } from "~/components/Logos/linkedinLogo";
 
 const About: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();

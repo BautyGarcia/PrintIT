@@ -41,10 +41,10 @@ const RecoverPassword: NextPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const largeScreen = useMediaQuery("(min-width: 992px)");
-
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    
     //Validation
     if (password.length < 8) {
       setError(true);

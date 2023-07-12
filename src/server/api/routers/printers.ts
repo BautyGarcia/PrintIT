@@ -6,9 +6,9 @@ import {
 
 export const printerRouter = createTRPCRouter({
     addPrinter: publicProcedure
-        .input(z.object({ userEmail: z.string(), printerOwner: z.string(), printerBrand: z.string(), printerModel: z.string(), printerType: z.string(), printerArea: z.string() }))
+        .input(z.object({ userId: z.string(), printerOwner: z.string(), printerBrand: z.string(), printerModel: z.string(), printerType: z.string(), printerArea: z.string() }))
         .mutation(async ({ input, ctx }) => {
-            const { userEmail, printerOwner, printerBrand, printerModel, printerType, printerArea } = input;
+            const { userId, printerOwner, printerBrand, printerModel, printerType, printerArea } = input;
 
             const newPrinter = await ctx.prisma.printer.create({
                 data: {
@@ -19,7 +19,7 @@ export const printerRouter = createTRPCRouter({
                     bedSize: printerArea,
                     user: {
                         connect: {
-                            email: userEmail,
+                            id: userId,
                         },
                     },
                 }
@@ -32,9 +32,9 @@ export const printerRouter = createTRPCRouter({
             return newPrinter;
         }),
     getPrinterForSTL: publicProcedure
-        .input(z.object({ bedSize: z.string(), printerType: z.string(), userEmail: z.string() }))
+        .input(z.object({ bedSize: z.string(), printerType: z.string(), userId: z.string() }))
         .mutation(async ({ input, ctx }) => {
-            const { bedSize, printerType, userEmail } = input;
+            const { bedSize, printerType, userId } = input;
 
             const printers = await ctx.prisma.printer.findMany({
                 where: {
@@ -42,7 +42,7 @@ export const printerRouter = createTRPCRouter({
                     isAvailable: true,
                     NOT: {
                         user: {
-                            email: userEmail,
+                            id: userId,
                         },
                     }
                 }
@@ -69,14 +69,14 @@ export const printerRouter = createTRPCRouter({
             return printersForSTL;
         }),
     getMyPrinters: publicProcedure
-        .input(z.object({ userEmail: z.string() }))
+        .input(z.object({ userId: z.string() }))
         .query(async ({ input, ctx }) => {
-            const { userEmail } = input;
+            const { userId } = input;
 
             const printers = await ctx.prisma.printer.findMany({
                 where: {
                     user: {
-                        email: userEmail,
+                        id: userId,
                     },
                 }
             })
@@ -86,5 +86,22 @@ export const printerRouter = createTRPCRouter({
             }
 
             return printers;
+        }),
+    deletePrinter: publicProcedure
+        .input(z.object({ printerId: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { printerId } = input;
+
+            const deletedPrinter = await ctx.prisma.printer.delete({
+                where: {
+                    id: printerId,
+                }
+            })
+
+            if (!deletedPrinter) {
+                throw new Error("No existe la impresora para eliminar");
+            }
+
+            return deletedPrinter;
         }),
 })

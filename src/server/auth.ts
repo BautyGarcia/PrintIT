@@ -105,6 +105,14 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
   secret: env.JWT_SECRET,
+  callbacks: {
+    session: ({ session, token }) => {
+      if (session?.user) {
+        session.user.id = token.uid as string;
+      }
+      return session;
+    },
+  },
 };
 
 /**

@@ -6,7 +6,7 @@ import { useEffect } from "react";
 const SessionChecker = () => {
     const { data: sessionData } = useSession();
     const router = useRouter();
-  
+    
     useEffect(() => {
       const redirectTimeout = setTimeout(() => {
         if (!sessionData) {

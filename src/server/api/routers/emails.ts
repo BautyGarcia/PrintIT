@@ -34,7 +34,7 @@ export const emailRouter = createTRPCRouter({
                     email,
                 },
             });
-
+            
             if (!user) {
                 throw new Error("Este Email no esta asignado a ninguna cuenta");
             }

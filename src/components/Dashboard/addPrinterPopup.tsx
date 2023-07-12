@@ -73,7 +73,7 @@ const PrinterPopup: React.FC = () => {
 
     addPrinter(
       {
-        userEmail: SessionData?.user?.email as string,
+        userId: SessionData?.user.id as string,
         printerOwner: values.businessName,
         printerBrand: values.printerBrand,
         printerModel: values.printerModel,

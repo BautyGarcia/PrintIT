@@ -24,14 +24,16 @@ model Printer {
 }
 
 model Work {
-  id        String     @id @default(cuid())
-  status    WorkStatus
-  clientId  String
-  workerId  String
-  printerId String
-  printer   Printer    @relation(fields: [printerId], references: [id])
-  client    User       @relation("ClientRelation", fields: [clientId], references: [id])
-  worker    User       @relation("WorkerRelation", fields: [workerId], references: [id])
+  id         String     @id @default(cuid())
+  status     WorkStatus
+  price      Float      @default(0)
+  lastBidder RoleTypes  @default(CLIENT)
+  clientId   String
+  workerId   String
+  printerId  String
+  printer    Printer    @relation(fields: [printerId], references: [id])
+  client     User       @relation("ClientRelation", fields: [clientId], references: [id])
+  worker     User       @relation("WorkerRelation", fields: [workerId], references: [id])
 
   @@index([clientId])
   @@index([workerId])
@@ -42,7 +44,13 @@ enum WorkStatus {
   CANCELED
   NEGOTIATING
   PRINTING
+  SHIPPING
   FINISHED
+}
+
+enum RoleTypes {
+  CLIENT
+  WORKER
 }
 
 // Necessary for Next auth

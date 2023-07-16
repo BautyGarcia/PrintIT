@@ -29,6 +29,15 @@ const MyPrintersTable = () => {
         console.log(id);
     }
 
+    const DeletePrinter = (id: string) => {
+        console.log(id);
+    }
+
+    const EditPrinter = (id: string) => {
+        console.log(id);
+        //Esto deberia abrir un popup para el formulario de edicion de impresora
+    }
+
     const rows = printersList.data?.map((printer) => (
         <tr key={printer.id}>
             <td>{printer.brand}</td>
@@ -45,13 +54,13 @@ const MyPrintersTable = () => {
                         {printer.isAvailable ? "Deshabilitar" : "Rehabilitar"}
                     </Button>
                     <Button
-                        onClick={() => SwitchPrinterState(printer.id)}
+                        onClick={() => DeletePrinter(printer.id)}
                         className='bg-blue-500 py-2 mr-2 text-white hover:bg-blue-700'
                     >
                         Eliminar
                     </Button>
                     <Button
-                        onClick={() => SwitchPrinterState(printer.id)}
+                        onClick={() => EditPrinter(printer.id)}
                         className='bg-blue-500 py-2 text-white hover:bg-blue-700'
                     >
                         Editar

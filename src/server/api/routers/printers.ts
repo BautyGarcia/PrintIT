@@ -69,14 +69,14 @@ export const printerRouter = createTRPCRouter({
             return printersForSTL;
         }),
     getMyPrinters: publicProcedure
-        .input(z.object({ userId: z.string() }))
+        .input(z.object({ userEmail: z.string() }))
         .query(async ({ input, ctx }) => {
-            const { userId } = input;
+            const { userEmail } = input;
 
             const printers = await ctx.prisma.printer.findMany({
                 where: {
                     user: {
-                        id: userId,
+                        email: userEmail,
                     },
                 }
             })

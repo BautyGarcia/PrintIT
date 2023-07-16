@@ -1,9 +1,7 @@
 import Head from "next/head";
 import { SettingsHeader } from "~/components/Settingss/settingsHeader";
 import { useMantineColorScheme } from "@mantine/core";
-import UserSetting from "~/components/Settingss/userSettings";
 import { type SetStateAction } from "react";
-import { Group, MediaQuery } from "@mantine/core";
 import { useSession } from "next-auth/react";
 import SettingsTab from "~/components/Settingss/settingsTabs";
 
@@ -16,7 +14,6 @@ interface SettingsProps {
 
 const Settings: React.FC<SettingsProps> = ({}) => {
   const { colorScheme } = useMantineColorScheme();
-  const { data: sessionData } = useSession();
 
   return (
     <>

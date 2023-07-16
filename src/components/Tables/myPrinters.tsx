@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { createStyles, Table, ScrollArea } from '@mantine/core';
-import { useSession } from 'next-auth/react';
 import { api } from '~/utils/api';
 
 const useStyles = createStyles((theme) => ({
@@ -24,11 +23,7 @@ const MyPrintersTable = () => {
     const { classes, cx } = useStyles();
     const [scrolled, setScrolled] = useState(false);
     
-    const { data: sessionData } = useSession();
-    const printersList = api.printer.getMyPrinters.useQuery(
-    { userEmail: sessionData?.user.email as string },
-    { enabled: sessionData !== undefined }
-    ) as MyPrintersTableProps;
+    const printersList = api.printer.getMyPrinters.useQuery() as MyPrintersTableProps;
 
     const rows = printersList.data?.map ((printer) => (
         <tr key={printer.id}>

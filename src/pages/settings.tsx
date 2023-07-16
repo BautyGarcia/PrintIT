@@ -2,7 +2,6 @@ import Head from "next/head";
 import { SettingsHeader } from "~/components/Settingss/settingsHeader";
 import { useMantineColorScheme } from "@mantine/core";
 import { type SetStateAction } from "react";
-import { useSession } from "next-auth/react";
 import SettingsTab from "~/components/Settingss/settingsTabs";
 
 interface SettingsProps {

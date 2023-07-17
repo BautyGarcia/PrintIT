@@ -147,10 +147,24 @@ const STLDropzone = () => {
       className={cn(
         "mt-28 flex h-96 w-full flex-col items-center justify-center",
         {
-          "mt-8 h-[800px]": isSelected,
+          "mt-8 h-[750px]": isSelected,
         }
       )}
     >
+      <h1
+        className={cn("mb-4", {
+          hidden: !isSelected,
+        })}
+      >
+        Estás cada vez más cerca de conseguir tu impresión 3D deseada 
+      </h1>
+      <h3
+        className={cn("mb-4", {
+          hidden: !isSelected,
+        })}
+      >
+        Completa el formulario abajo y podrás seguir con el procedimiento
+      </h3>
       {isSelected ? (
         <></>
       ) : (
@@ -198,7 +212,7 @@ const STLDropzone = () => {
           <>
             <div className="ml-8 flex flex-row justify-around">
               <div className="flex flex-col">
-                <div>
+                <div className="mt-12 ">
                   <StlViewer url={stlViewerURL} style={styles} orbitControls />
                 </div>
                 <div className="mt-8 flex gap-2">
@@ -209,7 +223,7 @@ const STLDropzone = () => {
                 </div>
               </div>
 
-              <div className="justify-cenmter ml-8 flex h-full flex-col items-center gap-2">
+              <div className="justify-cenmter ml-8 mt-12 flex h-full flex-col items-center gap-2">
                 <GetInTouchSimple />
               </div>
             </div>
@@ -235,7 +249,7 @@ const STLDropzone = () => {
                 Clear
               </button>
             </div>
-            <Text className="mt-5 flex flex-col">
+            <Text className="mb-5 mt-5 flex flex-col">
               NOTE: It might turn as corrupted file when opening.
             </Text>
           </>
@@ -247,18 +261,35 @@ const STLDropzone = () => {
 
 function ContadorImpresiones() {
   const [count, handlers] = useCounter(0, { min: 0, max: 10 });
+  const { colorScheme } = useMantineColorScheme();
 
   return (
     <>
       <Text>{count}</Text>
-      <Group position="center">
-        <Button className="" onClick={handlers.increment}>
+      <Group
+        className={
+          colorScheme === "dark"
+            ? "mr-[79px] mt-5 rounded-md border border-white bg-[#1c2333] "
+            : "mr-[79px] mt-5 rounded-md border border-black bg-[#FFFFFF] "
+        }
+        position="left"
+      >
+        <Button
+          className={colorScheme === "dark" ? "text-white" : "text-black"}
+          onClick={handlers.increment}
+        >
           +
         </Button>
-        <Button className="" onClick={handlers.decrement}>
+        <Button
+          className={colorScheme === "dark" ? "text-white" : "text-black"}
+          onClick={handlers.decrement}
+        >
           -
         </Button>
-        <Button className="" onClick={handlers.reset}>
+        <Button
+          className={colorScheme === "dark" ? "text-white" : "text-black"}
+          onClick={handlers.reset}
+        >
           <i className="ri-loop-left-line"></i>
         </Button>
       </Group>

@@ -5,7 +5,18 @@ import sliceSTL from "~/utils/fileSlicer";
 import { Text } from "@mantine/core";
 import pako from "pako";
 import "remixicon/fonts/remixicon.css";
-import { useMantineColorScheme } from "@mantine/core";
+import {
+  TextInput,
+  Textarea,
+  SimpleGrid,
+  Group,
+  Title,
+  Button,
+  useMantineColorScheme,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { useMediaQuery } from "@mantine/hooks";
+import { useCounter } from "@mantine/hooks";
 import { cn } from "~/utils/util";
 
 const STLDropzone = () => {
@@ -185,14 +196,24 @@ const STLDropzone = () => {
           </>
         ) : (
           <>
-            <StlViewer url={stlViewerURL} style={styles} orbitControls />
-            <div className="mt-8 flex gap-2">
-              <Text>Volume: {volume} cm3</Text>
-              <Text>Width: {width} cm</Text>
-              <Text>Height: {height} cm</Text>
-              <Text>Depth: {depth} cm</Text>
+            <div className="ml-8 flex flex-row justify-around">
+              <div className="flex flex-col">
+                <div>
+                  <StlViewer url={stlViewerURL} style={styles} orbitControls />
+                </div>
+                <div className="mt-8 flex gap-2">
+                  <Text>Volume: {volume} cm3</Text>
+                  <Text>Width: {width} cm</Text>
+                  <Text>Height: {height} cm</Text>
+                  <Text>Depth: {depth} cm</Text>
+                </div>
+              </div>
+
+              <div className="justify-cenmter ml-8 flex h-full flex-col items-center gap-2">
+                <GetInTouchSimple />
+              </div>
             </div>
-            <div className="flex w-1/3 flex-row justify-evenly">
+            <div className="flex flex-row items-center justify-center gap-4">
               <button
                 className={
                   colorScheme === "dark"
@@ -214,7 +235,7 @@ const STLDropzone = () => {
                 Clear
               </button>
             </div>
-            <Text className="mt-5">
+            <Text className="mt-5 flex flex-col">
               NOTE: It might turn as corrupted file when opening.
             </Text>
           </>
@@ -223,5 +244,75 @@ const STLDropzone = () => {
     </div>
   );
 };
+
+function ContadorImpresiones() {
+  const [count, handlers] = useCounter(0, { min: 0, max: 10 });
+
+  return (
+    <>
+      <Text>{count}</Text>
+      <Group position="center">
+        <Button className="" onClick={handlers.increment}>
+          +
+        </Button>
+        <Button className="" onClick={handlers.decrement}>
+          -
+        </Button>
+        <Button className="" onClick={handlers.reset}>
+          <i className="ri-loop-left-line"></i>
+        </Button>
+      </Group>
+    </>
+  );
+}
+
+function GetInTouchSimple() {
+  const largeScreen = useMediaQuery("(min-width: 1300px)");
+  const form = useForm({
+    initialValues: {
+      nombre: "",
+    },
+    validate: {
+      nombre: (value) => value.trim().length < 2,
+    },
+  });
+
+  return (
+    <form
+      className={largeScreen ? "w-4/6" : "w-full"}
+      onSubmit={form.onSubmit(() => null)}
+    >
+      <Title className="mt-10" order={2} size="h1" weight={200} align="start">
+        <p>Tu Impresion 3D</p>
+      </Title>
+
+      <SimpleGrid cols={2} mt="xl" breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
+        <TextInput
+          className="mb-2 w-60"
+          label="Nombre"
+          placeholder="Ingresa tu nombre"
+          name="nombre"
+          variant="filled"
+          {...form.getInputProps("nombre")}
+        />
+      </SimpleGrid>
+      <h2 className="mb-2">Calidad de la Impresion</h2>
+      <h3 className="mb-2">...</h3>
+      <h2 className="mb-2">Precio Estimado</h2>
+      <h3 className="mb-2">precio...</h3>
+      <h2 className="mb-2">Cantidad de Impresiones</h2>
+      <ContadorImpresiones />
+      <Group position="center" mt="xl">
+        <Button
+          type="submit"
+          size="md"
+          className="w-60 rounded-lg bg-blue-500 hover:bg-blue-700"
+        >
+          Send Stl
+        </Button>
+      </Group>
+    </form>
+  );
+}
 
 export default STLDropzone;

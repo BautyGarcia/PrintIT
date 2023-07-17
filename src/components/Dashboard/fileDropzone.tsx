@@ -154,8 +154,8 @@ const STLDropzone = () => {
       <div
         className={
           colorScheme === "dark"
-            ? "flex h-full w-2/3 flex-col items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#1C2333]"
-            : "flex h-full w-2/3 flex-col items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#FFFFFF]"
+            ? "flex h-full w-3/5 flex-col items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#1C2333]"
+            : "flex h-full w-3/5 flex-col items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#FFFFFF]"
         }
       >
         <i
@@ -176,6 +176,7 @@ const STLDropzone = () => {
         {!isSelected ? (
           <>
             <input
+              className="absolute h-60 w-2/4 bg-opacity-0 text-transparent"
               type="file"
               onChange={handleFileSubmit}
               accept=".stl"

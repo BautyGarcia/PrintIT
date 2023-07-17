@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { createStyles, Table, ScrollArea, Button } from '@mantine/core';
 import { api } from '~/utils/api';
+import { notifications } from '@mantine/notifications';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -23,14 +24,33 @@ const MyPrintersTable = () => {
     const { classes, cx } = useStyles();
     const [scrolled, setScrolled] = useState(false);
 
-    const printersList = api.printer.getMyPrinters.useQuery() as MyPrintersTableProps;
+    const { data: printersList, refetch: refetchPrintersList } = api.printer.getMyPrinters.useQuery();
+    const { mutate: deletePrinter } = api.printer.deletePrinter.useMutation();
 
     const SwitchPrinterState = (id: string) => {
         console.log(id);
     }
 
     const DeletePrinter = (id: string) => {
-        console.log(id);
+        deletePrinter({ printerId: id }, {
+            onSuccess: () => {
+                notifications.show({
+                    title: "Impresora eliminada",
+                    message: "La impresora ha sido eliminada correctamente.",
+                    color: "green",
+                    autoClose: 5000,
+                });
+                refetchPrintersList();
+            },
+            onError: (error) => {
+                notifications.show({
+                    title: "Error",
+                    message: error.message,
+                    color: "red",
+                    autoClose: 5000,
+                });
+            }
+        })
     }
 
     const EditPrinter = (id: string) => {
@@ -38,7 +58,7 @@ const MyPrintersTable = () => {
         //Esto deberia abrir un popup para el formulario de edicion de impresora
     }
 
-    const rows = printersList.data?.map((printer) => (
+    const rows = printersList?.map((printer) => (
         <tr key={printer.id}>
             <td>{printer.brand}</td>
             <td>{printer.model}</td>

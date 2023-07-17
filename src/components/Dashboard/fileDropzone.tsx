@@ -1,12 +1,15 @@
 import { notifications } from "@mantine/notifications";
-import { useState, type ChangeEvent } from "react";
+import { useState, type ChangeEvent, useRef, useEffect } from "react";
 import { StlViewer } from "react-stl-viewer";
 import sliceSTL from "~/utils/fileSlicer";
 import { Text } from "@mantine/core";
 import pako from "pako";
 import "remixicon/fonts/remixicon.css";
+import { useMantineColorScheme } from "@mantine/core";
+import { cn } from "~/utils/util";
 
 const STLDropzone = () => {
+  const { colorScheme } = useMantineColorScheme();
   const [isSelected, setIsSelected] = useState(false);
   const [stlViewerURL, setSTLViewerURL] = useState("" as string);
   const [volume, setVolume] = useState(0 as number);
@@ -14,10 +17,20 @@ const STLDropzone = () => {
   const [height, setHeight] = useState(0 as number);
   const [depth, setDepth] = useState(0 as number);
   const [compressedFile, setCompressedFile] = useState<File | null>(null);
+  const fileRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    const files = fileRef.current?.files;
+    if (files && files.length > 0) {
+      console.log("Se ha cargado un archivo");
+    } else {
+      console.log("No se ha cargado ningún archivo");
+    }
+  }, [fileRef.current]);
 
   const styles = {
-    width: "700px",
-    height: "700px",
+    width: "500px",
+    height: "500px",
     border: "1px solid black",
   };
 
@@ -119,45 +132,87 @@ const STLDropzone = () => {
   };
 
   return (
-    <div className="mt-28 flex h-96 w-full flex-col items-center justify-center">
-      <h1>Sube tu archivo y te mostraremos los distintos proovedores</h1>
-      <h3 className="mb-12 mt-8">
-        Ten en cuenta que solamente soportamos archivos STL de un tamaño menor a
-        # MB.
-      </h3>
-      <div className="flex h-full w-2/3 flex-col items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#1C2333]">
+    <div
+      className={cn(
+        "mt-28 flex h-96 w-full flex-col items-center justify-center",
+        {
+          "mt-8 h-[800px]": isSelected,
+        }
+      )}
+    >
+      {isSelected ? (
+        <></>
+      ) : (
+        <>
+          <h1>Sube tu archivo y te mostraremos los distintos proovedores</h1>
+          <h3 className="mb-12 mt-8">
+            Ten en cuenta que solamente soportamos archivos STL de un tamaño
+            menor a # MB.
+          </h3>
+        </>
+      )}
+      <div
+        className={
+          colorScheme === "dark"
+            ? "flex h-full w-2/3 flex-col items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#1C2333]"
+            : "flex h-full w-2/3 flex-col items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#FFFFFF]"
+        }
+      >
         <i
-          className={[
-            "ri-upload-cloud-fill",
-            "mb-4 text-6xl text-[#3B82F6]",
-          ].join(" ")}
+          className={cn(
+            ["ri-upload-cloud-fill", "mb-4 text-6xl text-[#3B82F6]"].join(" "),
+            {
+              hidden: isSelected,
+            }
+          )}
         ></i>
-        <h3 className="mb-4">Arrastra tu archivo aca</h3>
+        <h3
+          className={cn("mb-4", {
+            hidden: isSelected,
+          })}
+        >
+          Arrastra tu archivo aca
+        </h3>
         {!isSelected ? (
           <>
-            <input type="file" onChange={handleFileSubmit} accept=".stl" />
+            <input
+              type="file"
+              onChange={handleFileSubmit}
+              accept=".stl"
+              ref={fileRef}
+            />
           </>
         ) : (
           <>
             <StlViewer url={stlViewerURL} style={styles} orbitControls />
-
-            <Text>Volume: {volume} cm3</Text>
-            <Text>Width: {width} cm</Text>
-            <Text>Height: {height} cm</Text>
-            <Text>Depth: {depth} cm</Text>
-
-            <button
-              className="mt-5 rounded-md bg-[#1c2333] p-2"
-              onClick={handleDownload}
-            >
-              Download Compressed File
-            </button>
-            <button
-              className="ml-5 rounded-md bg-[#1c2333] p-2"
-              onClick={clearSubmit}
-            >
-              Clear
-            </button>
+            <div className="mt-8 flex gap-2">
+              <Text>Volume: {volume} cm3</Text>
+              <Text>Width: {width} cm</Text>
+              <Text>Height: {height} cm</Text>
+              <Text>Depth: {depth} cm</Text>
+            </div>
+            <div className="flex w-1/3 flex-row justify-evenly">
+              <button
+                className={
+                  colorScheme === "dark"
+                    ? "mt-5 rounded-md border border-white bg-[#1c2333] p-2"
+                    : "mt-5 rounded-md border border-black bg-[#FFFFFF] p-2"
+                }
+                onClick={handleDownload}
+              >
+                Download Compressed File
+              </button>
+              <button
+                className={
+                  colorScheme === "dark"
+                    ? "mt-5 rounded-md border border-white bg-[#1c2333] p-2"
+                    : "mt-5 rounded-md border border-black bg-[#FFFFFF] p-2"
+                }
+                onClick={clearSubmit}
+              >
+                Clear
+              </button>
+            </div>
             <Text className="mt-5">
               NOTE: It might turn as corrupted file when opening.
             </Text>

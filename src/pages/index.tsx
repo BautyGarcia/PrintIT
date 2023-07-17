@@ -25,7 +25,7 @@ import { TopLandingPhone } from "~/components/Landing/topLandingPhone";
 const Landing: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
   const largeScreen = useMediaQuery("(min-width: 1300px)");
-  
+
   return (
     <>
       <Head>
@@ -149,18 +149,14 @@ const Landing: NextPage = () => {
               {
                 "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white":
                   colorScheme === "dark",
-                "h-[26rem] w-1/5 rounded-lg shadow-lg": largeScreen === true,
+                "h-[28rem] w-1/5 rounded-lg shadow-lg": largeScreen === true,
                 "mb-8 mt-8 w-full items-start": largeScreen === false,
               }
             )}
           >
             <PuntodeImpresion />
             <h1>Punto de Impresion</h1>
-            <p
-              className={
-                largeScreen ? "w-4/6 text-justify" : "w-full text-justify"
-              }
-            >
+            <p className={largeScreen ? "ml-5 w-4/6" : "w-full text-justify"}>
               Nuestras página web también esta enfocada en aquellos que buscan
               vender sus productos 3D o simplemente poner en uso su impresora 3D
             </p>
@@ -171,18 +167,14 @@ const Landing: NextPage = () => {
               {
                 "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white":
                   colorScheme === "dark",
-                "h-[26rem] w-1/5 rounded-xl shadow-lg": largeScreen === true,
+                "h-[28rem] w-1/5 rounded-xl shadow-lg": largeScreen === true,
                 "mb-8 mt-8 w-full items-start ": largeScreen === false,
               }
             )}
           >
             <Necesidades />
             <h1>Tus Necesidades</h1>
-            <p
-              className={
-                largeScreen ? "w-4/6 text-justify" : "w-full text-justify"
-              }
-            >
+            <p className={largeScreen ? "ml-4 w-4/6" : "w-full text-justify"}>
               Te brindamos la posibilidad de ahorrar mucho tiempo y dinero al no
               tener que comprar tu propia impresora 3D y los materiales
               necesarios para imprimir
@@ -194,18 +186,14 @@ const Landing: NextPage = () => {
               {
                 "mb-2 ml-2 mr-2 mt-2 flex flex-col items-center justify-center from-[#2e026d] to-[#15162c] text-white":
                   colorScheme === "dark",
-                "h-[26rem] w-1/5 rounded-xl shadow-lg": largeScreen === true,
+                "h-[28rem] w-1/5 rounded-xl shadow-lg": largeScreen === true,
                 "mb-8 mt-8 w-full items-start": largeScreen === false,
               }
             )}
           >
             <Proveedores />
             <h1>Proveedores</h1>
-            <p
-              className={
-                largeScreen ? "w-4/6 text-justify" : "w-full text-justify"
-              }
-            >
+            <p className={largeScreen ? "ml-8 w-4/6" : "w-full text-justify"}>
               Adicionalmente te ofrecemos los medios para contactarte con
               personas que buscan poner sus impresoras a disposición, con el fin
               de conseguir un beneficio mutuo

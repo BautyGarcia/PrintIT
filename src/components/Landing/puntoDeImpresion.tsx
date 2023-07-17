@@ -5,8 +5,8 @@ export const PuntodeImpresion: React.FC = ({}) => {
     <Image
       src="/PuntodeImpresion.png"
       alt="PuntodeImpresion"
-      width={200}
-      height={200}
+      width={160}
+      height={160}
     />
   );
 };

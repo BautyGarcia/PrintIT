@@ -78,7 +78,10 @@ export const printerRouter = createTRPCRouter({
                     user: {
                         id: userId,
                     },
-                }
+                },
+                orderBy: {
+                    isAvailable: "desc",
+                },
             })
 
             if (!printers) {

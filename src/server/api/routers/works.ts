@@ -1,8 +1,8 @@
-import { type PrismaClient, RoleTypes } from "@prisma/client";
+import { type PrismaClient, type RoleTypes } from "@prisma/client";
 import { z } from "zod";
 import {
     createTRPCRouter,
-    publicProcedure,
+    protectedProcedure,
 } from "~/server/api/trpc";
 
 const getWorkInfoAndUserRoleType = async (prisma: PrismaClient, workId: string, userId: string) => { 
@@ -33,11 +33,9 @@ const getWorkInfoAndUserRoleType = async (prisma: PrismaClient, workId: string, 
 }
 
 export const workRouter = createTRPCRouter({
-    getMyWorks: publicProcedure
-        .input(z.object({ userId: z.string() }))
-        .mutation(async ({ input, ctx }) => {
-            const { userId } = input;
-
+    getMyWorks: protectedProcedure
+        .query(async ({ ctx }) => {
+            const userId = ctx.session.user.id;
             const works = await ctx.prisma.work.findMany({
                 where: {
                     worker: {
@@ -52,11 +50,9 @@ export const workRouter = createTRPCRouter({
 
             return works;
         }),
-    getMyOrders: publicProcedure
-        .input(z.object({ userId: z.string() }))
-        .mutation(async ({ input, ctx }) => {
-            const { userId } = input;
-
+    getMyOrders: protectedProcedure
+        .mutation(async ({ ctx }) => {
+            const userId = ctx.session.user.id;
             const works = await ctx.prisma.work.findMany({
                 where: {
                     client: {
@@ -71,10 +67,11 @@ export const workRouter = createTRPCRouter({
 
             return works;
         }),
-    createWork: publicProcedure
-        .input(z.object({ clientId: z.string(), workerId: z.string(), printerId: z.string() }))
+    createWork: protectedProcedure
+        .input(z.object({ workerId: z.string(), printerId: z.string() }))
         .mutation(async ({ input, ctx }) => {
-            const { clientId, workerId, printerId } = input;
+            const { workerId, printerId } = input;
+            const clientId = ctx.session.user.id;
 
             const newWork = await ctx.prisma.work.create({
                 data: {
@@ -103,10 +100,11 @@ export const workRouter = createTRPCRouter({
 
             return newWork;
         }),
-    cancelWork: publicProcedure
-        .input(z.object({ userId: z.string(), workId: z.string() }))
+    cancelWork: protectedProcedure
+        .input(z.object({ workId: z.string() }))
         .mutation(async ({ input, ctx }) => {
-            const { userId, workId } = input;
+            const { workId } = input;
+            const userId = ctx.session.user.id;
 
             const work = await ctx.prisma.work.findUnique({
                 where: {
@@ -137,10 +135,11 @@ export const workRouter = createTRPCRouter({
 
             return canceledWork;
         }),
-    updateWorkBid: publicProcedure
-        .input(z.object({ workId: z.string(), bid: z.number(), bidderId: z.string() }))
+    updateWorkBid: protectedProcedure
+        .input(z.object({ workId: z.string(), bid: z.number() }))
         .mutation(async ({ input, ctx }) => {
-            const { workId, bid, bidderId } = input;
+            const { workId, bid } = input;
+            const bidderId = ctx.session.user.id;
 
             const workInfo = await getWorkInfoAndUserRoleType(ctx.prisma, workId, bidderId);
 
@@ -160,10 +159,11 @@ export const workRouter = createTRPCRouter({
 
             return updatedWork;
         }),
-    setWorkToPrinting: publicProcedure
-        .input(z.object({ workId: z.string(), userId: z.string() }))
+    setWorkToPrinting: protectedProcedure
+        .input(z.object({ workId: z.string() }))
         .mutation(async ({ input, ctx }) => {
-            const { workId, userId } = input;
+            const { workId } = input;
+            const userId = ctx.session.user.id;
 
             await getWorkInfoAndUserRoleType(ctx.prisma, workId, userId);
 
@@ -183,10 +183,11 @@ export const workRouter = createTRPCRouter({
             return confirmedWork;
         }
     ),
-    setWorkToShipping: publicProcedure
-        .input(z.object({ workId: z.string(), userId: z.string() }))
+    setWorkToShipping: protectedProcedure
+        .input(z.object({ workId: z.string() }))
         .mutation(async ({ input, ctx }) => {
-            const { workId, userId } = input;
+            const { workId } = input;
+            const userId = ctx.session.user.id;
 
             await getWorkInfoAndUserRoleType(ctx.prisma, workId, userId);
 
@@ -205,10 +206,11 @@ export const workRouter = createTRPCRouter({
 
             return confirmedWork;
         }),
-    setWorkToFinished: publicProcedure
-        .input(z.object({ workId: z.string(), userId: z.string() }))
+    setWorkToFinished: protectedProcedure
+        .input(z.object({ workId: z.string() }))
         .mutation(async ({ input, ctx }) => {
-            const { workId, userId } = input;
+            const { workId } = input;
+            const userId = ctx.session.user.id;
 
             await getWorkInfoAndUserRoleType(ctx.prisma, workId, userId);
 

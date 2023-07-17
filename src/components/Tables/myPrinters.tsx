@@ -16,19 +16,34 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-interface MyPrintersTableProps {
-    data: { id: string, brand: string; model: string; bedSize: string, type: string, isAvailable: boolean }[];
-}
-
 const MyPrintersTable = () => {
     const { classes, cx } = useStyles();
     const [scrolled, setScrolled] = useState(false);
 
     const { data: printersList, refetch: refetchPrintersList } = api.printer.getMyPrinters.useQuery();
     const { mutate: deletePrinter } = api.printer.deletePrinter.useMutation();
+    const { mutate: switchPrinterState } = api.printer.switchPrinterAvailability.useMutation();
 
     const SwitchPrinterState = (id: string) => {
-        console.log(id);
+        switchPrinterState({ printerId: id }, {
+            onSuccess: () => {
+                notifications.show({
+                    title: "Estado cambiado",
+                    message: "El estado de la impresora ha sido cambiado correctamente.",
+                    color: "green",
+                    autoClose: 5000,
+                });
+                void refetchPrintersList();
+            },
+            onError: (error) => {
+                notifications.show({
+                    title: "Error",
+                    message: error.message,
+                    color: "red",
+                    autoClose: 5000,
+                });
+            }
+        })
     }
 
     const DeletePrinter = (id: string) => {
@@ -40,7 +55,7 @@ const MyPrintersTable = () => {
                     color: "green",
                     autoClose: 5000,
                 });
-                refetchPrintersList();
+                void refetchPrintersList();
             },
             onError: (error) => {
                 notifications.show({
@@ -64,7 +79,7 @@ const MyPrintersTable = () => {
             <td>{printer.model}</td>
             <td>{printer.type}</td>
             <td>{printer.bedSize}</td>
-            <td>{printer.isAvailable ? "Disponible" : "Ocupada"}</td>
+            <td>{printer.isAvailable ? "Disponible" : "Inhabilitada"}</td>
             <td>
                 <div className="flex justify-end">
                     <Button
@@ -100,7 +115,7 @@ const MyPrintersTable = () => {
                         <th>Tipo</th>
                         <th>Tamaño</th>
                         <th>Estado</th>
-                        <th></th>
+                        <th/>
                     </tr>
                 </thead>
                 <tbody>{rows}</tbody>

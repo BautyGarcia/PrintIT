@@ -79,7 +79,7 @@ const MyPrintersTable = () => {
             <td>{printer.model}</td>
             <td>{printer.type}</td>
             <td>{printer.bedSize}</td>
-            <td>{printer.isAvailable ? "Disponible" : "Inhabilitada"}</td>
+            <td>{printer.isAvailable ? "Habilitada" : "Inhabilitada"}</td>
             <td>
                 <div className="flex justify-end">
                     <Button
@@ -107,7 +107,7 @@ const MyPrintersTable = () => {
 
     return (
         <ScrollArea h={"89vh"} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
-            <Table miw={700}>
+            <Table miw={700} verticalSpacing="sm" fontSize="md" horizontalSpacing="xl">
                 <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
                     <tr>
                         <th>Marca</th>

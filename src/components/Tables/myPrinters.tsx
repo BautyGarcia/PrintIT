@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { createStyles, Table, ScrollArea, Button } from '@mantine/core';
 import { api } from '~/utils/api';
 import { notifications } from '@mantine/notifications';
+import EditPrinterPopup from '../Dashboard/editPrinterPopup';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -68,11 +69,6 @@ const MyPrintersTable = () => {
         })
     }
 
-    const EditPrinter = (id: string) => {
-        console.log(id);
-        //Esto deberia abrir un popup para el formulario de edicion de impresora
-    }
-
     const rows = printersList?.map((printer) => (
         <tr key={printer.id}>
             <td>{printer.brand}</td>
@@ -94,12 +90,7 @@ const MyPrintersTable = () => {
                     >
                         Eliminar
                     </Button>
-                    <Button
-                        onClick={() => EditPrinter(printer.id)}
-                        className='bg-blue-500 py-2 text-white hover:bg-blue-700'
-                    >
-                        Editar
-                    </Button>
+                    <EditPrinterPopup printerInfo={printer} refreshPrinters={refetchPrintersList}/>
                 </div>
             </td>
         </tr>

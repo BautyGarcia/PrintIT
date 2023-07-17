@@ -15,7 +15,7 @@ import { useSession } from "next-auth/react";
 import { Logo } from "../Logos/logo";
 import { api } from "~/utils/api";
 
-const PrinterPopup: React.FC = () => {
+const AddPrinterPopup: React.FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const [isLoading, setIsLoading] = useState(false);
   const { data: SessionData } = useSession();
@@ -205,4 +205,4 @@ const PrinterPopup: React.FC = () => {
   );
 };
 
-export default PrinterPopup;
+export default AddPrinterPopup;

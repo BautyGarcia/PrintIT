@@ -119,4 +119,78 @@ export const printerRouter = createTRPCRouter({
 
             return deletedPrinter;
         }),
+    switchPrinterAvailability: protectedProcedure
+        .input(z.object({ printerId: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { printerId } = input;
+            const ownerId = ctx.session.user.id;
+
+            const printerToSwitch = await ctx.prisma.printer.findUnique({
+                where: {
+                    id: printerId,
+                },
+            });
+
+            if (!printerToSwitch) {
+                throw new Error("No existe la impresora");
+            }
+
+            if (printerToSwitch.userId !== ownerId) {
+                throw new Error("No tienes permiso para cambiar la disponibilidad de esta impresora");
+            }
+
+            const updatedPrinter = await ctx.prisma.printer.update({
+                where: {
+                    id: printerId,
+                },
+                data: {
+                    isAvailable: !printerToSwitch.isAvailable,
+                },
+            });
+
+            if (!updatedPrinter) {
+                throw new Error("Hubo un problema cambiando la disponibilidad de la impresora");
+            }
+
+            return updatedPrinter;
+        }),
+    updatePrinter: protectedProcedure
+        .input(z.object({ printerId: z.string(), printerOwner: z.string(), printerBrand: z.string(), printerModel: z.string(), printerType: z.string(), printerArea: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { printerId, printerOwner, printerBrand, printerModel, printerType, printerArea } = input;
+            const ownerId = ctx.session.user.id;
+
+            const printerToUpdate = await ctx.prisma.printer.findUnique({
+                where: {
+                    id: printerId,
+                },
+            });
+
+            if (!printerToUpdate) {
+                throw new Error("No existe la impresora");
+            }
+
+            if (printerToUpdate.userId !== ownerId) {
+                throw new Error("No tienes permiso para cambiar la disponibilidad de esta impresora");
+            }
+
+            const updatedPrinter = await ctx.prisma.printer.update({
+                where: {
+                    id: printerId,
+                },
+                data: {
+                    name: printerOwner,
+                    brand: printerBrand,
+                    model: printerModel,
+                    type: printerType,
+                    bedSize: printerArea,
+                },
+            });
+
+            if (!updatedPrinter) {
+                throw new Error("Hubo un problema cambiando la disponibilidad de la impresora");
+            }
+
+            return updatedPrinter;
+        }),
 })

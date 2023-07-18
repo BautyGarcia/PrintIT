@@ -41,7 +41,7 @@ model Work {
 }
 
 enum WorkStatus {
-  CANCELED
+  CANCELLED
   NEGOTIATING
   PRINTING
   SHIPPING

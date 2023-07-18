@@ -131,7 +131,7 @@ export const workRouter = createTRPCRouter({
                     id: workId,
                 },
                 data: {
-                    status: "CANCELED",
+                    status: "CANCELLED",
                 },
             });
 

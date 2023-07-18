@@ -16,36 +16,43 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const MyWorksTable = () => {
-  const { classes, cx } = useStyles();
-  const [scrolled, setScrolled] = useState(false);
+    const { classes, cx } = useStyles();
+    const [scrolled, setScrolled] = useState(false);
 
-  const { data: worksList, refetch: refetchWorksList } = api.work.getMyWorks.useQuery();
-  console.log(worksList);
-  
-  const rows = worksList?.map((work) => (
-    <tr key={work.id}>
-      <td>{work.client.name}</td>
-      <td>{work.price}</td>
-      <td>{work.status}</td>
-      <td>{work.lastBidder}</td>
-    </tr>
-  ));
+    const { data: worksList, refetch: refetchWorksList } = api.work.getMyWorks.useQuery();
 
-  return (
-    <ScrollArea h={300} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
-      <Table miw={700} verticalSpacing="sm" fontSize="md" horizontalSpacing="xl">
-        <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
-          <tr>
-            <th>Cliente</th>
-            <th>Precio</th>
-            <th>Estado</th>
-            <th>Ultimo Postor</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </Table>
-    </ScrollArea>
-  );
+    const statusReferences = {
+        "NEGOTIATING": "Negociando",
+        "CANCELLED": "Cancelado",
+        "SHIPPING": "Enviando",
+        "PRINTING": "Imprimiendo",
+        "FINISHED": "Finalizado",
+    }
+
+    const rows = worksList?.map((work) => (
+        <tr key={work.id}>
+            <td>{work.client.name}</td>
+            <td>{work.price + "$"}</td>
+            <td>{statusReferences[work.status]}</td>
+            <td>{work.lastBidder === "CLIENT" ? "Cliente" : "Vos"}</td>
+        </tr>
+    ));
+
+    return (
+        <ScrollArea h={300} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+            <Table miw={700} verticalSpacing="sm" fontSize="md" horizontalSpacing="xl">
+                <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Precio</th>
+                        <th>Estado</th>
+                        <th>Ultimo Postor</th>
+                    </tr>
+                </thead>
+                <tbody>{rows}</tbody>
+            </Table>
+        </ScrollArea>
+    );
 }
 
 export default MyWorksTable;

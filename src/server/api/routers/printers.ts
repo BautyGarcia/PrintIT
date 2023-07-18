@@ -34,7 +34,7 @@ export const printerRouter = createTRPCRouter({
         }),
     getPrinterForSTL: protectedProcedure
         .input(z.object({ bedSize: z.string(), printerType: z.string() }))
-        .mutation(async ({ input, ctx }) => {
+        .query(async ({ input, ctx }) => {
             const { bedSize, printerType } = input;
             const userId = ctx.session.user.id;
 
@@ -47,7 +47,10 @@ export const printerRouter = createTRPCRouter({
                             id: userId,
                         },
                     }
-                }
+                },
+                include: {
+                    user: true,
+                },
             })
 
             if (!printers) {

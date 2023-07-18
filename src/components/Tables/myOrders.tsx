@@ -43,7 +43,7 @@ const MyOrdersTable = () => {
             <Table miw={700} verticalSpacing="sm" fontSize="md" horizontalSpacing="xl">
                 <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
                     <tr>
-                        <th>Impresor</th>
+                        <th>Vendedor</th>
                         <th>Precio</th>
                         <th>Estado</th>
                         <th>Ultimo Postor</th>

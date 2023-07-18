@@ -7,7 +7,6 @@ import pako from "pako";
 import "remixicon/fonts/remixicon.css";
 import {
   TextInput,
-  Textarea,
   SimpleGrid,
   Group,
   Title,

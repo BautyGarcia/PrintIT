@@ -32,7 +32,7 @@ const MyWorksTable = () => {
     const rows = worksList?.map((work) => (
         <tr key={work.id}>
             <td>{work.client.name}</td>
-            <td>{work.price + "$"}</td>
+            <td>{(work.price).toString() + "$"}</td>
             <td>{statusReferences[work.status]}</td>
             <td>{work.lastBidder === "CLIENT" ? "Cliente" : "Vos"}</td>
         </tr>

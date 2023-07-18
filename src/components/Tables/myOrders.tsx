@@ -32,7 +32,7 @@ const MyOrdersTable = () => {
     const rows = ordersList?.map((order) => (
         <tr key={order.id}>
             <td>{order.worker.name}</td>
-            <td>{order.price + "$"}</td>
+            <td>{(order.price).toString() + "$"}</td>
             <td>{statusReferences[order.status]}</td>
             <td>{order.lastBidder === "CLIENT" ? "Vos" : "Cliente"}</td>
         </tr>

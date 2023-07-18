@@ -1,11 +1,12 @@
 import { type NextPage } from "next";
 import Dashboard from ".";
+import MyOrdersTable from "~/components/Tables/myOrders";
 
 const MisPedidos: NextPage = () => {
 
   return (
     <Dashboard>
-        <h1>Mis Pedidos</h1>
+      <MyOrdersTable/>
     </Dashboard>
   );
 };

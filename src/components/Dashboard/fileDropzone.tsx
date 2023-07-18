@@ -147,7 +147,7 @@ const STLDropzone = () => {
       className={cn(
         "mt-28 flex h-96 w-full flex-col items-center justify-center",
         {
-          "mt-8 h-[750px]": isSelected,
+          "mt-8 h-[800px]": isSelected,
         }
       )}
     >
@@ -177,11 +177,14 @@ const STLDropzone = () => {
         </>
       )}
       <div
-        className={
-          colorScheme === "dark"
-            ? "flex h-full w-3/5 flex-col items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#1C2333]"
-            : "flex h-full w-3/5 flex-col items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#FFFFFF]"
-        }
+        className={cn(
+          "flex h-full w-3/5 flex-row items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#FFFFFF]",
+          {
+            "flex h-full w-3/5 flex-row items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#1C2333]":
+              colorScheme === "dark",
+            "border-none": isSelected,
+          }
+        )}
       >
         <i
           className={cn(
@@ -210,51 +213,61 @@ const STLDropzone = () => {
           </>
         ) : (
           <>
-            <div className="ml-8 flex flex-row justify-around">
-              <div className="flex flex-col">
-                <div className="mt-12 ">
-                  <StlViewer url={stlViewerURL} style={styles} orbitControls />
-                </div>
-                <div className="mt-8 flex gap-2">
-                  <Text>Volume: {volume} cm3</Text>
-                  <Text>Width: {width} cm</Text>
-                  <Text>Height: {height} cm</Text>
-                  <Text>Depth: {depth} cm</Text>
-                </div>
+            <div className="ml-8 flex flex-col justify-center">
+              <div className="mt-8 ">
+                <StlViewer url={stlViewerURL} style={styles} orbitControls />
               </div>
-
-              <div className="justify-cenmter ml-8 mt-12 flex h-full flex-col items-center gap-2">
-                <GetInTouchSimple />
+              <div className="mt-4 flex gap-2">
+                <Text>Volume: {volume} cm3</Text>
+                <Text>Width: {width} cm</Text>
+                <Text>Height: {height} cm</Text>
+                <Text>Depth: {depth} cm</Text>
+              </div>
+              <div className=" mb-4 flex flex-row items-center justify-center gap-4">
+                <button
+                  className={
+                    colorScheme === "dark"
+                      ? "mt-5 flex flex-row rounded-md border border-white bg-[#1c2333] p-2"
+                      : "mt-5 flex flex-row rounded-md border border-black bg-[#FFFFFF] p-2"
+                  }
+                  onClick={handleDownload}
+                >
+                  Download Compressed File
+                </button>
+                <button
+                  className={
+                    colorScheme === "dark"
+                      ? "mt-5 flex flex-row rounded-md border border-white bg-[#1c2333] p-2"
+                      : "mt-5 flex flex-row rounded-md border border-black bg-[#FFFFFF] p-2"
+                  }
+                  onClick={clearSubmit}
+                >
+                  Clear
+                </button>
               </div>
             </div>
-            <div className="flex flex-row items-center justify-center gap-4">
-              <button
-                className={
-                  colorScheme === "dark"
-                    ? "mt-5 rounded-md border border-white bg-[#1c2333] p-2"
-                    : "mt-5 rounded-md border border-black bg-[#FFFFFF] p-2"
-                }
-                onClick={handleDownload}
-              >
-                Download Compressed File
-              </button>
-              <button
-                className={
-                  colorScheme === "dark"
-                    ? "mt-5 rounded-md border border-white bg-[#1c2333] p-2"
-                    : "mt-5 rounded-md border border-black bg-[#FFFFFF] p-2"
-                }
-                onClick={clearSubmit}
-              >
-                Clear
-              </button>
-            </div>
-            <Text className="mb-5 mt-5 flex flex-col">
-              NOTE: It might turn as corrupted file when opening.
-            </Text>
           </>
         )}
+        <div
+          className={cn(
+            "-mt-20 ml-8 mr-8 flex h-[500px] flex-col items-center justify-center rounded-sm border-2 border-black",
+            {
+              "-mt-20 ml-8 mr-8 flex h-[500px] flex-col items-center justify-center rounded-sm border-2 border-white":
+                colorScheme === "dark",
+              hidden: !isSelected,
+            }
+          )}
+        >
+          <GetInTouchSimple />
+        </div>
       </div>
+      <Text
+        className={cn("mb-5 mt-5 flex flex-col", {
+          hidden: !isSelected,
+        })}
+      >
+        NOTE: It might turn as corrupted file when opening.
+      </Text>
     </div>
   );
 };
@@ -265,12 +278,12 @@ function ContadorImpresiones() {
 
   return (
     <>
-      <Text>{count}</Text>
+      <Text className="ml-12 items-center justify-center">{count}</Text>
       <Group
         className={
           colorScheme === "dark"
-            ? "mr-[79px] mt-5 rounded-md border border-white bg-[#1c2333] "
-            : "mr-[79px] mt-5 rounded-md border border-black bg-[#FFFFFF] "
+            ? "ml-12 mr-[98px] mt-5 rounded-md border border-white bg-[#1c2333] "
+            : "ml-12 mr-[98px] mt-5 rounded-md border border-black bg-[#FFFFFF] "
         }
         position="left"
       >
@@ -310,16 +323,23 @@ function GetInTouchSimple() {
 
   return (
     <form
-      className={largeScreen ? "w-4/6" : "w-full"}
+      className={
+        largeScreen ? "h-full w-11/12 items-center justify-center" : "w-full"
+      }
       onSubmit={form.onSubmit(() => null)}
     >
-      <Title className="mt-10" order={2} size="h1" weight={200} align="start">
+      <Title className="mt-4" order={2} size="h1" weight={200} align="center">
         <p>Tu Impresion 3D</p>
       </Title>
 
-      <SimpleGrid cols={2} mt="xl" breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
+      <SimpleGrid
+        className="items-center justify-center"
+        cols={2}
+        mt="xl"
+        breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+      >
         <TextInput
-          className="mb-2 w-60"
+          className="mb-2 ml-12 w-60 items-center justify-center"
           label="Nombre"
           placeholder="Ingresa tu nombre"
           name="nombre"
@@ -327,17 +347,19 @@ function GetInTouchSimple() {
           {...form.getInputProps("nombre")}
         />
       </SimpleGrid>
-      <h2 className="mb-2">Calidad de la Impresion</h2>
-      <h3 className="mb-2">...</h3>
-      <h2 className="mb-2">Precio Estimado</h2>
-      <h3 className="mb-2">precio...</h3>
-      <h2 className="mb-2">Cantidad de Impresiones</h2>
+      <div className="mb-2 ml-12 items-center justify-center">
+        <h2>Calidad de la Impresion</h2>
+        <h3>...</h3>
+        <h2>Precio Estimado</h2>
+        <h3>precio...</h3>
+        <h2>Cantidad de Impresiones</h2>
+      </div>
       <ContadorImpresiones />
       <Group position="center" mt="xl">
         <Button
           type="submit"
           size="md"
-          className="w-60 rounded-lg bg-blue-500 hover:bg-blue-700"
+          className="mb-4 w-60 rounded-lg bg-blue-500 hover:bg-blue-700"
         >
           Send Stl
         </Button>

@@ -106,9 +106,9 @@ export const authOptions: NextAuthOptions = {
   },
   secret: env.JWT_SECRET,
   callbacks: {
-    session: ({ session, token }) => {
+    session: ({ session, user }) => {
       if (session?.user) {
-        session.user.id = token.sub as string;
+        session.user.id = user.id;
       }
       return session;
     },

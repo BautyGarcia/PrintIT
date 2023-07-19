@@ -9,6 +9,8 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
 import bcrypt from "bcrypt";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { DefaultAdapter } from "next-auth/adapters";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -20,6 +22,7 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      cantPuertas: number;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
@@ -37,6 +40,7 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma) as DefaultAdapter,
   providers: [
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
@@ -52,19 +56,19 @@ export const authOptions: NextAuthOptions = {
           password: string;
           method: string;
         }
-        
+
         const existingUser = await prisma.user.findUnique({
           where: {
             email,
           },
         });
 
-        if (method === "signUp") {          
+        if (method === "signUp") {
 
           if (existingUser) {
             throw new Error('Este email ya esta registrado');
           }
-          
+
           const salt = await bcrypt.genSalt();
           const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -106,9 +110,9 @@ export const authOptions: NextAuthOptions = {
   },
   secret: env.JWT_SECRET,
   callbacks: {
-    session: ({ session, user }) => {
-      if (session?.user) {
-        session.user.id = user.id;
+    session: ({ session, token }) => {
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
       }
       return session;
     },

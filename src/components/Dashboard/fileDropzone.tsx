@@ -17,7 +17,8 @@ import { useCounter } from "@mantine/hooks";
 import { cn } from "~/utils/util";
 import { StlViewer } from "react-stl-viewer";
 
-const loadCompressWorker = () => new Worker(new URL("~/utils/compressWorker", import.meta.url));
+const loadCompressWorker = () =>
+  new Worker(new URL("~/utils/compressWorker", import.meta.url));
 
 const STLDropzone = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -101,7 +102,9 @@ const STLDropzone = () => {
 
     const worker = loadCompressWorker();
 
-    worker.onmessage = function (e: MessageEvent<{ compressedFile: File | null; error?: string }>) {
+    worker.onmessage = function (
+      e: MessageEvent<{ compressedFile: File | null; error?: string }>
+    ) {
       const { compressedFile, error } = e.data;
 
       if (error) {
@@ -125,157 +128,157 @@ const STLDropzone = () => {
     };
 
     worker.postMessage({ arrayBuffer: fileData });
-};
+  };
 
-const handleDownload = () => {
-  if (compressedFile) {
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(compressedFile);
-    link.download = "compressed_file.stl"; // Set the default file name with the ".stl" extension
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-};
+  const handleDownload = () => {
+    if (compressedFile) {
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(compressedFile);
+      link.download = "compressed_file.stl"; // Set the default file name with the ".stl" extension
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
 
-const clearSubmit = () => {
-  setIsSelected(false);
-  setSTLViewerURL("");
-  setVolume(0);
-  setWidth(0);
-  setHeight(0);
-  setDepth(0);
-  setCompressedFile(null);
-};
+  const clearSubmit = () => {
+    setIsSelected(false);
+    setSTLViewerURL("");
+    setVolume(0);
+    setWidth(0);
+    setHeight(0);
+    setDepth(0);
+    setCompressedFile(null);
+  };
 
-return (
-  <div
-    className={cn(
-      "mt-28 flex h-96 w-full flex-col items-center justify-center",
-      {
-        "mt-8 h-[800px]": isSelected,
-      }
-    )}
-  >
-    <h1
-      className={cn("mb-4", {
-        hidden: !isSelected,
-      })}
-    >
-      Estás cada vez más cerca de conseguir tu impresión 3D deseada
-    </h1>
-    <h3
-      className={cn("mb-4", {
-        hidden: !isSelected,
-      })}
-    >
-      Completa el formulario abajo y podrás seguir con el procedimiento
-    </h3>
-    {isSelected ? (
-      <></>
-    ) : (
-      <>
-        <h1>Sube tu archivo y te mostraremos los distintos proovedores</h1>
-        <h3 className="mb-12 mt-8">
-          Ten en cuenta que solamente soportamos archivos STL de un tamaño
-          menor a # MB.
-        </h3>
-      </>
-    )}
+  return (
     <div
       className={cn(
-        "flex h-full w-3/5 flex-row items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#FFFFFF]",
+        "mt-28 flex h-96 w-full flex-col items-center justify-center",
         {
-          "flex h-full w-3/5 flex-row items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#1C2333]":
-            colorScheme === "dark",
-          "border-none": isSelected,
+          "mt-8 h-[800px]": isSelected,
         }
       )}
     >
-      <i
-        className={cn(
-          ["ri-upload-cloud-fill", "mb-4 text-6xl text-[#3B82F6]"].join(" "),
-          {
-            hidden: isSelected,
-          }
-        )}
-      ></i>
-      <h3
+      <h1
         className={cn("mb-4", {
-          hidden: isSelected,
+          hidden: !isSelected,
         })}
       >
-        Arrastra tu archivo aca
+        Estás cada vez más cerca de conseguir tu impresión 3D deseada
+      </h1>
+      <h3
+        className={cn("mb-4", {
+          hidden: !isSelected,
+        })}
+      >
+        Completa el formulario abajo y podrás seguir con el procedimiento
       </h3>
-      {!isSelected ? (
-        <>
-          <input
-            className="absolute h-60 w-2/4 bg-opacity-0 text-transparent"
-            type="file"
-            onChange={handleFileSubmit}
-            accept=".stl"
-            ref={fileRef}
-          />
-        </>
+      {isSelected ? (
+        <></>
       ) : (
         <>
-          <div className="ml-8 flex flex-col justify-center">
-            <div className="mt-8 ">
-              <StlViewer url={stlViewerURL} style={styles} orbitControls/>
-            </div>
-            <div className="mt-4 flex gap-2">
-              <Text>Volume: {volume} cm3</Text>
-              <Text>Width: {width} cm</Text>
-              <Text>Height: {height} cm</Text>
-              <Text>Depth: {depth} cm</Text>
-            </div>
-            <div className=" mb-4 flex flex-row items-center justify-center gap-4">
-              <button
-                className={
-                  colorScheme === "dark"
-                    ? "mt-5 flex flex-row rounded-md border border-white bg-[#1c2333] p-2"
-                    : "mt-5 flex flex-row rounded-md border border-black bg-[#FFFFFF] p-2"
-                }
-                onClick={handleDownload}
-              >
-                Download Compressed File
-              </button>
-              <button
-                className={
-                  colorScheme === "dark"
-                    ? "mt-5 flex flex-row rounded-md border border-white bg-[#1c2333] p-2"
-                    : "mt-5 flex flex-row rounded-md border border-black bg-[#FFFFFF] p-2"
-                }
-                onClick={clearSubmit}
-              >
-                Clear
-              </button>
-            </div>
-          </div>
+          <h1>Sube tu archivo y te mostraremos los distintos proovedores</h1>
+          <h3 className="mb-12 mt-8">
+            Ten en cuenta que solamente soportamos archivos STL de un tamaño
+            menor a # MB.
+          </h3>
         </>
       )}
       <div
         className={cn(
-          "-mt-20 ml-8 mr-8 flex h-[500px] flex-col items-center justify-center rounded-sm border-2 border-black",
+          "flex h-full w-3/5 flex-row items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#FFFFFF]",
           {
-            "-mt-20 ml-8 mr-8 flex h-[500px] flex-col items-center justify-center rounded-sm border-2 border-white":
+            "flex h-full w-3/5 flex-row items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#1C2333]":
               colorScheme === "dark",
-            hidden: !isSelected,
+            "border-none": isSelected,
           }
         )}
       >
-        <GetInTouchSimple />
+        <i
+          className={cn(
+            ["ri-upload-cloud-fill", "mb-4 text-6xl text-[#3B82F6]"].join(" "),
+            {
+              hidden: isSelected,
+            }
+          )}
+        ></i>
+        <h3
+          className={cn("mb-4", {
+            hidden: isSelected,
+          })}
+        >
+          Arrastra tu archivo aca
+        </h3>
+        {!isSelected ? (
+          <>
+            <input
+              className="absolute h-60 w-2/4 bg-opacity-0 text-transparent"
+              type="file"
+              onChange={handleFileSubmit}
+              accept=".stl"
+              ref={fileRef}
+            />
+          </>
+        ) : (
+          <>
+            <div className="ml-8 flex flex-col justify-center">
+              <div className="mt-8 ">
+                <StlViewer url={stlViewerURL} style={styles} orbitControls />
+              </div>
+              <div className="mt-4 flex gap-2">
+                <Text>Volume: {volume} cm3</Text>
+                <Text>Width: {width} cm</Text>
+                <Text>Height: {height} cm</Text>
+                <Text>Depth: {depth} cm</Text>
+              </div>
+            </div>
+          </>
+        )}
+        <div
+          className={cn(
+            " ml-8 mr-8 flex h-[550px] flex-col items-center justify-center rounded-sm border-2 border-black",
+            {
+              " ml-8 mr-8 flex h-[550px] flex-col items-center justify-center rounded-sm border-2 border-white":
+                colorScheme === "dark",
+              hidden: !isSelected,
+            }
+          )}
+        >
+          <GetInTouchSimple />
+          <div className=" mb-8 flex flex-row items-center justify-center gap-4">
+            <button
+              className={
+                colorScheme === "dark"
+                  ? "mt-5 flex flex-row rounded-md border border-white bg-[#1c2333] p-2"
+                  : "mt-5 flex flex-row rounded-md border border-black bg-[#FFFFFF] p-2"
+              }
+              onClick={handleDownload}
+            >
+              Download Compressed File
+            </button>
+            <button
+              className={
+                colorScheme === "dark"
+                  ? "mt-5 flex flex-row rounded-md border border-white bg-[#1c2333] p-2"
+                  : "mt-5 flex flex-row rounded-md border border-black bg-[#FFFFFF] p-2"
+              }
+              onClick={clearSubmit}
+            >
+              Clear
+            </button>
+          </div>
+        </div>
       </div>
+      <Text
+        className={cn("mb-5 mt-5 flex flex-col", {
+          hidden: !isSelected,
+        })}
+      >
+        NOTE: It might turn as corrupted file when opening.
+      </Text>
     </div>
-    <Text
-      className={cn("mb-5 mt-5 flex flex-col", {
-        hidden: !isSelected,
-      })}
-    >
-      NOTE: It might turn as corrupted file when opening.
-    </Text>
-  </div>
-);
+  );
 };
 
 function ContadorImpresiones() {
@@ -288,8 +291,8 @@ function ContadorImpresiones() {
       <Group
         className={
           colorScheme === "dark"
-            ? "ml-12 mr-[98px] mt-5 rounded-md border border-white bg-[#1c2333] "
-            : "ml-12 mr-[98px] mt-5 rounded-md border border-black bg-[#FFFFFF] "
+            ? "ml-12 mr-[88px] mt-5 rounded-md border border-white bg-[#1c2333] "
+            : "ml-12 mr-[88px] mt-5 rounded-md border border-black bg-[#FFFFFF] "
         }
         position="left"
       >
@@ -330,7 +333,9 @@ function GetInTouchSimple() {
   return (
     <form
       className={
-        largeScreen ? "h-full w-11/12 items-center justify-center" : "w-full"
+        largeScreen
+          ? "mt-8 h-full w-11/12 items-center justify-center"
+          : "w-full"
       }
       onSubmit={form.onSubmit(() => null)}
     >

@@ -55,7 +55,7 @@ const ContactUs: NextPage = () => {
 
 export default ContactUs;
 
-export function GetInTouchSimple() {
+const GetInTouchSimple = () => {
   const largeScreen = useMediaQuery("(min-width: 1300px)");
   const form = useForm({
     initialValues: {

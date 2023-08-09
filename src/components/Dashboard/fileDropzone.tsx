@@ -1,12 +1,24 @@
 import { notifications } from "@mantine/notifications";
 import { useState, type ChangeEvent, useRef, useEffect } from "react";
-import { StlViewer } from "react-stl-viewer";
 import sliceSTL from "~/utils/fileSlicer";
 import { Text } from "@mantine/core";
-import pako from "pako";
 import "remixicon/fonts/remixicon.css";
-import { useMantineColorScheme } from "@mantine/core";
+import {
+  TextInput,
+  SimpleGrid,
+  Group,
+  Title,
+  Button,
+  useMantineColorScheme,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { useMediaQuery } from "@mantine/hooks";
+import { useCounter } from "@mantine/hooks";
 import { cn } from "~/utils/util";
+import { StlViewer } from "react-stl-viewer";
+
+const loadCompressWorker = () =>
+  new Worker(new URL("~/utils/compressWorker", import.meta.url));
 
 const STLDropzone = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -26,7 +38,7 @@ const STLDropzone = () => {
     } else {
       console.log("No se ha cargado ningún archivo");
     }
-  }, [fileRef.current]);
+  }, []);
 
   const styles = {
     width: "500px",
@@ -87,34 +99,42 @@ const STLDropzone = () => {
 
     // Compress the file
     const fileData = await file.arrayBuffer();
-    const compressedData = pako.deflate(fileData, { level: 9 });
-    const compressedSize = Math.ceil(compressedData.byteLength / 1024 / 1024);
 
-    // Check if the compressed file is bigger than 6MB
-    if (compressedSize > 6) {
-      notifications.show({
-        title: "Error",
-        message:
-          "El archivo seleccionado es demasiado grande y no se puede utilizar, por favor seleccione otro archivo",
-        color: "red",
-        autoClose: 5000,
-      });
-      return;
-    }
+    const worker = loadCompressWorker();
 
-    setCompressedFile(
-      new File([compressedData], file.name, {
-        type: "application/octet-stream",
-      })
-    );
+    worker.onmessage = function (
+      e: MessageEvent<{ compressedFile: File | null; error?: string }>
+    ) {
+      const { compressedFile, error } = e.data;
+
+      if (error) {
+        notifications.show({
+          title: "Error",
+          message: error,
+          color: "red",
+          autoClose: 5000,
+        });
+      } else {
+        setCompressedFile(compressedFile);
+        notifications.show({
+          title: "Success",
+          message: "El archivo se ha comprimido exitosamente",
+          color: "green",
+          autoClose: 5000,
+        });
+      }
+
+      worker.terminate();
+    };
+
+    worker.postMessage({ arrayBuffer: fileData });
   };
 
   const handleDownload = () => {
     if (compressedFile) {
-      const url = URL.createObjectURL(compressedFile);
       const link = document.createElement("a");
-      link.href = url;
-      link.download = compressedFile.name;
+      link.href = URL.createObjectURL(compressedFile);
+      link.download = "compressed_file.stl"; // Set the default file name with the ".stl" extension
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -140,6 +160,20 @@ const STLDropzone = () => {
         }
       )}
     >
+      <h1
+        className={cn("mb-4", {
+          hidden: !isSelected,
+        })}
+      >
+        Estás cada vez más cerca de conseguir tu impresión 3D deseada
+      </h1>
+      <h3
+        className={cn("mb-4", {
+          hidden: !isSelected,
+        })}
+      >
+        Completa el formulario abajo y podrás seguir con el procedimiento
+      </h3>
       {isSelected ? (
         <></>
       ) : (
@@ -152,11 +186,14 @@ const STLDropzone = () => {
         </>
       )}
       <div
-        className={
-          colorScheme === "dark"
-            ? "flex h-full w-2/3 flex-col items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#1C2333]"
-            : "flex h-full w-2/3 flex-col items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#FFFFFF]"
-        }
+        className={cn(
+          "flex h-full w-3/5 flex-row items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#FFFFFF]",
+          {
+            "flex h-full w-3/5 flex-row items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#1C2333]":
+              colorScheme === "dark",
+            "border-none": isSelected,
+          }
+        )}
       >
         <i
           className={cn(
@@ -176,6 +213,7 @@ const STLDropzone = () => {
         {!isSelected ? (
           <>
             <input
+              className="absolute h-60 w-2/4 bg-opacity-0 text-transparent"
               type="file"
               onChange={handleFileSubmit}
               accept=".stl"
@@ -184,43 +222,161 @@ const STLDropzone = () => {
           </>
         ) : (
           <>
-            <StlViewer url={stlViewerURL} style={styles} orbitControls />
-            <div className="mt-8 flex gap-2">
-              <Text>Volume: {volume} cm3</Text>
-              <Text>Width: {width} cm</Text>
-              <Text>Height: {height} cm</Text>
-              <Text>Depth: {depth} cm</Text>
+            <div className="ml-8 flex flex-col justify-center">
+              <div className="mt-8 ">
+                <StlViewer url={stlViewerURL} style={styles} orbitControls />
+              </div>
+              <div className="mt-4 flex gap-2">
+                <Text>Volume: {volume} cm3</Text>
+                <Text>Width: {width} cm</Text>
+                <Text>Height: {height} cm</Text>
+                <Text>Depth: {depth} cm</Text>
+              </div>
             </div>
-            <div className="flex w-1/3 flex-row justify-evenly">
-              <button
-                className={
-                  colorScheme === "dark"
-                    ? "mt-5 rounded-md border border-white bg-[#1c2333] p-2"
-                    : "mt-5 rounded-md border border-black bg-[#FFFFFF] p-2"
-                }
-                onClick={handleDownload}
-              >
-                Download Compressed File
-              </button>
-              <button
-                className={
-                  colorScheme === "dark"
-                    ? "mt-5 rounded-md border border-white bg-[#1c2333] p-2"
-                    : "mt-5 rounded-md border border-black bg-[#FFFFFF] p-2"
-                }
-                onClick={clearSubmit}
-              >
-                Clear
-              </button>
-            </div>
-            <Text className="mt-5">
-              NOTE: It might turn as corrupted file when opening.
-            </Text>
           </>
         )}
+        <div
+          className={cn(
+            " ml-8 mr-8 flex h-[550px] flex-col items-center justify-center rounded-sm border-2 border-black",
+            {
+              " ml-8 mr-8 flex h-[550px] flex-col items-center justify-center rounded-sm border-2 border-white":
+                colorScheme === "dark",
+              hidden: !isSelected,
+            }
+          )}
+        >
+          <GetInTouchSimple />
+          <div className=" mb-8 flex flex-row items-center justify-center gap-4">
+            <button
+              className={
+                colorScheme === "dark"
+                  ? "mt-5 flex flex-row rounded-md border border-white bg-[#1c2333] p-2"
+                  : "mt-5 flex flex-row rounded-md border border-black bg-[#FFFFFF] p-2"
+              }
+              onClick={handleDownload}
+            >
+              Download Compressed File
+            </button>
+            <button
+              className={
+                colorScheme === "dark"
+                  ? "mt-5 flex flex-row rounded-md border border-white bg-[#1c2333] p-2"
+                  : "mt-5 flex flex-row rounded-md border border-black bg-[#FFFFFF] p-2"
+              }
+              onClick={clearSubmit}
+            >
+              Clear
+            </button>
+          </div>
+        </div>
       </div>
+      <Text
+        className={cn("mb-5 mt-5 flex flex-col", {
+          hidden: !isSelected,
+        })}
+      >
+        NOTE: It might turn as corrupted file when opening.
+      </Text>
     </div>
   );
 };
+
+function ContadorImpresiones() {
+  const [count, handlers] = useCounter(0, { min: 0, max: 10 });
+  const { colorScheme } = useMantineColorScheme();
+
+  return (
+    <>
+      <Text className="ml-12 items-center justify-center">{count}</Text>
+      <Group
+        className={
+          colorScheme === "dark"
+            ? "ml-12 mr-[88px] mt-5 rounded-md border border-white bg-[#1c2333] "
+            : "ml-12 mr-[88px] mt-5 rounded-md border border-black bg-[#FFFFFF] "
+        }
+        position="left"
+      >
+        <Button
+          className={colorScheme === "dark" ? "text-white" : "text-black"}
+          onClick={handlers.increment}
+        >
+          +
+        </Button>
+        <Button
+          className={colorScheme === "dark" ? "text-white" : "text-black"}
+          onClick={handlers.decrement}
+        >
+          -
+        </Button>
+        <Button
+          className={colorScheme === "dark" ? "text-white" : "text-black"}
+          onClick={handlers.reset}
+        >
+          <i className="ri-loop-left-line"></i>
+        </Button>
+      </Group>
+    </>
+  );
+}
+
+function GetInTouchSimple() {
+  const largeScreen = useMediaQuery("(min-width: 1300px)");
+  const form = useForm({
+    initialValues: {
+      nombre: "",
+    },
+    validate: {
+      nombre: (value) => value.trim().length < 2,
+    },
+  });
+
+  return (
+    <form
+      className={
+        largeScreen
+          ? "mt-8 h-full w-11/12 items-center justify-center"
+          : "w-full"
+      }
+      onSubmit={form.onSubmit(() => null)}
+    >
+      <Title className="mt-4" order={2} size="h1" weight={200} align="center">
+        <p>Tu Impresion 3D</p>
+      </Title>
+
+      <SimpleGrid
+        className="items-center justify-center"
+        cols={2}
+        mt="xl"
+        breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+      >
+        <TextInput
+          className="mb-2 ml-12 w-60 items-center justify-center"
+          label="Nombre"
+          placeholder="Ingresa tu nombre"
+          name="nombre"
+          variant="filled"
+          {...form.getInputProps("nombre")}
+        />
+      </SimpleGrid>
+      <div className="mb-2 ml-12 items-center justify-center">
+        <h2>Calidad de la Impresion</h2>
+        <h3>...</h3>
+        <h2>Precio Estimado</h2>
+        <h3>precio...</h3>
+        <h2>Cantidad de Impresiones</h2>
+      </div>
+      <ContadorImpresiones />
+      <Group position="center" mt="xl">
+        <Button
+          type="submit"
+          size="md"
+          className="mb-4 w-60 rounded-lg bg-blue-500 hover:bg-blue-700"
+        >
+          Send Stl
+        </Button>
+      </Group>
+    </form>
+  );
+}
 
 export default STLDropzone;

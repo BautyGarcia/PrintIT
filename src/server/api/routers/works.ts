@@ -42,6 +42,9 @@ export const workRouter = createTRPCRouter({
                         id: userId,
                     }
                 },
+                include: {
+                    client: true,
+                }
             });
 
             if (!works) {
@@ -51,7 +54,7 @@ export const workRouter = createTRPCRouter({
             return works;
         }),
     getMyOrders: protectedProcedure
-        .mutation(async ({ ctx }) => {
+        .query(async ({ ctx }) => {
             const userId = ctx.session.user.id;
             const works = await ctx.prisma.work.findMany({
                 where: {
@@ -59,6 +62,9 @@ export const workRouter = createTRPCRouter({
                         id: userId,
                     }
                 },
+                include: {
+                    worker: true,
+                }
             });
 
             if (!works) {
@@ -125,7 +131,7 @@ export const workRouter = createTRPCRouter({
                     id: workId,
                 },
                 data: {
-                    status: "CANCELED",
+                    status: "CANCELLED",
                 },
             });
 

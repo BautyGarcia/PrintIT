@@ -16,6 +16,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { useCounter } from "@mantine/hooks";
 import { cn } from "~/utils/util";
 import { StlViewer } from "react-stl-viewer";
+import Link from "next/link";
 
 const loadCompressWorker = () =>
   new Worker(new URL("~/utils/compressWorker", import.meta.url));
@@ -367,13 +368,16 @@ function GetInTouchSimple() {
       </div>
       <ContadorImpresiones />
       <Group position="center" mt="xl">
+        <Link href="/dashboard/elegirImpresora" passHref> 
         <Button
           type="submit"
           size="md"
           className="mb-4 w-60 rounded-lg bg-blue-500 hover:bg-blue-700"
+          
         >
           Send Stl
         </Button>
+        </Link>
       </Group>
     </form>
   );

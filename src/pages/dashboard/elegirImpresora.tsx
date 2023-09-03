@@ -51,9 +51,6 @@ interface DashboardProps {
         >
           {children}
         </AppShell>
-        <>
-            //possiblePrinters
-        </>
       </>
     );
   };

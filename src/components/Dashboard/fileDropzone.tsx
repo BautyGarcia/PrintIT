@@ -17,6 +17,7 @@ import { useCounter } from "@mantine/hooks";
 import { cn } from "~/utils/util";
 import { StlViewer } from "react-stl-viewer";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const loadCompressWorker = () => new Worker(new URL("~/utils/compressWorker", import.meta.url));
 
@@ -32,7 +33,8 @@ const STLDropzone = () => {
   const [compressedFile, setCompressedFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState("" as string);
   const { data: sessionData } = useSession();
-
+  const router = useRouter();
+  
   const largeScreen = useMediaQuery("(min-width: 1300px)");
   const form = useForm({
     initialValues: {
@@ -158,6 +160,7 @@ const STLDropzone = () => {
 
     localStorage.setItem("fileName", destinationFileName);
     localStorage.setItem("fileUrl", fileUrl);
+    void router.push("/elegirImpresora");
   };
 
   const clearSubmit = () => {

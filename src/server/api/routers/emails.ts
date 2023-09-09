@@ -8,7 +8,7 @@ import {
     publicProcedure,
 } from "~/server/api/trpc";
 import path from "path";
-import recoverPasswordTemplate from "~/utils/emailTemplates";
+import { recoverPasswordTemplate, createWorkTemplate } from "~/utils/emailTemplates";
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -106,4 +106,34 @@ export const emailRouter = createTRPCRouter({
                     throw new Error("No se pudo enviar el Email");
                 }
             }),
+    sendCreateWorkEmail: publicProcedure
+        .input(z.object({ email: z.string(), clientName: z.string(), workerName: z.string() }))
+        .mutation(async ({ input }) => {
+            const { email, clientName, workerName } = input;
+
+            const redirectURL = env.NODE_ENV === "production" ? `https://printitweb.vercel.app/dashboard/misTrabajos` : `http://localhost:3000/dashboard/misTrabajos`;
+            const imagePath = path.join(process.cwd(), 'public', 'LogoWhite.png');
+
+            const mailOptions = {
+                from: 'PrintIT <contact.printit.app@gmail.com>',
+                to: email,
+                subject: 'PrintIT - ¡Tenemos un trabajo para ti!',
+                html: createWorkTemplate(clientName, redirectURL, workerName),
+                attachments: [
+                    {
+                        filename: 'LogoWhite.png',
+                        path: imagePath,
+                        cid: 'logoBlanco' //same cid value as in the html img src
+                    }
+                ]
+            };
+
+            try {
+                await transporter.sendMail(mailOptions);
+                return { message: "Email sent successfully." };
+            } catch (error) {
+                console.log(error);
+                throw new Error("No se pudo enviar el Email de recuperación");
+            }
+        }),
 });

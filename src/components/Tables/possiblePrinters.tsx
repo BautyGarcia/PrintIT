@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { createStyles, Table, ScrollArea, rem } from '@mantine/core';
+import { createStyles, Table, ScrollArea, rem, Button } from '@mantine/core';
 import { api } from '~/utils/api';
+import { notifications } from '@mantine/notifications';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -25,35 +26,77 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-interface STLInfo {
-    bedSize: string;
-}
-
 interface PrintersForSTLTableProps {
-    STLInfo: STLInfo;
+    bedSize: string;
+    fileUrl: string;
+    fileName: string;
 }
 
-const PrintersForSTLTable = ({ STLInfo }: PrintersForSTLTableProps) => {
+const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
     const { classes, cx } = useStyles();
     const [scrolled, setScrolled] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
     const { data: printersList } = api.printer.getPrinterForSTL.useQuery({
-        bedSize: STLInfo.bedSize,
+        bedSize: props.bedSize
     });
-    
+
+    const { mutate: createWork } = api.work.createWork.useMutation();
+
     const rows = printersList?.map((printer) => (
-      <tr key={printer.id}>
-        <td>{printer.user.name}</td>
-        <td>{printer.brand}</td>
-        <td>{printer.model}</td>
-        <td>{printer.type}</td>
-        <td>{printer.bedSize}</td>
-        <td>{"Zona"}</td>
-        <td>{".$"}</td>
-      </tr>
+        <tr key={printer.id}>
+            <td>{printer.user.name}</td>
+            <td>{printer.brand}</td>
+            <td>{printer.model}</td>
+            <td>{printer.type}</td>
+            <td>{printer.bedSize}</td>
+            <td>
+                <div className='flex justify-center'>
+                    <Button
+                        className='bg-blue-500 py-2 mr-2 w-[60%] text-white hover:bg-blue-700'
+                        onClick={() => setWork(printer.id, printer.user.id)}
+                    >
+                        Elegir
+                    </Button>
+                </div>
+            </td>
+        </tr>
     ));
-  
+
+    const setWork = (printerId: string, workerId: string) => {
+        setIsLoading(true);
+        notifications.show({
+            title: 'Creando pedido...',
+            message: 'Espere por favor',
+            autoClose: false,
+            loading: isLoading
+        });
+
+        createWork({
+            printerId: printerId,
+            workerId: workerId,
+        },{
+            onSuccess: () => {
+                setIsLoading(false);
+                notifications.show({
+                    title: 'Pedido creado',
+                    message: 'El pedido se ha creado correctamente, ve a la parte de Mis Pedidos',
+                    color: 'green',
+                    autoClose: 5000,
+                });
+            },
+            onError: (error) => {
+                notifications.show({
+                    title: 'Error',
+                    message: error.message,
+                    color: 'red',
+                });
+            }
+        });
+    };
+
     return (
-        <ScrollArea h={300} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+        <ScrollArea onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
             <Table miw={700}>
                 <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
                     <tr>
@@ -62,8 +105,6 @@ const PrintersForSTLTable = ({ STLInfo }: PrintersForSTLTableProps) => {
                         <th>Modelo</th>
                         <th>Tipo</th>
                         <th>Tamaño de Cama</th>
-                        <th>Zona</th>
-                        <th>Precio Estimado</th>
                     </tr>
                 </thead>
                 <tbody>{rows}</tbody>

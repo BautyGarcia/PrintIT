@@ -18,6 +18,8 @@ import { cn } from "~/utils/util";
 import { StlViewer } from "react-stl-viewer";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import ChoosePrinterPopup from "./choosePrinterPopup";
+import { set } from "zod";
 
 const loadCompressWorker = () => new Worker(new URL("~/utils/compressWorker", import.meta.url));
 
@@ -31,10 +33,11 @@ const STLDropzone = () => {
   const [height, setHeight] = useState(0 as number);
   const [depth, setDepth] = useState(0 as number);
   const [compressedFile, setCompressedFile] = useState<File | null>(null);
+  const [compressedUrl, setCompressedUrl] = useState("" as string);
   const [fileName, setFileName] = useState("" as string);
   const { data: sessionData } = useSession();
   const router = useRouter();
-  
+
   const largeScreen = useMediaQuery("(min-width: 1300px)");
   const form = useForm({
     initialValues: {
@@ -130,6 +133,7 @@ const STLDropzone = () => {
         });
       } else {
         setCompressedFile(compressedFile);
+        setCompressedUrl(URL.createObjectURL(compressedFile as File));
         notifications.show({
           title: "Success",
           message: "El archivo se ha comprimido exitosamente",
@@ -142,25 +146,6 @@ const STLDropzone = () => {
     };
 
     worker.postMessage({ arrayBuffer: fileData });
-  };
-
-  const handleSendStl = () => {
-    if (!compressedFile) {
-      notifications.show({
-        title: "Error",
-        message: "No se ha seleccionado ningún archivo",
-        color: "red",
-        autoClose: 5000,
-      });
-      return;
-    }
-  
-    const fileUrl = URL.createObjectURL(compressedFile);
-    const destinationFileName = `${(sessionData?.user?.name as string)}-${fileName}-${Date.now()}`.replace(/ /g, "_");
-
-    localStorage.setItem("fileName", destinationFileName);
-    localStorage.setItem("fileUrl", fileUrl);
-    void router.push("/elegirImpresora");
   };
 
   const clearSubmit = () => {
@@ -321,14 +306,7 @@ const STLDropzone = () => {
             </div>
             <ContadorImpresiones />
             <Group position="center" mt="xl">
-              <Button
-                type="submit"
-                size="md"
-                className="mb-4 w-60 rounded-lg bg-blue-500 hover:bg-blue-700"
-                onClick={() => handleSendStl()}
-              >
-                Confirmar
-              </Button>
+              <ChoosePrinterPopup fileName={`${(sessionData?.user?.name as string)}-${fileName}-${Date.now()}`.replace(/ /g, "_")} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`}/>
             </Group>
           </form>
         </div>

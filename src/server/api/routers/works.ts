@@ -235,4 +235,14 @@ export const workRouter = createTRPCRouter({
 
             return confirmedWork;
         }),
+    getWorkById: protectedProcedure
+        .input(z.object({ workId: z.string() }))
+        .query(async ({ input, ctx }) => {
+            const { workId } = input;
+            const userId = ctx.session.user.id;
+
+            const workInfo = await getWorkInfoAndUserRoleType(ctx.prisma, workId, userId);
+
+            return workInfo;
+        }),
 })

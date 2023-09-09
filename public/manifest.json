@@ -4,13 +4,13 @@
     "description": "PrintIT is a web application",
     "icons": [
         {
-            "src": "/MaskableLogoPWA.png",
+            "src": "/PWA/MaskableLogoPWA.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "maskable"
         },
         {
-            "src": "/LogoPWA.png",
+            "src": "/PWA/LogoPWA.png",
             "sizes": "155x155",
             "type": "image/png"
         }

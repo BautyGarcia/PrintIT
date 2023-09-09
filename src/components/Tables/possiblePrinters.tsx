@@ -27,7 +27,6 @@ const useStyles = createStyles((theme) => ({
 
 interface STLInfo {
     bedSize: string;
-    printerType: string;
 }
 
 interface PrintersForSTLTableProps {
@@ -39,7 +38,6 @@ const PrintersForSTLTable = ({ STLInfo }: PrintersForSTLTableProps) => {
     const [scrolled, setScrolled] = useState(false);
     const { data: printersList } = api.printer.getPrinterForSTL.useQuery({
         bedSize: STLInfo.bedSize,
-        printerType: STLInfo.printerType,
     });
     
     const rows = printersList?.map((printer) => (

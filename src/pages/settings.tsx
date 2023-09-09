@@ -1,8 +1,8 @@
 import Head from "next/head";
-import { SettingsHeader } from "~/components/Settingss/settingsHeader";
+import { SettingsHeader } from "~/components/Settings/settingsHeader";
 import { useMantineColorScheme } from "@mantine/core";
 import { type SetStateAction } from "react";
-import SettingsTab from "~/components/Settingss/settingsTabs";
+import SettingsTab from "~/components/Settings/settingsTabs";
 
 interface SettingsProps {
   opened: boolean;
@@ -18,7 +18,7 @@ const Settings: React.FC<SettingsProps> = ({}) => {
     <>
       <Head>
         <title>PrintIT</title>
-        <link rel="icon" href="/Logo.ico" />
+        <link rel="icon" href="/General/Logo.ico" />
         <meta name="description" content="PrintIT" />
       </Head>
       <SettingsHeader />

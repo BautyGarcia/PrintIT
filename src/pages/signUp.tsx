@@ -24,58 +24,65 @@ const SignUpPage: NextPage = () => {
   const largeScreen = useMediaQuery("(min-width: 992px)");
 
   return (
-    <main
-      className={
-        colorScheme === "dark"
-          ? "h-screen w-full bg-[#1C2333]"
-          : "h-screen w-full bg-white"
-      }
-    >
-      <div className="absolute ml-5 mt-5 flex items-center gap-2">
-        <Link className="flex flex-row items-center gap-2" href="/" passHref>
-          <Logo width={40} height={40} />
-        </Link>
-      </div>
-      <section
+    <>
+      <Head>
+        <title>PrintIT</title>
+        <link rel="icon" href="/General/Logo.ico" />
+        <meta name="description" content="PrintIT" />
+      </Head>
+      <main
         className={
-          largeScreen
-            ? "flex h-full w-1/2 flex-col items-center justify-center text-center"
-            : "flex h-full w-full flex-col items-center justify-center"
+          colorScheme === "dark"
+            ? "h-screen w-full bg-[#1C2333]"
+            : "h-screen w-full bg-white"
         }
       >
-        <h1
-          className={
-            colorScheme === "dark"
-              ? "font-family-Inter text-4xl text-white"
-              : "font-family-Inter text-4xl text-black"
-          }
-        >
-          Bienvenido a PrinIT
-        </h1>
-        <h3 className="font-family-Inter text-#AFAFAF">Ingrese sus datos</h3>
-        <RegisterForm />
-        <AuthShowcase />
-        <p
-          className={
-            colorScheme === "dark"
-              ? "font-family-Inter p-5 text-white"
-              : "font-family-Inter p-5 text-black"
-          }
-        >
-          ¿Ya tenés una cuenta?{" "}
-          <Link href={"/signIn"} className="font-family-Inter text-blue-500">
-            Ingresá acá
+        <div className="absolute ml-5 mt-5 flex items-center gap-2">
+          <Link className="flex flex-row items-center gap-2" href="/" passHref>
+            <Logo width={40} height={40} />
           </Link>
-        </p>
-      </section>
-      <picture
-        className={
-          largeScreen ? "absolute right-0 top-0 h-screen w-1/2" : "hidden"
-        }
-      >
-        <LogoSignUpIMG />
-      </picture>
-    </main>
+        </div>
+        <section
+          className={
+            largeScreen
+              ? "flex h-full w-1/2 flex-col items-center justify-center text-center"
+              : "flex h-full w-full flex-col items-center justify-center"
+          }
+        >
+          <h1
+            className={
+              colorScheme === "dark"
+                ? "font-family-Inter text-4xl text-white"
+                : "font-family-Inter text-4xl text-black"
+            }
+          >
+            Bienvenido a PrinIT
+          </h1>
+          <h3 className="font-family-Inter text-#AFAFAF">Ingrese sus datos</h3>
+          <RegisterForm />
+          <AuthShowcase />
+          <p
+            className={
+              colorScheme === "dark"
+                ? "font-family-Inter p-5 text-white"
+                : "font-family-Inter p-5 text-black"
+            }
+          >
+            ¿Ya tenés una cuenta?{" "}
+            <Link href={"/signIn"} className="font-family-Inter text-blue-500">
+              Ingresá acá
+            </Link>
+          </p>
+        </section>
+        <picture
+          className={
+            largeScreen ? "absolute right-0 top-0 h-screen w-1/2" : "hidden"
+          }
+        >
+          <LogoSignUpIMG />
+        </picture>
+      </main>
+    </>
   );
 };
 
@@ -171,67 +178,60 @@ const RegisterForm: React.FC = () => {
   };
 
   return (
-    <>
-      <Head>
-        <title>PrintIT</title>
-        <link rel="icon" href="/Logo.ico" />
-        <meta name="description" content="PrintIT" />
-      </Head>
-      <form
-        className="mx-auto mt-8 flex w-full flex-col items-center justify-center text-center"
-        onSubmit={handleSubmit}
+    <form
+      className="mx-auto mt-8 flex w-full flex-col items-center justify-center text-center"
+      onSubmit={handleSubmit}
+    >
+      <div className="mb-2 w-4/5">
+        <Text fw={500} className="font-family-Inter justify-left flex">
+          User
+        </Text>
+        <TextInput
+          value={name}
+          type="text"
+          placeholder="Ingrese su Nombre"
+          onChange={(e) => {
+            setName(e.currentTarget.value);
+            setError(false);
+          }}
+          {...(error ? { error } : {})}
+        />
+      </div>
+      <div className="mb-2 w-4/5">
+        <Text fw={500} className="font-family-Inter justify-left flex">
+          Email
+        </Text>
+        <Autocomplete
+          {...(error ? { error } : {})}
+          value={value}
+          data={data}
+          onChange={handleChange}
+          rightSection={loading ? <Loader size="1rem" /> : null}
+          placeholder="Your email"
+        />
+      </div>
+      <div className="mb-2 w-4/5">
+        <Text fw={500} className="font-family-Inter justify-left flex">
+          Password
+        </Text>
+        <PasswordInput
+          value={password}
+          onChange={(event) => {
+            setPassword(event.currentTarget.value);
+            setError(false);
+          }}
+          placeholder="Your password"
+          className="mb-3"
+          {...(error ? { error } : {})}
+        />
+      </div>
+      <Button
+        className="font-family-Inter mt-3 w-4/5 rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"
+        type="submit"
+        loading={isLoading}
       >
-        <div className="mb-2 w-4/5">
-          <Text fw={500} className="font-family-Inter justify-left flex">
-            User
-          </Text>
-          <TextInput
-            value={name}
-            type="text"
-            placeholder="Ingrese su Nombre"
-            onChange={(e) => {
-              setName(e.currentTarget.value);
-              setError(false);
-            }}
-            {...(error ? { error } : {})}
-          />
-        </div>
-        <div className="mb-2 w-4/5">
-          <Text fw={500} className="font-family-Inter justify-left flex">
-            Email
-          </Text>
-          <Autocomplete
-            {...(error ? { error } : {})}
-            value={value}
-            data={data}
-            onChange={handleChange}
-            rightSection={loading ? <Loader size="1rem" /> : null}
-            placeholder="Your email"
-          />
-        </div>
-        <div className="mb-2 w-4/5">
-          <Text fw={500} className="font-family-Inter justify-left flex">
-            Password
-          </Text>
-          <PasswordInput
-            value={password}
-            onChange={(event) => {
-              setPassword(event.currentTarget.value);
-              setError(false);
-            }}
-            placeholder="Your password"
-            className="mb-3"
-            {...(error ? { error } : {})}
-          />
-        </div>
-        <Button
-          className="font-family-Inter mt-3 w-4/5 rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"
-          type="submit"
-          loading={isLoading}
-        >
-          Sign Up
-        </Button>
-      </form>
-    </>
+        Sign Up
+      </Button>
+    </form>
   );
 };

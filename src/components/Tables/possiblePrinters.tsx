@@ -118,32 +118,36 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
                                     props.closePopup();
                                 },
                                 onError: (error) => {
-                                    notifications.show({
+                                    notifications.update({
+                                        id: 'create-work',
                                         title: 'Error',
                                         message: "Hubo un error subiendo la URL. " + error.message,
                                         color: 'red',
-                                        autoClose: 2000,
+                                        autoClose: 3000,
                                     });
                                     props.closePopup();
                                 }
                             });
                         }
                     }).catch(() => {
-                        notifications.show({
+                        notifications.update({
+                            id: 'create-work',
                             title: 'Error',
                             message: "Hubo un error subiendo el archivo.",
                             color: 'red',
-                            autoClose: 2000,
+                            autoClose: 3000,
                         });
                         props.closePopup();
                     });
                 }
             },
             onError: (error) => {
-                notifications.show({
+                notifications.update({
+                    id: 'create-work',
                     title: 'Error',
                     message: "Hubo un error creando el trabajo. " + error.message,
                     color: 'red',
+                    autoClose: 3000,
                 });
                 props.closePopup();
             }

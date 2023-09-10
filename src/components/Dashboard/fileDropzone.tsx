@@ -19,7 +19,8 @@ import { StlViewer } from "react-stl-viewer";
 import { useSession } from "next-auth/react";
 import ChoosePrinterPopup from "./choosePrinterPopup";
 
-const loadCompressWorker = () => new Worker(new URL("~/utils/compressWorker", import.meta.url));
+const loadCompressWorker = () =>
+  new Worker(new URL("~/utils/compressWorker", import.meta.url));
 
 const STLDropzone = () => {
   const { colorScheme } = useMantineColorScheme();
@@ -321,8 +322,8 @@ function ContadorImpresiones() {
       <Group
         className={
           colorScheme === "dark"
-            ? "ml-12 mr-[98px] mt-5 rounded-md border border-white bg-[#1c2333] "
-            : "ml-12 mr-[98px] mt-5 rounded-md border border-black bg-[#FFFFFF] "
+            ? "ml-12 mr-[88px] mt-5 rounded-md border border-white bg-[#1c2333] "
+            : "ml-12 mr-[88px] mt-5 rounded-md border border-black bg-[#FFFFFF] "
         }
         position="left"
       >

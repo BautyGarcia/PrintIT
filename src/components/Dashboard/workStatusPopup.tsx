@@ -2,6 +2,8 @@ import { useDisclosure } from "@mantine/hooks";
 import {
     Button,
     Modal,
+    Text,
+    Input
 } from "@mantine/core";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
@@ -19,8 +21,9 @@ interface WorkSatusPopupProps {
     workInfo: WorkInfo;
     refreshWorks: () => void;
 }
-//{ workInfo, refreshWorks }: WorkSatusPopupProps
-const WorkSatusPopup = () => {
+
+const WorkSatusPopup = ({ workInfo, refreshWorks }: WorkSatusPopupProps) => {
+    const { id, status, price, lastBidder } = workInfo;
     const [opened, { open, close }] = useDisclosure(false);
     const [isLoading, setIsLoading] = useState(false);
     const { data: SessionData } = useSession();
@@ -45,7 +48,30 @@ const WorkSatusPopup = () => {
                     opacity: 0.25,
                     blur: 4,
                 }}>
-                {/*Content Here*/}
+                <div className="p-4">
+                    <div className="mb-4 text-lg font-bold">Estado del trabajo</div>
+                    <div className="mb-4">
+                        <Text size="xl">{status}</Text>
+                    </div>
+                    <div className="mb-4 text-lg font-bold">Precio del trabajo</div>
+                    <div className="mb-4">
+                        <Input
+                            value={price}
+                            onChange={(event) => console.log(event.target.value)}
+                            type="number"
+                        />
+                    </div>
+                    <div className="mb-4 text-lg font-bold">Último postor</div>
+                    <div className="mb-4">
+                        <Text size="xl">{lastBidder}</Text>
+                    </div>
+                    <div className="mt-6 flex justify-between">
+                        <Button className="bg-[#3B82F6]" onClick={close}>
+                            Cerrar
+                        </Button>
+                        {/* You can add a button to save the edited price here */}
+                    </div>
+                </div>
                 <div className="mt-6 flex justify-between">
                     <Button className="bg-[#3B82F6]" onClick={close}>
                         Cerrar

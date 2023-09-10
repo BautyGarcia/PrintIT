@@ -38,7 +38,17 @@ const MyWorksTable = () => {
             <td>{work.lastBidder === "CLIENT" ? "Cliente" : "Vos"}</td>
             <td>
                 <div className='flex justify-center'>
-                    <WorkSatusPopup />
+                    <WorkSatusPopup 
+                        refreshWorks={refetchWorksList} 
+                        workInfo={
+                            {
+                                id: work.id,
+                                lastBidder: work.lastBidder,
+                                price: work.price,
+                                status: work.status,
+                            }
+                        }
+                    />
                 </div>
             </td>
         </tr>
@@ -53,6 +63,7 @@ const MyWorksTable = () => {
                         <th>Precio</th>
                         <th>Estado</th>
                         <th>Ultimo Postor</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>{rows}</tbody>

@@ -71,7 +71,7 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
             id: 'create-work',
             title: 'Creando pedido...',
             message: 'Espere por favor',
-            autoClose: 3000,
+            autoClose: false,
             loading: true,
             withCloseButton: false,
         });

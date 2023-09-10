@@ -3,6 +3,7 @@ import { createStyles, Table, ScrollArea, rem, Button } from '@mantine/core';
 import { api } from '~/utils/api';
 import { notifications } from '@mantine/notifications';
 import { useSession } from 'next-auth/react';
+import { IconCheck } from '@tabler/icons-react';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -37,7 +38,6 @@ interface PrintersForSTLTableProps {
 const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
     const { classes, cx } = useStyles();
     const [scrolled, setScrolled] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
     const { data: sessionData } = useSession();
     const { data: printersList } = api.printer.getPrinterForSTL.useQuery({
         bedSize: props.bedSize
@@ -67,12 +67,12 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
     ));
 
     const setWork = (printerId: string, workerId: string, workerName: string, workerEmail: string, fileUrl: string, fileName: string) => {
-        setIsLoading(true);
         notifications.show({
+            id: 'create-work',
             title: 'Creando pedido...',
             message: 'Espere por favor',
             autoClose: 3000,
-            loading: isLoading,
+            loading: true,
             withCloseButton: false,
         });
 
@@ -81,7 +81,6 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
             workerId: workerId,
         },{
             onSuccess: async (data) => {
-                setIsLoading(false);
                 sendCreateWorkEmail({
                     email: workerEmail,
                     clientName: sessionData?.user.name || "",
@@ -108,11 +107,13 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
                                 workId: data.id,
                             }, {
                                 onSuccess: () => {
-                                    notifications.show({
+                                    notifications.update({
+                                        id: 'create-work',
                                         title: 'Pedido creado',
-                                        message: 'El pedido se ha creado correctamente, ve a la parte de Mis Pedidos',
+                                        message: 'El pedido se creó correctamente. Ve a la seccion de Mis Pedidos',
                                         color: 'green',
                                         autoClose: 3000,
+                                        icon: <IconCheck size="1rem" />,
                                     });
                                     props.closePopup();
                                 },

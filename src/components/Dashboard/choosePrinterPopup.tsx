@@ -20,7 +20,7 @@ const ChoosePrinterPopup = (props: ChoosePrinterPopupProps) => {
                 fullScreen
                 transitionProps={{ transition: 'fade', duration: 200 }}
             >
-                <PrintersForSTLTable bedSize={props.fileSize} fileName={props.fileName} fileUrl={props.fileUrl}/>
+                <PrintersForSTLTable bedSize={props.fileSize} fileName={props.fileName} fileUrl={props.fileUrl} closePopup={close}/>
             </Modal>
 
             <Group position="center">

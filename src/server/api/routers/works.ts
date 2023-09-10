@@ -245,4 +245,24 @@ export const workRouter = createTRPCRouter({
 
             return workInfo;
         }),
+    addStlUrlToWork: protectedProcedure
+        .input(z.object({ workId: z.string(), stlUrl: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { workId, stlUrl } = input;
+
+            const updatedWork = await ctx.prisma.work.update({
+                where: {
+                    id: workId,
+                },
+                data: {
+                    stlUrl,
+                },
+            });
+
+            if (!updatedWork) {
+                throw new Error("Hubo un problema actualizando el trabajo");
+            }
+
+            return updatedWork;
+        }),
 })

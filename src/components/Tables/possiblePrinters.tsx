@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { createStyles, Table, ScrollArea, rem, Button } from '@mantine/core';
 import { api } from '~/utils/api';
 import { notifications } from '@mantine/notifications';
+import { useSession } from 'next-auth/react';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -30,18 +31,20 @@ interface PrintersForSTLTableProps {
     bedSize: string;
     fileUrl: string;
     fileName: string;
+    closePopup: () => void;
 }
 
 const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
     const { classes, cx } = useStyles();
     const [scrolled, setScrolled] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-
+    const { data: sessionData } = useSession();
     const { data: printersList } = api.printer.getPrinterForSTL.useQuery({
         bedSize: props.bedSize
     });
-
     const { mutate: createWork } = api.work.createWork.useMutation();
+    const { mutate: sendCreateWorkEmail } = api.email.sendCreateWorkEmail.useMutation();
+    const { mutate: updateWorkURL } = api.work.addStlUrlToWork.useMutation();
 
     const rows = printersList?.map((printer) => (
         <tr key={printer.id}>
@@ -54,7 +57,7 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
                 <div className='flex justify-center'>
                     <Button
                         className='bg-blue-500 py-2 mr-2 w-[60%] text-white hover:bg-blue-700'
-                        onClick={() => setWork(printer.id, printer.user.id)}
+                        onClick={() => setWork(printer.id, printer.user.id, printer.user.name, printer.user.email, props.fileUrl, props.fileName)}
                     >
                         Elegir
                     </Button>
@@ -63,34 +66,85 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
         </tr>
     ));
 
-    const setWork = (printerId: string, workerId: string) => {
+    const setWork = (printerId: string, workerId: string, workerName: string, workerEmail: string, fileUrl: string, fileName: string) => {
         setIsLoading(true);
         notifications.show({
             title: 'Creando pedido...',
             message: 'Espere por favor',
-            autoClose: false,
-            loading: isLoading
+            autoClose: 3000,
+            loading: isLoading,
+            withCloseButton: false,
         });
 
         createWork({
             printerId: printerId,
             workerId: workerId,
         },{
-            onSuccess: () => {
+            onSuccess: async (data) => {
                 setIsLoading(false);
-                notifications.show({
-                    title: 'Pedido creado',
-                    message: 'El pedido se ha creado correctamente, ve a la parte de Mis Pedidos',
-                    color: 'green',
-                    autoClose: 5000,
+                sendCreateWorkEmail({
+                    email: workerEmail,
+                    clientName: sessionData?.user.name || "",
+                    workerName,
                 });
+
+                const urlInfo = await fetch(fileUrl);
+                if (urlInfo.ok) {
+                    const blob = await urlInfo.blob();
+                    const file = new File([blob], fileName + ".stl", { type: "application/octet-stream" });
+                    const formData = new FormData();
+                    formData.append("file", file);
+
+                    await fetch("https://printitweb-filehandler.cyclic.app/", {
+                        method: 'POST',
+                        body: formData,
+                    }).then(async (response) => {
+                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                        const responseData: { fileURL: string } = await response.json();
+                        
+                        if (response.ok) {
+                            updateWorkURL({
+                                stlUrl: responseData.fileURL,
+                                workId: data.id,
+                            }, {
+                                onSuccess: () => {
+                                    notifications.show({
+                                        title: 'Pedido creado',
+                                        message: 'El pedido se ha creado correctamente, ve a la parte de Mis Pedidos',
+                                        color: 'green',
+                                        autoClose: 3000,
+                                    });
+                                    props.closePopup();
+                                },
+                                onError: (error) => {
+                                    notifications.show({
+                                        title: 'Error',
+                                        message: "Hubo un error subiendo la URL. " + error.message,
+                                        color: 'red',
+                                        autoClose: 2000,
+                                    });
+                                    props.closePopup();
+                                }
+                            });
+                        }
+                    }).catch(() => {
+                        notifications.show({
+                            title: 'Error',
+                            message: "Hubo un error subiendo el archivo.",
+                            color: 'red',
+                            autoClose: 2000,
+                        });
+                        props.closePopup();
+                    });
+                }
             },
             onError: (error) => {
                 notifications.show({
                     title: 'Error',
-                    message: error.message,
+                    message: "Hubo un error creando el trabajo. " + error.message,
                     color: 'red',
                 });
+                props.closePopup();
             }
         });
     };

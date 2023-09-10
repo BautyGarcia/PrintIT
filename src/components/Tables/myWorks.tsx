@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { createStyles, Table, ScrollArea } from '@mantine/core';
 import { api } from '~/utils/api';
+import WorkSatusPopup from '../Dashboard/workStatusPopup';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -35,6 +36,11 @@ const MyWorksTable = () => {
             <td>{(work.price).toString() + "$"}</td>
             <td>{statusReferences[work.status]}</td>
             <td>{work.lastBidder === "CLIENT" ? "Cliente" : "Vos"}</td>
+            <td>
+                <div className='flex justify-center'>
+                    <WorkSatusPopup />
+                </div>
+            </td>
         </tr>
     ));
 

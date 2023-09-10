@@ -133,7 +133,7 @@ export const emailRouter = createTRPCRouter({
                 return { message: "Email sent successfully." };
             } catch (error) {
                 console.log(error);
-                throw new Error("No se pudo enviar el Email de recuperación");
+                throw new Error("No se pudo enviar el Email de crear trabajo");
             }
         }),
 });

@@ -17,9 +17,7 @@ import { useCounter } from "@mantine/hooks";
 import { cn } from "~/utils/util";
 import { StlViewer } from "react-stl-viewer";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import ChoosePrinterPopup from "./choosePrinterPopup";
-import { set } from "zod";
 
 const loadCompressWorker = () => new Worker(new URL("~/utils/compressWorker", import.meta.url));
 
@@ -32,11 +30,9 @@ const STLDropzone = () => {
   const [width, setWidth] = useState(0 as number);
   const [height, setHeight] = useState(0 as number);
   const [depth, setDepth] = useState(0 as number);
-  const [compressedFile, setCompressedFile] = useState<File | null>(null);
   const [compressedUrl, setCompressedUrl] = useState("" as string);
   const [fileName, setFileName] = useState("" as string);
   const { data: sessionData } = useSession();
-  const router = useRouter();
 
   const largeScreen = useMediaQuery("(min-width: 1300px)");
   const form = useForm({
@@ -65,7 +61,8 @@ const STLDropzone = () => {
     }
 
     const file = files[0];
-    setFileName(file.name);
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    setFileName(`${(sessionData?.user?.name as string)}-${(file.name).split(".")[0]}-${Date.now()}`.replace(/ /g, "_"));
 
     // Check file size
     if (Math.ceil(file.size / 1024 / 1024) > 20) {
@@ -132,14 +129,7 @@ const STLDropzone = () => {
           autoClose: 5000,
         });
       } else {
-        setCompressedFile(compressedFile);
         setCompressedUrl(URL.createObjectURL(compressedFile as File));
-        notifications.show({
-          title: "Success",
-          message: "El archivo se ha comprimido exitosamente",
-          color: "green",
-          autoClose: 5000,
-        });
       }
 
       worker.terminate();
@@ -155,7 +145,6 @@ const STLDropzone = () => {
     setWidth(0);
     setHeight(0);
     setDepth(0);
-    setCompressedFile(null);
   };
 
   return (
@@ -306,7 +295,7 @@ const STLDropzone = () => {
             </div>
             <ContadorImpresiones />
             <Group position="center" mt="xl">
-              <ChoosePrinterPopup fileName={`${(sessionData?.user?.name as string)}-${fileName}-${Date.now()}`.replace(/ /g, "_")} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`}/>
+              <ChoosePrinterPopup fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`}/>
             </Group>
           </form>
         </div>

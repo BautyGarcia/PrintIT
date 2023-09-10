@@ -31,6 +31,7 @@ model Work {
   clientId   String
   workerId   String
   printerId  String
+  stlUrl     String?
   printer    Printer    @relation(fields: [printerId], references: [id])
   client     User       @relation("ClientRelation", fields: [clientId], references: [id])
   worker     User       @relation("WorkerRelation", fields: [workerId], references: [id])
@@ -85,11 +86,11 @@ model Session {
 
 model User {
   id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
+  name          String
+  email         String    @unique
   emailVerified DateTime?
   image         String?
-  password      String?
+  password      String
   accounts      Account[]
   sessions      Session[]
   printers      Printer[]

@@ -21,6 +21,7 @@ import Link from "next/link";
 import PrinterPopup from "~/components/Dashboard/addPrinterPopup";
 import { useRouter } from "next/router";
 import { useUserRoleType } from "~/contexts/UserTypeRoleContext";
+import { api } from "~/utils/api";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -156,7 +157,7 @@ const useStyles = createStyles((theme) => ({
 const HomeNavBar: React.FC = () => {
   const router = useRouter();
   const { classes, cx } = useStyles();
-
+  const { refetch: getMyPrinters } = api.printer.getMyPrinters.useQuery();
   const { userTypeRole } = useUserRoleType();
   const [active, setActive] = useState("Subir Archivo");
 
@@ -188,7 +189,7 @@ const HomeNavBar: React.FC = () => {
     <>
       <Navbar.Section grow>
         <Group className={classes.header} position="apart">
-          <PrinterPopup />
+          <PrinterPopup refreshPrinters={getMyPrinters}/>
           <Link
             href=""
             className={classes.community}

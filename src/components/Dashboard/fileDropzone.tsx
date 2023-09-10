@@ -26,6 +26,7 @@ const STLDropzone = () => {
   const { colorScheme } = useMantineColorScheme();
   const [isSelected, setIsSelected] = useState(false);
   const [isSlicing, setIsSlicing] = useState(false);
+  const [isCompressing, setIsCompressing] = useState(false);
   const [stlViewerURL, setSTLViewerURL] = useState("" as string);
   const [volume, setVolume] = useState(0 as number);
   const [width, setWidth] = useState(0 as number);
@@ -47,7 +48,7 @@ const STLDropzone = () => {
 
   const handleFileSubmit = async (event: ChangeEvent<HTMLInputElement>) => {
     setIsSlicing(true);
-
+    setIsCompressing(true);
     const files = event.target.files;
     
     // Check if files were selected
@@ -133,6 +134,7 @@ const STLDropzone = () => {
         setCompressedUrl(URL.createObjectURL(compressedFile as File));
       }
 
+      setIsCompressing(false);
       worker.terminate();
     };
 
@@ -296,7 +298,7 @@ const STLDropzone = () => {
             </div>
             <ContadorImpresiones />
             <Group position="center" mt="xl">
-              <ChoosePrinterPopup fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`}/>
+              <ChoosePrinterPopup loading={isCompressing || isSlicing ? true : false} fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`}/>
             </Group>
           </form>
         </div>

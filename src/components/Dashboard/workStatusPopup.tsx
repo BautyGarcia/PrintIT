@@ -267,17 +267,7 @@ const WorkSatusPopup = ({ workInfo, refreshWorks }: WorkSatusPopupProps) => {
                                 }
                             </>
                             :
-                            <>
-                                {
-                                    status === "Negociacion" ?
-                                        <Text fw={500} className="mt-6 text-xl text-center">Su contraoferta ha sido enviada, por favor espere a una respuesta antes de continuar.</Text>
-                                        :
-                                        <>
-                                            <Text fw={500} className="mt-6 text-xl text-center">El estado de este trabajo ya no es de Negociación.</Text>
-                                        </>
-                                }
-                            </>
-
+                            <Text fw={500} className="mt-6 text-xl text-center">Su contraoferta ha sido enviada, por favor espere a una respuesta antes de continuar.</Text>
                     }
                 </div>
                 <div className="mt-6 flex justify-between">

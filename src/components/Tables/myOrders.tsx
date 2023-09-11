@@ -29,19 +29,22 @@ const MyOrdersTable = () => {
             <td>{order.status}</td>
             <td>{order.lastBidder === "CLIENT" ? "Cliente" : "Vendedor"}</td>
             <td>
-                <div className='flex justify-center'>
-                    <WorkSatusPopup 
-                        refreshWorks={refetchOrdersList} 
-                        workInfo={
-                            {
-                                id: order.id,
-                                lastBidder: order.lastBidder,
-                                price: order.price,
-                                status: order.status,
-                            }
-                        }
-                    />
-                </div>
+                {
+                    order.status === "Negociacion" ?
+                        <div className='flex justify-end'>
+                            <WorkSatusPopup
+                                refreshWorks={refetchOrdersList}
+                                workInfo={
+                                    {
+                                        id: order.id,
+                                        lastBidder: order.lastBidder,
+                                        price: order.price,
+                                        status: order.status,
+                                    }
+                                }
+                            />
+                        </div> : <></>
+                }
             </td>
         </tr>
     ));

@@ -44,17 +44,20 @@ const MyWorksTable = () => {
                     >
                         Descargar Archivo
                     </Button>
-                    <WorkSatusPopup 
-                        refreshWorks={refetchWorksList} 
-                        workInfo={
-                            {
-                                id: work.id,
-                                lastBidder: work.lastBidder,
-                                price: work.price,
-                                status: work.status,
-                            }
-                        }
-                    />
+                    {
+                        work.status === "Negociacion" ?
+                            <WorkSatusPopup
+                                refreshWorks={refetchWorksList}
+                                workInfo={
+                                    {
+                                        id: work.id,
+                                        lastBidder: work.lastBidder,
+                                        price: work.price,
+                                        status: work.status,
+                                    }
+                                }
+                            /> : <></>
+                    }
                 </div>
             </td>
         </tr>

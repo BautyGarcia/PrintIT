@@ -183,7 +183,7 @@ const WorkSatusPopup = ({ workInfo, refreshWorks }: WorkSatusPopupProps) => {
                 onClick={open}
                 className='bg-blue-500 py-2 text-white hover:bg-blue-700'
             >
-                Entrar
+                Negociar Precio
             </Button>
             <Modal
                 opened={opened}

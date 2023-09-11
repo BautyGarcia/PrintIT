@@ -22,19 +22,11 @@ const MyWorksTable = () => {
 
     const { data: worksList, refetch: refetchWorksList } = api.work.getMyWorks.useQuery();
 
-    const statusReferences = {
-        "NEGOTIATING": "Negociando",
-        "CANCELLED": "Cancelado",
-        "SHIPPING": "Enviando",
-        "PRINTING": "Imprimiendo",
-        "FINISHED": "Finalizado",
-    }
-
     const rows = worksList?.map((work) => (
         <tr key={work.id}>
             <td>{work.client.name}</td>
             <td>{(work.price).toString() + "$"}</td>
-            <td>{statusReferences[work.status]}</td>
+            <td>{work.status}</td>
             <td>{work.lastBidder === "CLIENT" ? "Cliente" : "Vos"}</td>
             <td>
                 <div className='flex justify-center'>

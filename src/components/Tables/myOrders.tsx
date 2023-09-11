@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { createStyles, Table, ScrollArea } from '@mantine/core';
 import { api } from '~/utils/api';
+import WorkSatusPopup from '../Dashboard/workStatusPopup';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -21,20 +22,27 @@ const MyOrdersTable = () => {
 
     const { data: ordersList, refetch: refetchOrdersList } = api.work.getMyOrders.useQuery();
 
-    const statusReferences = {
-        "NEGOTIATING": "Negociando",
-        "CANCELLED": "Cancelado",
-        "SHIPPING": "Enviando",
-        "PRINTING": "Imprimiendo",
-        "FINISHED": "Finalizado",
-    }
-
     const rows = ordersList?.map((order) => (
         <tr key={order.id}>
             <td>{order.worker.name}</td>
             <td>{(order.price).toString() + "$"}</td>
-            <td>{statusReferences[order.status]}</td>
-            <td>{order.lastBidder === "CLIENT" ? "Vos" : "Cliente"}</td>
+            <td>{order.status}</td>
+            <td>{order.lastBidder === "CLIENT" ? "Cliente" : "Vendedor"}</td>
+            <td>
+                <div className='flex justify-center'>
+                    <WorkSatusPopup 
+                        refreshWorks={refetchOrdersList} 
+                        workInfo={
+                            {
+                                id: order.id,
+                                lastBidder: order.lastBidder,
+                                price: order.price,
+                                status: order.status,
+                            }
+                        }
+                    />
+                </div>
+            </td>
         </tr>
     ));
 
@@ -47,6 +55,7 @@ const MyOrdersTable = () => {
                         <th>Precio</th>
                         <th>Estado</th>
                         <th>Ultimo Postor</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>{rows}</tbody>

@@ -42,11 +42,11 @@ model Work {
 }
 
 enum WorkStatus {
-  CANCELLED
-  NEGOTIATING
-  PRINTING
-  SHIPPING
-  FINISHED
+  Cancelado
+  Negociacion
+  Imprimiendo
+  Enviando
+  Finalizado
 }
 
 enum RoleTypes {

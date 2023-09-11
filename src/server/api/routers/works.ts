@@ -96,7 +96,7 @@ export const workRouter = createTRPCRouter({
                             id: printerId,
                         },
                     },
-                    status: "NEGOTIATING",
+                    status: "Negociacion",
                 }
             })
 
@@ -131,7 +131,7 @@ export const workRouter = createTRPCRouter({
                     id: workId,
                 },
                 data: {
-                    status: "CANCELLED",
+                    status: "Cancelado",
                 },
             });
 
@@ -178,7 +178,7 @@ export const workRouter = createTRPCRouter({
                     id: workId,
                 },
                 data: {
-                    status: "PRINTING",
+                    status: "Imprimiendo",
                 },
             });
 
@@ -202,7 +202,7 @@ export const workRouter = createTRPCRouter({
                     id: workId,
                 },
                 data: {
-                    status: "SHIPPING",
+                    status: "Enviando",
                 },
             });
 
@@ -225,7 +225,7 @@ export const workRouter = createTRPCRouter({
                     id: workId,
                 },
                 data: {
-                    status: "FINISHED",
+                    status: "Finalizado",
                 },
             });
 
@@ -265,4 +265,14 @@ export const workRouter = createTRPCRouter({
 
             return updatedWork;
         }),
+    getUserRoleType: protectedProcedure
+        .input(z.object({ workId: z.string() }))
+        .query(async ({ input, ctx }) => {
+            const { workId } = input;
+            const userId = ctx.session.user.id;
+
+            const workInfo = await getWorkInfoAndUserRoleType(ctx.prisma, workId, userId);
+
+            return workInfo.roleType;
+    }),
 })

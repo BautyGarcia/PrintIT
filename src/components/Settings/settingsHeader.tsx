@@ -61,7 +61,7 @@ export const SettingsHeader: React.FC = () => {
         }
       >
         <Group position="apart" sx={{ height: "100%" }}>
-          <Link className="flex flex-row items-center gap-2" href="#" passHref>
+          <Link className="flex flex-row items-center gap-2" href="/dashboard/subirArchivo" passHref>
             <Logo width={40} height={40} />
           </Link>
 

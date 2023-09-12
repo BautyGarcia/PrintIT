@@ -3,7 +3,6 @@ import { Logo } from "../Logos/logo";
 import SchemeButton from "../Landing/schemeButton";
 import UserBox from "./userBox";
 import { type SetStateAction } from "react";
-import UserToggle from "./userToggleButton";
 import Link from "next/link";
 
 interface HomeHeaderProps {
@@ -33,9 +32,6 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
           <Logo width={40} height={40} />
         </Link>
       </Group>
-      <div className="flex items-center">
-        <UserToggle />
-      </div>
       <MediaQuery largerThan="sm" styles={{ display: "none" }}>
         <Burger
           opened={opened}

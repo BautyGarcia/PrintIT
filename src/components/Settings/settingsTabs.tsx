@@ -2,7 +2,7 @@ import { Tabs } from "@mantine/core";
 import { useSession } from "next-auth/react";
 import { useMantineColorScheme } from "@mantine/core";
 import { Group, MediaQuery } from "@mantine/core";
-import UserSetting from "~/components/Settingss/userSettings";
+import UserSetting from "~/components/Settings/userSettings";
 
 const Datos: React.FC = ({}) => {
   const { colorScheme } = useMantineColorScheme();

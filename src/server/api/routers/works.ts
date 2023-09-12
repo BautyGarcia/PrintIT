@@ -96,7 +96,7 @@ export const workRouter = createTRPCRouter({
                             id: printerId,
                         },
                     },
-                    status: "NEGOTIATING",
+                    status: "Negociacion",
                 }
             })
 
@@ -131,7 +131,7 @@ export const workRouter = createTRPCRouter({
                     id: workId,
                 },
                 data: {
-                    status: "CANCELLED",
+                    status: "Cancelado",
                 },
             });
 
@@ -178,7 +178,7 @@ export const workRouter = createTRPCRouter({
                     id: workId,
                 },
                 data: {
-                    status: "PRINTING",
+                    status: "Imprimiendo",
                 },
             });
 
@@ -202,7 +202,7 @@ export const workRouter = createTRPCRouter({
                     id: workId,
                 },
                 data: {
-                    status: "SHIPPING",
+                    status: "Enviando",
                 },
             });
 
@@ -225,7 +225,7 @@ export const workRouter = createTRPCRouter({
                     id: workId,
                 },
                 data: {
-                    status: "FINISHED",
+                    status: "Finalizado",
                 },
             });
 
@@ -235,4 +235,44 @@ export const workRouter = createTRPCRouter({
 
             return confirmedWork;
         }),
+    getWorkById: protectedProcedure
+        .input(z.object({ workId: z.string() }))
+        .query(async ({ input, ctx }) => {
+            const { workId } = input;
+            const userId = ctx.session.user.id;
+
+            const workInfo = await getWorkInfoAndUserRoleType(ctx.prisma, workId, userId);
+
+            return workInfo;
+        }),
+    addStlUrlToWork: protectedProcedure
+        .input(z.object({ workId: z.string(), stlUrl: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { workId, stlUrl } = input;
+
+            const updatedWork = await ctx.prisma.work.update({
+                where: {
+                    id: workId,
+                },
+                data: {
+                    stlUrl,
+                },
+            });
+
+            if (!updatedWork) {
+                throw new Error("Hubo un problema actualizando el trabajo");
+            }
+
+            return updatedWork;
+        }),
+    getUserRoleType: protectedProcedure
+        .input(z.object({ workId: z.string() }))
+        .query(async ({ input, ctx }) => {
+            const { workId } = input;
+            const userId = ctx.session.user.id;
+
+            const workInfo = await getWorkInfoAndUserRoleType(ctx.prisma, workId, userId);
+
+            return workInfo.roleType;
+    }),
 })

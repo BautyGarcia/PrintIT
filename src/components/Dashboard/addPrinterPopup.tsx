@@ -15,7 +15,11 @@ import { useSession } from "next-auth/react";
 import { Logo } from "../Logos/logo";
 import { api } from "~/utils/api";
 
-const AddPrinterPopup: React.FC = () => {
+interface AddPrinterPopupProps {
+  refreshPrinters: () => void;
+}
+
+const AddPrinterPopup = ({ refreshPrinters }: AddPrinterPopupProps) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [isLoading, setIsLoading] = useState(false);
   const { data: SessionData } = useSession();
@@ -86,6 +90,7 @@ const AddPrinterPopup: React.FC = () => {
             autoClose: 5000,
           });
           setIsLoading(false);
+          refreshPrinters();
           handlePopupClose();
         },
         onError: (error) => {

@@ -3,11 +3,11 @@ import classNames from "classnames";
 import Image from "next/image";
 
 const images = [
-  "/Carousel1.png",
-  "/Carousel2.png",
-  "/Carousel3.png",
-  "/Carousel4.png",
-  "/Carousel5.png",
+  "/Carousel/Carousel1.png",
+  "/Carousel/Carousel2.png",
+  "/Carousel/Carousel3.png",
+  "/Carousel/Carousel4.png",
+  "/Carousel/Carousel5.png",
 ];
 
 const Carousel: React.FC = () => {

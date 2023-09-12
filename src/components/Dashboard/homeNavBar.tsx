@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   createStyles,
   Navbar,
@@ -20,15 +20,15 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import PrinterPopup from "~/components/Dashboard/addPrinterPopup";
 import { useRouter } from "next/router";
-import { useUserRoleType } from "~/contexts/UserTypeRoleContext";
+import UserToggle from "./userToggleButton";
+import { api } from "~/utils/api";
 
 const useStyles = createStyles((theme) => ({
   header: {
     paddingBottom: theme.spacing.md,
     marginBottom: `calc(${theme.spacing.xs} * 1.5)`,
-    borderBottom: `${rem(1)} solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[2]
-    }`,
+    borderBottom: `${rem(1)} solid ${theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[2]
+      }`,
     display: "block",
     textAlign: "center",
   },
@@ -36,9 +36,8 @@ const useStyles = createStyles((theme) => ({
   footer: {
     paddingTop: theme.spacing.md,
     marginTop: theme.spacing.md,
-    borderTop: `${rem(1)} solid ${
-      theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[2]
-    }`,
+    borderTop: `${rem(1)} solid ${theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[2]
+      }`,
     display: "flex",
     justifyContent: "space-between",
   },
@@ -156,116 +155,107 @@ const useStyles = createStyles((theme) => ({
 const HomeNavBar: React.FC = () => {
   const router = useRouter();
   const { classes, cx } = useStyles();
-
-  const { userTypeRole } = useUserRoleType();
+  const { refetch: getMyPrinters } = api.printer.getMyPrinters.useQuery();
   const [active, setActive] = useState("Subir Archivo");
+  const [userTypeRole, setUserTypeRole] = useState("Cliente");
+  
+  const handleRoleChange = (role: string) => {
+    setUserTypeRole(role);
 
-  useEffect(() => {
-    if (
-      userTypeRole === "Cliente" &&
-      router.pathname === "/dashboard/subirArchivo"
-    ) {
+    if (role === "Cliente") {
+      void router.push("/dashboard/subirArchivo");
       setActive("Subir Archivo");
-    } else if (
-      userTypeRole === "Cliente" &&
-      router.pathname === "/dashboard/misPedidos"
-    ) {
-      setActive("Mis Pedidos");
-    } else if (
-      userTypeRole === "Vendedor" &&
-      router.pathname === "/dashboard/misTrabajos"
-    ) {
+    } else {
+      void router.push("/dashboard/misTrabajos");
       setActive("Mis Trabajos");
-    } else if (
-      userTypeRole === "Vendedor" &&
-      router.pathname === "/dashboard/misImpresoras"
-    ) {
-      setActive("Mis Impresoras");
     }
-  }, [userTypeRole, router.pathname]);
+  };
 
   return (
     <>
-      <Navbar.Section grow>
-        <Group className={classes.header} position="apart">
-          <PrinterPopup />
-          <Link
-            href=""
-            className={classes.community}
-            onClick={(event) => event.preventDefault()}
-          >
-            <IconMessage className={classes.communityIcon} />
-            <span>Comunidad</span>
-          </Link>
-        </Group>
-
-        {userTypeRole === "Cliente" && (
-          <>
+      <Navbar.Section grow className="flex flex-col">
+        <div className="flex flex-col h-[100%]">
+          <Group className={classes.header} position="apart">
+            <PrinterPopup refreshPrinters={getMyPrinters} />
             <Link
-              href="/dashboard/subirArchivo"
-              className={cx(classes.link, {
-                [classes.linkActive]: "Subir Archivo" === active,
-              })}
-              onClick={(event) => {
-                event.preventDefault();
-                setActive("Subir Archivo");
-                void router.push("/dashboard/subirArchivo");
-              }}
+              href=""
+              className={classes.community}
+              onClick={(event) => event.preventDefault()}
             >
-              <IconFile3d className={classes.linkIcon} stroke={1.5} />
-              <span>Subir Archivo</span>
+              <IconMessage className={classes.communityIcon} />
+              <span>Comunidad</span>
             </Link>
+          </Group>
 
-            <Link
-              href="/dashboard/misPedidos"
-              className={cx(classes.link, {
-                [classes.linkActive]: "Mis Pedidos" === active,
-              })}
-              onClick={(event) => {
-                event.preventDefault();
-                setActive("Mis Pedidos");
-                void router.push("/dashboard/misPedidos");
-              }}
-            >
-              <IconPackage className={classes.linkIcon} stroke={1.5} />
-              <span>Mis Pedidos</span>
-            </Link>
-          </>
-        )}
+          {userTypeRole === "Cliente" && (
+            <>
+              <Link
+                href="/dashboard/subirArchivo"
+                className={cx(classes.link, {
+                  [classes.linkActive]: "Subir Archivo" === active,
+                })}
+                onClick={(event) => {
+                  event.preventDefault();
+                  setActive("Subir Archivo");
+                  void router.push("/dashboard/subirArchivo");
+                }}
+              >
+                <IconFile3d className={classes.linkIcon} stroke={1.5} />
+                <span>Subir Archivo</span>
+              </Link>
 
-        {userTypeRole === "Vendedor" && (
-          <>
-            <Link
-              href="/dashboard/misTrabajos"
-              className={cx(classes.link, {
-                [classes.linkActive]: "Mis Trabajos" === active,
-              })}
-              onClick={(event) => {
-                event.preventDefault();
-                setActive("Mis Trabajos");
-                void router.push("/dashboard/misTrabajos");
-              }}
-            >
-              <IconShovel className={classes.linkIcon} stroke={1.5} />
-              <span>Mis Trabajos</span>
-            </Link>
+              <Link
+                href="/dashboard/misPedidos"
+                className={cx(classes.link, {
+                  [classes.linkActive]: "Mis Pedidos" === active,
+                })}
+                onClick={(event) => {
+                  event.preventDefault();
+                  setActive("Mis Pedidos");
+                  void router.push("/dashboard/misPedidos");
+                }}
+              >
+                <IconPackage className={classes.linkIcon} stroke={1.5} />
+                <span>Mis Pedidos</span>
+              </Link>
+            </>
+          )}
 
-            <Link
-              href="/dashboard/misImpresoras"
-              className={cx(classes.link, {
-                [classes.linkActive]: "Mis Impresoras" === active,
-              })}
-              onClick={(event) => {
-                event.preventDefault();
-                setActive("Mis Impresoras");
-                void router.push("/dashboard/misImpresoras");
-              }}
-            >
-              <IconPrinter className={classes.linkIcon} stroke={1.5} />
-              <span>Mis Impresoras</span>
-            </Link>
-          </>
-        )}
+          {userTypeRole === "Vendedor" && (
+            <>
+              <Link
+                href="/dashboard/misTrabajos"
+                className={cx(classes.link, {
+                  [classes.linkActive]: "Mis Trabajos" === active,
+                })}
+                onClick={(event) => {
+                  event.preventDefault();
+                  setActive("Mis Trabajos");
+                  void router.push("/dashboard/misTrabajos");
+                }}
+              >
+                <IconShovel className={classes.linkIcon} stroke={1.5} />
+                <span>Mis Trabajos</span>
+              </Link>
+
+              <Link
+                href="/dashboard/misImpresoras"
+                className={cx(classes.link, {
+                  [classes.linkActive]: "Mis Impresoras" === active,
+                })}
+                onClick={(event) => {
+                  event.preventDefault();
+                  setActive("Mis Impresoras");
+                  void router.push("/dashboard/misImpresoras");
+                }}
+              >
+                <IconPrinter className={classes.linkIcon} stroke={1.5} />
+                <span>Mis Impresoras</span>
+              </Link>
+            </>
+          )}
+        </div>
+        <UserToggle userTypeRole={userTypeRole} setUserTypeRole={handleRoleChange} />
       </Navbar.Section>
 
       <MediaQuery largerThan="sm" styles={{ display: "none" }}>

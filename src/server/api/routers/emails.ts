@@ -2,13 +2,18 @@ import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import nodemailer from "nodemailer";
 import { env } from "process";
-
 import {
     createTRPCRouter,
+    protectedProcedure,
     publicProcedure,
 } from "~/server/api/trpc";
 import path from "path";
-import recoverPasswordTemplate from "~/utils/emailTemplates";
+import { 
+    recoverPasswordTemplate, 
+    createWorkTemplate, 
+    finishNegotiationTemplate,
+    updateBidTemplate
+} from "~/utils/emailTemplates";
 
 const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -19,6 +24,15 @@ const transporter = nodemailer.createTransport({
         pass: env.MAILPASSWORD,
     }
 });
+
+const imagePath = path.join(process.cwd(), 'public', 'LogoWhite.png');
+const attachments = [
+    {
+        filename: 'LogoWhite.png',
+        path: imagePath,
+        cid: 'logoBlanco'
+    }
+];
 
 export const emailRouter = createTRPCRouter({
     sendPasswordEmail: publicProcedure
@@ -34,7 +48,7 @@ export const emailRouter = createTRPCRouter({
                     email,
                 },
             });
-            
+
             if (!user) {
                 throw new Error("Este Email no esta asignado a ninguna cuenta");
             }
@@ -54,7 +68,6 @@ export const emailRouter = createTRPCRouter({
 
             const emailName = email.slice(0, email.indexOf('@'));
             const redirectURL = env.NODE_ENV === "production" ? `https://printitweb.vercel.app/recoverPassword/${token}` : `http://localhost:3000/recoverPassword/${token}`;
-            const imagePath = path.join(process.cwd(), 'public', 'LogoWhite.png');
 
             //Set mail options
             const mailOptions = {
@@ -62,13 +75,7 @@ export const emailRouter = createTRPCRouter({
                 to: email,
                 subject: 'PrintIT - Olvidaste tu contraseña',
                 html: recoverPasswordTemplate(emailName, redirectURL),
-                attachments: [
-                    {
-                        filename: 'LogoWhite.png',
-                        path: imagePath,
-                        cid: 'logoBlanco' //same cid value as in the html img src
-                    }
-                ]
+                attachments
             };
 
             //Send Email
@@ -84,26 +91,165 @@ export const emailRouter = createTRPCRouter({
     sendUsEmail: publicProcedure
         .input(z.object({ email: z.string(), subject: z.string(), message: z.string() }))
         .mutation(async ({ input }) => {
-                
-                //Get input
-                const { email, subject, message } = input;
-    
-                //Set mail options
-                const mailOptions = {
-                    from: 'PrintIT <contact.printit.app@gmail.com>',
-                    to: 'PrintIT <contact.printit.app@gmail.com>',
-                    subject: subject,
-                    html: `<p>De: ${email}</p><p>${message}</p>`,
-                };
 
-                //Send Email
-                try {
-                    await transporter.sendMail(mailOptions);
-                    console.log("Email sent successfully.");
-                    return true;
-                } catch (error) {
-                    console.log(error);
-                    throw new Error("No se pudo enviar el Email");
+            //Get input
+            const { email, subject, message } = input;
+
+            //Set mail options
+            const mailOptions = {
+                from: 'PrintIT <contact.printit.app@gmail.com>',
+                to: 'PrintIT <contact.printit.app@gmail.com>',
+                subject: subject,
+                html: `<p>De: ${email}</p><p>${message}</p>`,
+            };
+
+            //Send Email
+            try {
+                await transporter.sendMail(mailOptions);
+                console.log("Email sent successfully.");
+                return true;
+            } catch (error) {
+                console.log(error);
+                throw new Error("No se pudo enviar el Email");
+            }
+        }),
+    sendCreateWorkEmail: protectedProcedure
+        .input(z.object({ email: z.string(), clientName: z.string(), workerName: z.string() }))
+        .mutation(async ({ input }) => {
+            const { email, clientName, workerName } = input;
+
+            const redirectURL = env.NODE_ENV === "production" ? `https://printitweb.vercel.app/dashboard/misTrabajos` : `http://localhost:3000/dashboard/misTrabajos`;
+
+            const mailOptions = {
+                from: 'PrintIT <contact.printit.app@gmail.com>',
+                to: email,
+                subject: 'PrintIT - ¡Tenemos un trabajo para ti!',
+                html: createWorkTemplate(clientName, redirectURL, workerName),
+                attachments
+            };
+
+            try {
+                await transporter.sendMail(mailOptions);
+                return { message: "Email sent successfully." };
+            } catch (error) {
+                console.log(error);
+                throw new Error("No se pudo enviar el Email de crear trabajo");
+            }
+        }),
+    sendNegotiationFinishedEmail: protectedProcedure
+        .input(z.object({ workId: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { workId } = input;
+            const userId = ctx.session.user.id;
+
+            const work = await ctx.prisma.work.findUnique({
+                where: {
+                    id: workId,
+                },
+                include: {
+                    client: {
+                        select: {
+                            email: true,
+                            name: true,
+                            id: true,
+                        }
+                    },
+                    worker: {
+                        select: {
+                            email: true,
+                            name: true,
+                            id: true,
+                        }
+                    },
                 }
-            }),
+            });
+
+            if (!work) {
+                throw new Error("No se pudo encontrar el trabajo");
+            }
+
+            if (work.client.id !== userId && work.worker.id !== userId) {
+                throw new Error("No tienes permiso para ver este trabajo");
+            }
+
+            try {
+                await transporter.sendMail({
+                    from: 'PrintIT <contact.printit.app@gmail.com>',
+                    to: work.client.email,
+                    subject: 'PrintIT - ¡Se terminó la negociación!',
+                    html: finishNegotiationTemplate(work.client.name),
+                    attachments
+                });
+                await transporter.sendMail({
+                    from: 'PrintIT <contact.printit.app@gmail.com>',
+                    to: work.worker.email,
+                    subject: 'PrintIT - ¡Se terminó la negociación!',
+                    html: finishNegotiationTemplate(work.worker.name),
+                    attachments
+                });
+                return { message: "Email sent successfully." };
+            } catch (error) {
+                console.log(error);
+                throw new Error("No se pudo enviar el Email de terminar negociación");
+            }
+        }),
+    sendUpdateBidEmail: protectedProcedure
+        .input(z.object({ workId: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { workId } = input;
+            const bidderId = ctx.session.user.id;
+
+            const work = await ctx.prisma.work.findUnique({
+                where: {
+                    id: workId,
+                },
+                include: {
+                    client: {
+                        select: {
+                            email: true,
+                            name: true,
+                            id: true,
+                        }
+                    },
+                    worker: {
+                        select: {
+                            email: true,
+                            name: true,
+                            id: true,
+                        }
+                    },
+                }
+            });
+
+            if (!work) {
+                throw new Error("No se pudo encontrar el trabajo");
+            }
+
+            if (work.client.id !== bidderId && work.worker.id !== bidderId) {
+                throw new Error("No tienes permiso para ver este trabajo");
+            }
+
+            const email = work.client.id === bidderId ? work.worker.email : work.client.email;
+            const name = work.client.id === bidderId ? work.worker.name : work.client.name;
+
+            const redirectSection = work.client.id === bidderId ? "misPedidos" : "misTrabajos";
+            const redirectURL = env.NODE_ENV === "production" ? `https://printitweb.vercel.app/dashboard/${redirectSection}` : `http://localhost:3000/dashboard/${redirectSection}`;
+            const redirectName = redirectSection === "misPedidos" ? "Mis Pedidos" : "Mis Trabajos";
+
+            const mailOptions = {
+                from: 'PrintIT <contact.printit.app@gmail.com>',
+                to: email,
+                subject: 'PrintIT - ¡Hay contraoferta!',
+                html: updateBidTemplate(name, redirectURL, redirectName),
+                attachments
+            };
+
+            try {
+                await transporter.sendMail(mailOptions);
+                return { message: "Email sent successfully." };
+            } catch (error) {
+                console.log(error);
+                throw new Error("No se pudo enviar el Email de contraoferta");
+            }
+        }),
 });

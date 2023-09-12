@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { createStyles, Table, ScrollArea } from '@mantine/core';
+import { createStyles, Table, ScrollArea, Button } from '@mantine/core';
 import { api } from '~/utils/api';
+import WorkSatusPopup from '../Dashboard/workStatusPopup';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -21,20 +22,44 @@ const MyWorksTable = () => {
 
     const { data: worksList, refetch: refetchWorksList } = api.work.getMyWorks.useQuery();
 
-    const statusReferences = {
-        "NEGOTIATING": "Negociando",
-        "CANCELLED": "Cancelado",
-        "SHIPPING": "Enviando",
-        "PRINTING": "Imprimiendo",
-        "FINISHED": "Finalizado",
-    }
+    const handleFileDownload = (fileURL: string) => {
+        const fileName = fileURL.split('https://storage.googleapis.com/printit-app/')[1];
+        const downloadLink = document.createElement('a');
+        downloadLink.href = fileURL;
+        downloadLink.download = fileName as string;
+        downloadLink.click();
+    };
 
     const rows = worksList?.map((work) => (
         <tr key={work.id}>
             <td>{work.client.name}</td>
             <td>{(work.price).toString() + "$"}</td>
-            <td>{statusReferences[work.status]}</td>
+            <td>{work.status}</td>
             <td>{work.lastBidder === "CLIENT" ? "Cliente" : "Vos"}</td>
+            <td>
+                <div className='flex justify-end '>
+                    <Button
+                        onClick={() => handleFileDownload(work.stlUrl as string)}
+                        className='bg-blue-500 py-2 mr-2 text-white hover:bg-blue-700'
+                    >
+                        Descargar Archivo
+                    </Button>
+                    {
+                        work.status === "Negociacion" ?
+                            <WorkSatusPopup
+                                refreshWorks={refetchWorksList}
+                                workInfo={
+                                    {
+                                        id: work.id,
+                                        lastBidder: work.lastBidder,
+                                        price: work.price,
+                                        status: work.status,
+                                    }
+                                }
+                            /> : <></>
+                    }
+                </div>
+            </td>
         </tr>
     ));
 
@@ -47,6 +72,7 @@ const MyWorksTable = () => {
                         <th>Precio</th>
                         <th>Estado</th>
                         <th>Ultimo Postor</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>{rows}</tbody>

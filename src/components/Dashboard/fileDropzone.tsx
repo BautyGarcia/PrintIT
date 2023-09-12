@@ -1,7 +1,7 @@
 import { notifications } from "@mantine/notifications";
-import { useState, type ChangeEvent, useRef, useEffect } from "react";
+import { useState, type ChangeEvent } from "react";
 import sliceSTL from "~/utils/fileSlicer";
-import { Text } from "@mantine/core";
+import { Loader, Text } from "@mantine/core";
 import "remixicon/fonts/remixicon.css";
 import {
   TextInput,
@@ -16,7 +16,8 @@ import { useMediaQuery } from "@mantine/hooks";
 import { useCounter } from "@mantine/hooks";
 import { cn } from "~/utils/util";
 import { StlViewer } from "react-stl-viewer";
-import Link from "next/link";
+import { useSession } from "next-auth/react";
+import ChoosePrinterPopup from "./choosePrinterPopup";
 
 const loadCompressWorker = () =>
   new Worker(new URL("~/utils/compressWorker", import.meta.url));
@@ -24,32 +25,33 @@ const loadCompressWorker = () =>
 const STLDropzone = () => {
   const { colorScheme } = useMantineColorScheme();
   const [isSelected, setIsSelected] = useState(false);
+  const [isSlicing, setIsSlicing] = useState(false);
+  const [isCompressing, setIsCompressing] = useState(false);
   const [stlViewerURL, setSTLViewerURL] = useState("" as string);
   const [volume, setVolume] = useState(0 as number);
   const [width, setWidth] = useState(0 as number);
   const [height, setHeight] = useState(0 as number);
   const [depth, setDepth] = useState(0 as number);
-  const [compressedFile, setCompressedFile] = useState<File | null>(null);
-  const fileRef = useRef<HTMLInputElement | null>(null);
+  const [compressedUrl, setCompressedUrl] = useState("" as string);
+  const [fileName, setFileName] = useState("" as string);
+  const { data: sessionData } = useSession();
 
-  useEffect(() => {
-    const files = fileRef.current?.files;
-    if (files && files.length > 0) {
-      console.log("Se ha cargado un archivo");
-    } else {
-      console.log("No se ha cargado ningún archivo");
-    }
-  }, []);
-
-  const styles = {
-    width: "500px",
-    height: "500px",
-    border: "1px solid black",
-  };
+  const largeScreen = useMediaQuery("(min-width: 1300px)");
+  const form = useForm({
+    initialValues: {
+      nombre: "",
+    },
+    validate: {
+      nombre: (value) => value.trim().length < 2,
+    },
+  });
 
   const handleFileSubmit = async (event: ChangeEvent<HTMLInputElement>) => {
+    setIsSlicing(true);
+    setIsCompressing(true);
     const files = event.target.files;
-
+    
+    // Check if files were selected
     if (!files || files.length === 0 || !files[0]) {
       notifications.show({
         title: "Error",
@@ -61,6 +63,19 @@ const STLDropzone = () => {
     }
 
     const file = files[0];
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+    setFileName(`${(sessionData?.user?.name as string)}-${(file.name).split(".")[0]}-${Date.now()}`.replace(/ /g, "_"));
+
+    // Check file size
+    if (Math.ceil(file.size / 1024 / 1024) > 20) {
+      notifications.show({
+        title: "Error",
+        message: "El archivo seleccionado es demasiado grande",
+        color: "red",
+        autoClose: 5000,
+      });
+      return;
+    }
 
     // Check file extension
     const allowedExtensions = ["stl", "STL"];
@@ -77,6 +92,7 @@ const STLDropzone = () => {
 
     // Render the file in the stl viewer
     const url = URL.createObjectURL(file);
+
     setSTLViewerURL(url);
     setIsSelected(true);
 
@@ -98,14 +114,13 @@ const STLDropzone = () => {
         return;
       });
 
+    setIsSlicing(false);
     // Compress the file
     const fileData = await file.arrayBuffer();
 
     const worker = loadCompressWorker();
-
-    worker.onmessage = function (
-      e: MessageEvent<{ compressedFile: File | null; error?: string }>
-    ) {
+    
+    worker.onmessage = function (e: MessageEvent<{ compressedFile: File | null; error?: string }>) {
       const { compressedFile, error } = e.data;
 
       if (error) {
@@ -116,30 +131,14 @@ const STLDropzone = () => {
           autoClose: 5000,
         });
       } else {
-        setCompressedFile(compressedFile);
-        notifications.show({
-          title: "Success",
-          message: "El archivo se ha comprimido exitosamente",
-          color: "green",
-          autoClose: 5000,
-        });
+        setCompressedUrl(URL.createObjectURL(compressedFile as File));
       }
 
+      setIsCompressing(false);
       worker.terminate();
     };
 
     worker.postMessage({ arrayBuffer: fileData });
-  };
-
-  const handleDownload = () => {
-    if (compressedFile) {
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(compressedFile);
-      link.download = "compressed_file.stl"; // Set the default file name with the ".stl" extension
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
   };
 
   const clearSubmit = () => {
@@ -149,7 +148,6 @@ const STLDropzone = () => {
     setWidth(0);
     setHeight(0);
     setDepth(0);
-    setCompressedFile(null);
   };
 
   return (
@@ -218,57 +216,91 @@ const STLDropzone = () => {
               type="file"
               onChange={handleFileSubmit}
               accept=".stl"
-              ref={fileRef}
             />
           </>
         ) : (
           <>
             <div className="ml-8 flex flex-col justify-center">
               <div className="mt-8 ">
-                <StlViewer url={stlViewerURL} style={styles} orbitControls />
+                <StlViewer url={stlViewerURL} orbitControls />
               </div>
               <div className="mt-4 flex gap-2">
-                <Text>Volume: {volume} cm3</Text>
-                <Text>Width: {width} cm</Text>
-                <Text>Height: {height} cm</Text>
-                <Text>Depth: {depth} cm</Text>
+                {
+                  isSlicing ? (
+                    <Loader />
+                  ) :
+                    (
+                      <>
+                        <Text>Volume: {volume} cm3</Text>
+                        <Text>Width: {width} cm</Text>
+                        <Text>Height: {height} cm</Text>
+                        <Text>Depth: {depth} cm</Text>
+                      </>
+                    )
+                }
+              </div>
+              <div className=" mb-4 flex flex-row items-center justify-center gap-4">
+                <button
+                  className={
+                    colorScheme === "dark"
+                      ? "mt-5 flex flex-row rounded-md border border-white bg-[#1c2333] p-2"
+                      : "mt-5 flex flex-row rounded-md border border-black bg-[#FFFFFF] p-2"
+                  }
+                  onClick={clearSubmit}
+                >
+                  Clear
+                </button>
               </div>
             </div>
           </>
         )}
         <div
           className={cn(
-            " ml-8 mr-8 flex h-[550px] flex-col items-center justify-center rounded-sm border-2 border-black",
+            "-mt-20 ml-8 mr-8 flex h-[500px] flex-col items-center justify-center rounded-sm border-2 border-black",
             {
-              " ml-8 mr-8 flex h-[550px] flex-col items-center justify-center rounded-sm border-2 border-white":
+              "-mt-20 ml-8 mr-8 flex h-[500px] flex-col items-center justify-center rounded-sm border-2 border-white":
                 colorScheme === "dark",
               hidden: !isSelected,
             }
           )}
         >
-          <GetInTouchSimple />
-          <div className=" mb-8 flex flex-row items-center justify-center gap-4">
-            <button
-              className={
-                colorScheme === "dark"
-                  ? "mt-5 flex flex-row rounded-md border border-white bg-[#1c2333] p-2"
-                  : "mt-5 flex flex-row rounded-md border border-black bg-[#FFFFFF] p-2"
-              }
-              onClick={handleDownload}
+          <form
+            className={
+              largeScreen ? "h-full w-11/12 items-center justify-center" : "w-full"
+            }
+            onSubmit={form.onSubmit(() => null)}
+          >
+            <Title className="mt-4" order={2} size="h1" weight={200} align="center">
+              <p>Tu Impresion 3D</p>
+            </Title>
+
+            <SimpleGrid
+              className="items-center justify-center"
+              cols={2}
+              mt="xl"
+              breakpoints={[{ maxWidth: "sm", cols: 1 }]}
             >
-              Download Compressed File
-            </button>
-            <button
-              className={
-                colorScheme === "dark"
-                  ? "mt-5 flex flex-row rounded-md border border-white bg-[#1c2333] p-2"
-                  : "mt-5 flex flex-row rounded-md border border-black bg-[#FFFFFF] p-2"
-              }
-              onClick={clearSubmit}
-            >
-              Clear
-            </button>
-          </div>
+              <TextInput
+                className="mb-2 ml-12 w-60 items-center justify-center"
+                label="Nombre"
+                placeholder="Ingresa tu nombre"
+                name="nombre"
+                variant="filled"
+                {...form.getInputProps("nombre")}
+              />
+            </SimpleGrid>
+            <div className="mb-2 ml-12 items-center justify-center">
+              <h2>Calidad de la Impresion</h2>
+              <h3>...</h3>
+              <h2>Precio Estimado</h2>
+              <h3>precio...</h3>
+              <h2>Cantidad de Impresiones</h2>
+            </div>
+            <ContadorImpresiones />
+            <Group position="center" mt="xl">
+              <ChoosePrinterPopup loading={isCompressing || isSlicing ? true : false} fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`}/>
+            </Group>
+          </form>
         </div>
       </div>
       <Text
@@ -317,69 +349,6 @@ function ContadorImpresiones() {
         </Button>
       </Group>
     </>
-  );
-}
-
-function GetInTouchSimple() {
-  const largeScreen = useMediaQuery("(min-width: 1300px)");
-  const form = useForm({
-    initialValues: {
-      nombre: "",
-    },
-    validate: {
-      nombre: (value) => value.trim().length < 2,
-    },
-  });
-
-  return (
-    <form
-      className={
-        largeScreen
-          ? "mt-8 h-full w-11/12 items-center justify-center"
-          : "w-full"
-      }
-      onSubmit={form.onSubmit(() => null)}
-    >
-      <Title className="mt-4" order={2} size="h1" weight={200} align="center">
-        <p>Tu Impresion 3D</p>
-      </Title>
-
-      <SimpleGrid
-        className="items-center justify-center"
-        cols={2}
-        mt="xl"
-        breakpoints={[{ maxWidth: "sm", cols: 1 }]}
-      >
-        <TextInput
-          className="mb-2 ml-12 w-60 items-center justify-center"
-          label="Nombre"
-          placeholder="Ingresa tu nombre"
-          name="nombre"
-          variant="filled"
-          {...form.getInputProps("nombre")}
-        />
-      </SimpleGrid>
-      <div className="mb-2 ml-12 items-center justify-center">
-        <h2>Calidad de la Impresion</h2>
-        <h3>...</h3>
-        <h2>Precio Estimado</h2>
-        <h3>precio...</h3>
-        <h2>Cantidad de Impresiones</h2>
-      </div>
-      <ContadorImpresiones />
-      <Group position="center" mt="xl">
-        <Link href="/dashboard/elegirImpresora" passHref> 
-        <Button
-          type="submit"
-          size="md"
-          className="mb-4 w-60 rounded-lg bg-blue-500 hover:bg-blue-700"
-          
-        >
-          Send Stl
-        </Button>
-        </Link>
-      </Group>
-    </form>
   );
 }
 

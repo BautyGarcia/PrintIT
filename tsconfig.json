@@ -28,6 +28,6 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs"
-  ],
+, "src/utils/compressWorker.ts", "src/components/Dashboard/STLViewer.jsx"  ],
   "exclude": ["node_modules"]
 }

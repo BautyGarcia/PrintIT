@@ -23,7 +23,7 @@ const Recover: NextPage = () => {
     <>
       <Head>
         <title>PrintIT</title>
-        <link rel="icon" href="/Logo.ico" />
+        <link rel="icon" href="/General/Logo.ico" />
         <meta name="description" content="PrintIT" />
       </Head>
       <main

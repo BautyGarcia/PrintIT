@@ -6,5 +6,5 @@ interface LogoGoogleProps {
 }
 
 export const LogoGoogle: React.FC<LogoGoogleProps> = ({ width, height }) => {
-    return <Image src= "/LogoGoogle.png" alt= "logoGoogle" width={width} height={height}/>
+    return <Image src= "/General/LogoGoogle.png" alt= "logoGoogle" width={width} height={height}/>
 }

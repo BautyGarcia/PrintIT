@@ -22,7 +22,7 @@ export const Logo: React.FC<LogoProps> = ({ width, height }) => {
   return (
     <div className="flex items-center">
       <Image
-        src={colorScheme === "light" ? "/Logo.png" : "/LogoWhite.png"}
+        src={colorScheme === "light" ? "/General/Logo.png" : "/LogoWhite.png"}
         alt="logo"
         width={width}
         height={height}

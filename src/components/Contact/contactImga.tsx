@@ -1,10 +1,10 @@
 import Image from "next/image";
 
-export const TopAboutUs: React.FC = () => {
+export const ContactIMG: React.FC = () => {
   return (
     <Image
-      src="/TopAbout.png"
-      alt="TopAboutImg"
+      src="/ContactUs/ContactImg.png"
+      alt="ContactIMg"
       width={680}
       height={880}
     />

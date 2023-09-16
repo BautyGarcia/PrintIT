@@ -111,6 +111,7 @@ const STLDropzone = () => {
           color: "red",
           autoClose: 5000,
         });
+        setIsSlicing(false);
         return;
       });
 

@@ -2,7 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { LandingHeader } from "~/components/Landing/landingHeader";
 import { Footer } from "~/components/Landing/footer";
-import { ContactIMG } from "~/components/Contact/contactImg";
+import { ContactIMG } from "~/components/Contact/contactImga";
 import {
   TextInput,
   Textarea,
@@ -55,7 +55,7 @@ const ContactUs: NextPage = () => {
 
 export default ContactUs;
 
-export function GetInTouchSimple() {
+const GetInTouchSimple = () => {
   const largeScreen = useMediaQuery("(min-width: 1300px)");
   const form = useForm({
     initialValues: {

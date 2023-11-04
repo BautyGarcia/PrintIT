@@ -1,19 +1,24 @@
 import { notifications } from "@mantine/notifications";
 import { useState, type ChangeEvent } from "react";
 import sliceSTL from "~/utils/fileSlicer";
-import { Loader, Text } from "@mantine/core";
+import { NumberInput, SegmentedControl, Text, Tooltip } from "@mantine/core";
 import "remixicon/fonts/remixicon.css";
 import {
   TextInput,
   SimpleGrid,
-  Group,
   Title,
   Button,
   useMantineColorScheme,
 } from "@mantine/core";
+import {
+  IconCloudUpload,
+  IconDimensions,
+  IconAugmentedReality,
+  IconTrash,
+  IconInfoCircleFilled
+} from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
-import { useCounter } from "@mantine/hooks";
 import { cn } from "~/utils/util";
 import { StlViewer } from "react-stl-viewer";
 import { useSession } from "next-auth/react";
@@ -24,6 +29,9 @@ const loadCompressWorker = () =>
 
 const STLDropzone = () => {
   const { colorScheme } = useMantineColorScheme();
+  const [amountPrints, setAmountPrints] = useState(1);
+  const [printName, setPrintName] = useState("" as string);
+  const [printQuality, setPrintQuality] = useState("Media" as string);
   const [isSelected, setIsSelected] = useState(false);
   const [isSlicing, setIsSlicing] = useState(false);
   const [isCompressing, setIsCompressing] = useState(false);
@@ -50,7 +58,7 @@ const STLDropzone = () => {
     setIsSlicing(true);
     setIsCompressing(true);
     const files = event.target.files;
-    
+
     // Check if files were selected
     if (!files || files.length === 0 || !files[0]) {
       notifications.show({
@@ -120,7 +128,7 @@ const STLDropzone = () => {
     const fileData = await file.arrayBuffer();
 
     const worker = loadCompressWorker();
-    
+
     worker.onmessage = function (e: MessageEvent<{ compressedFile: File | null; error?: string }>) {
       const { compressedFile, error } = e.data;
 
@@ -161,196 +169,136 @@ const STLDropzone = () => {
       )}
     >
       <h1
-        className={cn("mb-4", {
+        className={cn("mb-4 font-semibold", {
           hidden: !isSelected,
         })}
       >
-        Estás cada vez más cerca de conseguir tu impresión 3D deseada
+        Estás cada vez más cerca de conseguir tu impresión 3D
       </h1>
       <h3
         className={cn("mb-4", {
           hidden: !isSelected,
         })}
       >
-        Completa el formulario abajo y podrás seguir con el procedimiento
+        Completa el formulario para poder seguir
       </h3>
       {isSelected ? (
         <></>
       ) : (
         <>
-          <h1>Sube tu archivo y te mostraremos los distintos proovedores</h1>
-          <h3 className="mb-12 mt-8">
-            Ten en cuenta que solamente soportamos archivos STL de un tamaño
-            menor a # MB.
-          </h3>
+          <h1 className="font-semibold mb-[100px]">Sube tu archivo y te mostraremos los distintos proovedores</h1>
         </>
       )}
-      <div
-        className={cn(
-          "flex h-full w-3/5 flex-row items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#FFFFFF]",
-          {
-            "flex h-full w-3/5 flex-row items-center justify-center rounded-sm border-2 border-dashed border-blue-600 bg-[#1C2333]":
-              colorScheme === "dark",
-            "border-none": isSelected,
-          }
-        )}
-      >
-        <i
-          className={cn(
-            ["ri-upload-cloud-fill", "mb-4 text-6xl text-[#3B82F6]"].join(" "),
-            {
-              hidden: isSelected,
-            }
-          )}
-        ></i>
-        <h3
-          className={cn("mb-4", {
-            hidden: isSelected,
-          })}
-        >
-          Arrastra tu archivo aca
-        </h3>
-        {!isSelected ? (
-          <>
+
+      {!isSelected ? (
+        <>
+          <div
+            className={cn(
+              "flex h-full w-3/5 flex-col items-center justify-center rounded-lg border-2 border-dashed border-[#3B81F6] bg-[#FFFFFF]",
+              {
+                "flex h-full w-3/5 flex-col items-center justify-center rounded-lg border-2 border-dashed border-[#3B81F6] bg-[#1C2333]":
+                  colorScheme === "dark",
+                "border-none": isSelected,
+              }
+            )}
+          >
+            <IconCloudUpload
+              className="text-[#3B81F6] mb-4"
+              stroke={1.5}
+              size={75}
+            />
+            <h3
+              className="font-semibold text-xl"
+            >
+              Arrastra tu archivo aca
+            </h3>
             <input
               className="absolute h-60 w-2/4 bg-opacity-0 text-transparent"
               type="file"
               onChange={handleFileSubmit}
               accept=".stl"
+              id="fileInput"
             />
-          </>
-        ) : (
-          <>
-            <div className="ml-8 flex flex-col justify-center">
-              <div className="mt-8 ">
-                <StlViewer url={stlViewerURL} orbitControls />
-              </div>
-              <div className="mt-4 flex gap-2">
-                {
-                  isSlicing ? (
-                    <Loader />
-                  ) :
-                    (
-                      <>
-                        <Text>Volume: {volume} cm3</Text>
-                        <Text>Width: {width} cm</Text>
-                        <Text>Height: {height} cm</Text>
-                        <Text>Depth: {depth} cm</Text>
-                      </>
-                    )
-                }
-              </div>
-              <div className=" mb-4 flex flex-row items-center justify-center gap-4">
-                <button
-                  className={
-                    colorScheme === "dark"
-                      ? "mt-5 flex flex-row rounded-md border border-white bg-[#1c2333] p-2"
-                      : "mt-5 flex flex-row rounded-md border border-black bg-[#FFFFFF] p-2"
-                  }
-                  onClick={clearSubmit}
-                >
-                  Clear
-                </button>
-              </div>
-            </div>
-          </>
-        )}
-        <div
-          className={cn(
-            "-mt-20 ml-8 mr-8 flex h-[500px] flex-col items-center justify-center rounded-sm border-2 border-black",
-            {
-              "-mt-20 ml-8 mr-8 flex h-[500px] flex-col items-center justify-center rounded-sm border-2 border-white":
-                colorScheme === "dark",
-              hidden: !isSelected,
-            }
-          )}
-        >
-          <form
-            className={
-              largeScreen ? "h-full w-11/12 items-center justify-center" : "w-full"
-            }
-            onSubmit={form.onSubmit(() => null)}
-          >
-            <Title className="mt-4" order={2} size="h1" weight={200} align="center">
-              <p>Tu Impresion 3D</p>
-            </Title>
-
-            <SimpleGrid
-              className="items-center justify-center"
-              cols={2}
-              mt="xl"
-              breakpoints={[{ maxWidth: "sm", cols: 1 }]}
+            <Button
+              className="rounded-lg mt-5 bg-blue-500 hover:bg-blue-700"
+              onClick={() => {
+                document.getElementById("fileInput")?.click();
+              }}
             >
-              <TextInput
-                className="mb-2 ml-12 w-60 items-center justify-center"
-                label="Nombre"
-                placeholder="Ingresa tu nombre"
-                name="nombre"
-                variant="filled"
-                {...form.getInputProps("nombre")}
-              />
-            </SimpleGrid>
-            <div className="mb-2 ml-12 items-center justify-center">
-              <h2>Calidad de la Impresion</h2>
-              <h3>...</h3>
-              <h2>Precio Estimado</h2>
-              <h3>precio...</h3>
-              <h2>Cantidad de Impresiones</h2>
+              Seleccionar Archivo
+            </Button>
+          </div>
+        </>
+      ) : (
+        <div className="flex h-full w-4/5 gap-5">
+          <div className={`flex h-full w-full flex-col gap-5`}>
+            <div className={`flex h-5/6 w-full ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"} rounded-lg`}>
+              <div className="w-full h-full p-5">
+                <StlViewer url={stlViewerURL} orbitControls className="w-full h-full rounded-lg border-2 border-dashed border-[#3B81F6]" />
+              </div>
             </div>
-            <ContadorImpresiones />
-            <Group position="center" mt="xl">
-              <ChoosePrinterPopup loading={isCompressing || isSlicing ? true : false} fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`}/>
-            </Group>
-          </form>
+            <div className={`flex h-1/6 w-full justify-between items-center p-5 ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"} rounded-lg`}>
+              <IconDimensions
+                size={50}
+              />
+              <Text className="font-semibold">Ancho: {width} cm -</Text>
+              <Text className="font-semibold">Alto: {height} cm -</Text>
+              <Text className="font-semibold">Profundo: {depth} cm</Text>
+              <IconAugmentedReality
+                size={45}
+              />
+              <Text className="font-semibold">Volumen: {volume} cm3</Text>
+            </div>
+          </div>
+          <div className={`flex h-full w-2/5 ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"} rounded-lg`}>
+            <div className="flex h-full w-full flex-col gap-5 p-5 pb-2">
+              <Title order={3} className="font-semibold">Tu impresión 3D</Title>
+              <SimpleGrid cols={1} spacing="lg" className="flex h-full w-full flex-col justify-between">
+                <div className="flex flex-col gap-6">
+                  <TextInput
+                    label="Nombre del objeto"
+                    placeholder="Pisa papeles"
+                    error={form.errors.nombre && "Nombre inválido"}
+                    onChange={(event) => {
+                      setPrintName(event.currentTarget.value);
+                    }}
+                    value={printName}
+                  />
+                  <div>
+                    <Text size={"sm"} fw={500}>Calidad de Impresion </Text>
+                    <SegmentedControl fullWidth size="sm" className="mt-[2px]" radius="md" data={['Baja', 'Media', 'Alta']} onChange={(value) => setPrintQuality(value)} value={printQuality}/>
+                  </div>
+                  <NumberInput
+                    variant="filled"
+                    label="Cantidad"
+                    placeholder="Cantidad de impresiones"
+                    onChange={(value) => setAmountPrints(value as number)}
+                    defaultValue={1}
+                    min={1}
+                  />
+                  <div className="flex flex-col">
+                    <div className="flex gap-1 items-center">
+                      <Text size={"sm"} fw={500}>Precio estimado </Text>
+                      <Tooltip position="top" multiline w={220} withArrow label="Este precio es una estimacion automatica de referencia, no tiene porque coincidir con el precio final de la impreison.">
+                        <IconInfoCircleFilled className="" size={15} />
+                      </Tooltip>
+                    </div>
+                    <Text className="text-2xl" fw={700}>$100</Text>
+                  </div>
+                </div>
+                <div className="flex w-full gap-2">
+                  <div className="w-full">
+                    <ChoosePrinterPopup loading={isCompressing || isSlicing ? true : false} fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`} printName={printName} printAmount={amountPrints} printQuality={printQuality} printPrice={100}/>
+                  </div>
+                  <Button className="bg-red-600 p-1 hover:bg-red-700 rounded-lg" onClick={clearSubmit}><IconTrash /></Button>
+                </div>
+              </SimpleGrid>
+            </div>
+          </div>
         </div>
-      </div>
-      <Text
-        className={cn("mb-5 mt-5 flex flex-col", {
-          hidden: !isSelected,
-        })}
-      >
-        NOTE: It might turn as corrupted file when opening.
-      </Text>
+      )}
     </div>
   );
 };
-
-function ContadorImpresiones() {
-  const [count, handlers] = useCounter(0, { min: 0, max: 10 });
-  const { colorScheme } = useMantineColorScheme();
-
-  return (
-    <>
-      <Text className="ml-12 items-center justify-center">{count}</Text>
-      <Group
-        className={
-          colorScheme === "dark"
-            ? "ml-12 mr-[88px] mt-5 rounded-md border border-white bg-[#1c2333] "
-            : "ml-12 mr-[88px] mt-5 rounded-md border border-black bg-[#FFFFFF] "
-        }
-        position="left"
-      >
-        <Button
-          className={colorScheme === "dark" ? "text-white" : "text-black"}
-          onClick={handlers.increment}
-        >
-          +
-        </Button>
-        <Button
-          className={colorScheme === "dark" ? "text-white" : "text-black"}
-          onClick={handlers.decrement}
-        >
-          -
-        </Button>
-        <Button
-          className={colorScheme === "dark" ? "text-white" : "text-black"}
-          onClick={handlers.reset}
-        >
-          <i className="ri-loop-left-line"></i>
-        </Button>
-      </Group>
-    </>
-  );
-}
 
 export default STLDropzone;

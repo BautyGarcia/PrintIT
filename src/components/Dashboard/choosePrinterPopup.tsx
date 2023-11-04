@@ -7,6 +7,10 @@ interface ChoosePrinterPopupProps {
     fileName: string;
     fileUrl: string;
     loading: boolean;
+    printName: string;
+    printQuality: string;
+    printAmount: number;
+    printPrice: number;
 }
 
 const ChoosePrinterPopup = (props: ChoosePrinterPopupProps) => {
@@ -27,7 +31,7 @@ const ChoosePrinterPopup = (props: ChoosePrinterPopupProps) => {
             <Group position="center">
                 <Button
                     onClick={open}
-                    className="mb-4 w-60 rounded-lg bg-blue-500 hover:bg-blue-700"
+                    className="mb-4 w-full rounded-lg bg-blue-500 hover:bg-blue-700"
                     loading={props.loading}
                 >
                     {props.loading ? "Verificando Archivo..." : "Confirmar"}

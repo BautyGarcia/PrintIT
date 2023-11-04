@@ -11,6 +11,7 @@ interface ChoosePrinterPopupProps {
     printQuality: string;
     printAmount: number;
     printPrice: number;
+    printNotes: string;
 }
 
 const ChoosePrinterPopup = (props: ChoosePrinterPopupProps) => {
@@ -25,7 +26,7 @@ const ChoosePrinterPopup = (props: ChoosePrinterPopupProps) => {
                 fullScreen
                 transitionProps={{ transition: 'fade', duration: 200 }}
             >
-                <PrintersForSTLTable bedSize={props.fileSize} fileName={props.fileName} fileUrl={props.fileUrl} closePopup={close}/>
+                <PrintersForSTLTable bedSize={props.fileSize} fileName={props.fileName} fileUrl={props.fileUrl} closePopup={close} printAmount={props.printAmount} printName={props.printName} printPrice={props.printPrice} printQuality={props.printQuality} printNotes={props.printNotes}/>
             </Modal>
 
             <Group position="center">
@@ -34,7 +35,7 @@ const ChoosePrinterPopup = (props: ChoosePrinterPopupProps) => {
                     className="mb-4 w-full rounded-lg bg-blue-500 hover:bg-blue-700"
                     loading={props.loading}
                 >
-                    {props.loading ? "Verificando Archivo..." : "Confirmar"}
+                    {props.loading ? "Verificando Archivo..." : "Continuar"}
                 </Button>
             </Group>
         </>

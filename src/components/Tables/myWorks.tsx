@@ -32,9 +32,13 @@ const MyWorksTable = () => {
 
     const rows = worksList?.map((work) => (
         <tr key={work.id}>
+            <td>{work.name}</td>
             <td>{work.client.name}</td>
             <td>{(work.price).toString() + "$"}</td>
             <td>{work.status}</td>
+            <td>{work.quality}</td>
+            <td>{work.amount}</td>
+            <td>{work.notes}</td>
             <td>{work.lastBidder === "CLIENT" ? "Cliente" : "Vos"}</td>
             <td>
                 <div className='flex justify-end '>
@@ -68,9 +72,13 @@ const MyWorksTable = () => {
             <Table miw={700} verticalSpacing="sm" fontSize="md" horizontalSpacing="xl">
                 <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
                     <tr>
+                        <th>Nombre</th>
                         <th>Cliente</th>
                         <th>Precio</th>
                         <th>Estado</th>
+                        <th>Calidad</th>
+                        <th>Cantidad</th>
+                        <th>Notas</th>
                         <th>Ultimo Postor</th>
                         <th></th>
                     </tr>

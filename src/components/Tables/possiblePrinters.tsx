@@ -32,6 +32,11 @@ interface PrintersForSTLTableProps {
     bedSize: string;
     fileUrl: string;
     fileName: string;
+    printName: string;
+    printQuality: string;
+    printAmount: number;
+    printPrice: number;
+    printNotes: string;
     closePopup: () => void;
 }
 
@@ -79,6 +84,11 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
         createWork({
             printerId: printerId,
             workerId: workerId,
+            amount: props.printAmount,
+            price: props.printPrice,
+            quality: props.printQuality,
+            name: props.printName,
+            notes: props.printNotes,
         },{
             onSuccess: async (data) => {
                 sendCreateWorkEmail({

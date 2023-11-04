@@ -1,7 +1,7 @@
 import { notifications } from "@mantine/notifications";
 import { useState, type ChangeEvent } from "react";
 import sliceSTL from "~/utils/fileSlicer";
-import { NumberInput, SegmentedControl, Text, Tooltip } from "@mantine/core";
+import { NumberInput, SegmentedControl, Text, Textarea, Tooltip } from "@mantine/core";
 import "remixicon/fonts/remixicon.css";
 import {
   TextInput,
@@ -17,7 +17,6 @@ import {
   IconTrash,
   IconInfoCircleFilled
 } from "@tabler/icons-react";
-import { useForm } from "@mantine/form";
 import { useMediaQuery } from "@mantine/hooks";
 import { cn } from "~/utils/util";
 import { StlViewer } from "react-stl-viewer";
@@ -32,6 +31,8 @@ const STLDropzone = () => {
   const [amountPrints, setAmountPrints] = useState(1);
   const [printName, setPrintName] = useState("" as string);
   const [printQuality, setPrintQuality] = useState("Media" as string);
+  const [printNotes, setPrintNotes] = useState("" as string);
+  const [printPrice, setPrintPrice] = useState(0 as number);
   const [isSelected, setIsSelected] = useState(false);
   const [isSlicing, setIsSlicing] = useState(false);
   const [isCompressing, setIsCompressing] = useState(false);
@@ -45,14 +46,6 @@ const STLDropzone = () => {
   const { data: sessionData } = useSession();
 
   const largeScreen = useMediaQuery("(min-width: 1300px)");
-  const form = useForm({
-    initialValues: {
-      nombre: "",
-    },
-    validate: {
-      nombre: (value) => value.trim().length < 2,
-    },
-  });
 
   const handleFileSubmit = async (event: ChangeEvent<HTMLInputElement>) => {
     setIsSlicing(true);
@@ -73,7 +66,7 @@ const STLDropzone = () => {
     const file = files[0];
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     setFileName(`${(sessionData?.user?.name as string)}-${(file.name).split(".")[0]}-${Date.now()}`.replace(/ /g, "_"));
-
+    setPrintName((file.name).split(".")[0] as string);
     // Check file size
     if (Math.ceil(file.size / 1024 / 1024) > 20) {
       notifications.show({
@@ -241,8 +234,8 @@ const STLDropzone = () => {
               <IconDimensions
                 size={50}
               />
-              <Text className="font-semibold">Ancho: {width} cm -</Text>
-              <Text className="font-semibold">Alto: {height} cm -</Text>
+              <Text className="font-semibold">Ancho: {width} cm</Text>
+              <Text className="font-semibold">Alto: {height} cm</Text>
               <Text className="font-semibold">Profundo: {depth} cm</Text>
               <IconAugmentedReality
                 size={45}
@@ -258,7 +251,6 @@ const STLDropzone = () => {
                   <TextInput
                     label="Nombre del objeto"
                     placeholder="Pisa papeles"
-                    error={form.errors.nombre && "Nombre inválido"}
                     onChange={(event) => {
                       setPrintName(event.currentTarget.value);
                     }}
@@ -266,7 +258,7 @@ const STLDropzone = () => {
                   />
                   <div>
                     <Text size={"sm"} fw={500}>Calidad de Impresion </Text>
-                    <SegmentedControl fullWidth size="sm" className="mt-[2px]" radius="md" data={['Baja', 'Media', 'Alta']} onChange={(value) => setPrintQuality(value)} value={printQuality}/>
+                    <SegmentedControl fullWidth size="sm" className="mt-[2px]" radius="md" data={['Baja', 'Media', 'Alta']} onChange={(value) => setPrintQuality(value)} value={printQuality} />
                   </div>
                   <NumberInput
                     variant="filled"
@@ -275,6 +267,12 @@ const STLDropzone = () => {
                     onChange={(value) => setAmountPrints(value as number)}
                     defaultValue={1}
                     min={1}
+                  />
+                  <Textarea
+                    label="Notas"
+                    placeholder="Es una pieza flexible, color rojo..."
+                    onChange={(event) => setPrintNotes(event.currentTarget.value)}
+                    value={printNotes}
                   />
                   <div className="flex flex-col">
                     <div className="flex gap-1 items-center">
@@ -288,7 +286,7 @@ const STLDropzone = () => {
                 </div>
                 <div className="flex w-full gap-2">
                   <div className="w-full">
-                    <ChoosePrinterPopup loading={isCompressing || isSlicing ? true : false} fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`} printName={printName} printAmount={amountPrints} printQuality={printQuality} printPrice={100}/>
+                    <ChoosePrinterPopup loading={isCompressing || isSlicing ? true : false} fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`} printName={printName} printAmount={amountPrints} printQuality={printQuality} printPrice={printPrice} printNotes={printNotes} />
                   </div>
                   <Button className="bg-red-600 p-1 hover:bg-red-700 rounded-lg" onClick={clearSubmit}><IconTrash /></Button>
                 </div>

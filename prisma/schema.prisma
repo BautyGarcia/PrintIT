@@ -26,6 +26,10 @@ model Printer {
 model Work {
   id         String     @id @default(cuid())
   status     WorkStatus
+  name       String
+  notes      String?
+  quality    String
+  amount     Int
   price      Float      @default(0)
   lastBidder RoleTypes  @default(CLIENT)
   clientId   String

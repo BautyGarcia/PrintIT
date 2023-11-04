@@ -74,9 +74,9 @@ export const workRouter = createTRPCRouter({
             return works;
         }),
     createWork: protectedProcedure
-        .input(z.object({ workerId: z.string(), printerId: z.string() }))
+        .input(z.object({ workerId: z.string(), printerId: z.string(), price: z.number(), notes: z.string(), name: z.string(), amount: z.number(), quality: z.string() }))
         .mutation(async ({ input, ctx }) => {
-            const { workerId, printerId } = input;
+            const { workerId, printerId, amount, name, notes, price, quality } = input;
             const clientId = ctx.session.user.id;
 
             const newWork = await ctx.prisma.work.create({
@@ -97,6 +97,11 @@ export const workRouter = createTRPCRouter({
                         },
                     },
                     status: "Negociacion",
+                    price,
+                    notes,
+                    name,
+                    amount,
+                    quality,
                 }
             })
 

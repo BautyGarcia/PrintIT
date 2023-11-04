@@ -24,9 +24,13 @@ const MyOrdersTable = () => {
 
     const rows = ordersList?.map((order) => (
         <tr key={order.id}>
+            <td>{order.name}</td>
             <td>{order.worker.name}</td>
             <td>{(order.price).toString() + "$"}</td>
             <td>{order.status}</td>
+            <td>{order.quality}</td>
+            <td>{order.amount}</td>
+            <td>{order.notes}</td>
             <td>{order.lastBidder === "CLIENT" ? "Cliente" : "Vendedor"}</td>
             <td>
                 {
@@ -54,9 +58,13 @@ const MyOrdersTable = () => {
             <Table miw={700} verticalSpacing="sm" fontSize="md" horizontalSpacing="xl">
                 <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
                     <tr>
+                        <th>Nombre</th>
                         <th>Vendedor</th>
                         <th>Precio</th>
                         <th>Estado</th>
+                        <th>Calidad</th>
+                        <th>Cantidad</th>
+                        <th>Notas</th>
                         <th>Ultimo Postor</th>
                         <th></th>
                     </tr>

@@ -38,12 +38,6 @@ const MyWorksTable = () => {
             <td>{work.lastBidder === "CLIENT" ? "Cliente" : "Vos"}</td>
             <td>
                 <div className='flex justify-end '>
-                    <Button
-                        onClick={() => handleFileDownload(work.stlUrl as string)}
-                        className='bg-blue-500 py-2 mr-2 text-white hover:bg-blue-700'
-                    >
-                        Descargar Archivo
-                    </Button>
                     {
                         work.status === "Negociacion" ?
                             <WorkSatusPopup
@@ -58,6 +52,12 @@ const MyWorksTable = () => {
                                 }
                             /> : <></>
                     }
+                    <Button
+                        onClick={() => handleFileDownload(work.stlUrl as string)}
+                        className='bg-blue-500 py-2 ml-2 text-white hover:bg-blue-700'
+                    >
+                        Descargar Archivo
+                    </Button>
                 </div>
             </td>
         </tr>

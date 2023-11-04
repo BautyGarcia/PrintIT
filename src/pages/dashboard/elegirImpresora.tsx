@@ -5,7 +5,6 @@ import HomeHeader from "~/components/Dashboard/homeHeader";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import SessionChecker from "~/components/Sign/sessionChecker";
-import PrintersForSTLTable from "~/components/Tables/possiblePrinters";
 
 interface DashboardProps {
     children: React.ReactNode;

@@ -1,5 +1,4 @@
 import { SegmentedControl, Group, Center, Box } from "@mantine/core";
-import { Dispatch, SetStateAction } from "react";
 
 interface UserToggleProps {
   userTypeRole: string;

@@ -37,6 +37,7 @@
     "@uppy/google-drive": "^3.1.1",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
+    "classnames": "^2.3.2",
     "clsx": "^1.2.1",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.0",

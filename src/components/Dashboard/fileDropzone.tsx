@@ -22,6 +22,7 @@ import { cn } from "~/utils/util";
 import { StlViewer } from "react-stl-viewer";
 import { useSession } from "next-auth/react";
 import ChoosePrinterPopup from "./choosePrinterPopup";
+import getPrice from "~/utils/priceCalculator";
 
 const loadCompressWorker = () =>
   new Worker(new URL("~/utils/compressWorker", import.meta.url));
@@ -161,6 +162,7 @@ const STLDropzone = () => {
         }
       )}
     >
+      <button onClick={() => getPrice(1, 2, 13, 14)}>TEST</button>
       <h1
         className={cn("mb-4 font-semibold", {
           hidden: !isSelected,

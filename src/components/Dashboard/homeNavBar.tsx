@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   createStyles,
   Navbar,
@@ -22,6 +22,8 @@ import PrinterPopup from "~/components/Dashboard/addPrinterPopup";
 import { useRouter } from "next/router";
 import UserToggle from "./userToggleButton";
 import { api } from "~/utils/api";
+import { usePathname } from "next/navigation";
+import useRoleType from "~/hooks/useRoleType";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -154,22 +156,10 @@ const useStyles = createStyles((theme) => ({
 
 const HomeNavBar: React.FC = () => {
   const router = useRouter();
+  const pathname = usePathname().split("/")[2];
   const { classes, cx } = useStyles();
   const { refetch: getMyPrinters } = api.printer.getMyPrinters.useQuery();
-  const [active, setActive] = useState("Subir Archivo");
-  const [userTypeRole, setUserTypeRole] = useState("Cliente");
-  
-  const handleRoleChange = (role: string) => {
-    setUserTypeRole(role);
-
-    if (role === "Cliente") {
-      void router.push("/dashboard/subirArchivo");
-      setActive("Subir Archivo");
-    } else {
-      void router.push("/dashboard/misTrabajos");
-      setActive("Mis Trabajos");
-    }
-  };
+  const [userTypeRole, setUserTypeRole] = useRoleType('Cliente');
 
   return (
     <>
@@ -192,11 +182,10 @@ const HomeNavBar: React.FC = () => {
               <Link
                 href="/dashboard/subirArchivo"
                 className={cx(classes.link, {
-                  [classes.linkActive]: "Subir Archivo" === active,
+                  [classes.linkActive]: "subirArchivo" === pathname,
                 })}
                 onClick={(event) => {
                   event.preventDefault();
-                  setActive("Subir Archivo");
                   void router.push("/dashboard/subirArchivo");
                 }}
               >
@@ -207,11 +196,10 @@ const HomeNavBar: React.FC = () => {
               <Link
                 href="/dashboard/misPedidos"
                 className={cx(classes.link, {
-                  [classes.linkActive]: "Mis Pedidos" === active,
+                  [classes.linkActive]: "misPedidos" === pathname,
                 })}
                 onClick={(event) => {
                   event.preventDefault();
-                  setActive("Mis Pedidos");
                   void router.push("/dashboard/misPedidos");
                 }}
               >
@@ -226,11 +214,10 @@ const HomeNavBar: React.FC = () => {
               <Link
                 href="/dashboard/misTrabajos"
                 className={cx(classes.link, {
-                  [classes.linkActive]: "Mis Trabajos" === active,
+                  [classes.linkActive]: "misTrabajos" === pathname,
                 })}
                 onClick={(event) => {
                   event.preventDefault();
-                  setActive("Mis Trabajos");
                   void router.push("/dashboard/misTrabajos");
                 }}
               >
@@ -241,11 +228,10 @@ const HomeNavBar: React.FC = () => {
               <Link
                 href="/dashboard/misImpresoras"
                 className={cx(classes.link, {
-                  [classes.linkActive]: "Mis Impresoras" === active,
+                  [classes.linkActive]: "misImpresoras" === pathname,
                 })}
                 onClick={(event) => {
                   event.preventDefault();
-                  setActive("Mis Impresoras");
                   void router.push("/dashboard/misImpresoras");
                 }}
               >
@@ -255,7 +241,7 @@ const HomeNavBar: React.FC = () => {
             </>
           )}
         </div>
-        <UserToggle userTypeRole={userTypeRole} setUserTypeRole={handleRoleChange} />
+        <UserToggle userTypeRole={userTypeRole} setUserTypeRole={setUserTypeRole} />
       </Navbar.Section>
 
       <MediaQuery largerThan="sm" styles={{ display: "none" }}>

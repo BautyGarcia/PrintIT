@@ -3,6 +3,7 @@ import { authRouter } from "~/server/api/routers/auth";
 import { printerRouter } from "./routers/printers";
 import { workRouter } from "./routers/works";
 import { emailRouter } from "./routers/emails";
+import { utilsRouter } from "./routers/utils";
 /**
  * This is the primary router for your server.
  *
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
   printer: printerRouter,
   work: workRouter,
   email: emailRouter,
+  utils: utilsRouter,
 });
 
 // export type definition of API

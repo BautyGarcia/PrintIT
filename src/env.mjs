@@ -26,6 +26,7 @@ export const env = createEnv({
     JWT_SECRET: z.string(),
     MAILPASSWORD: z.string(),
     MAILUSER: z.string(),
+    MELIACCESS: z.string(),
   },
 
   /**
@@ -51,5 +52,6 @@ export const env = createEnv({
     JWT_SECRET: process.env.JWT_SECRET,
     MAILPASSWORD: process.env.MAILPASSWORD,
     MAILUSER: process.env.MAILUSER,
+    MELIACCESS: process.env.MELIACCESS,
   },
 });

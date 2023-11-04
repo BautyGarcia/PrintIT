@@ -1,7 +1,7 @@
 import { notifications } from "@mantine/notifications";
 import { useState, type ChangeEvent } from "react";
 import sliceSTL from "~/utils/fileSlicer";
-import { NumberInput, SegmentedControl, Text, Textarea, Tooltip } from "@mantine/core";
+import { NumberInput, SegmentedControl, Skeleton, Text, Textarea, Tooltip } from "@mantine/core";
 import "remixicon/fonts/remixicon.css";
 import {
   TextInput,
@@ -22,7 +22,7 @@ import { cn } from "~/utils/util";
 import { StlViewer } from "react-stl-viewer";
 import { useSession } from "next-auth/react";
 import ChoosePrinterPopup from "./choosePrinterPopup";
-import getPrice from "~/utils/priceCalculator";
+import { api } from "~/utils/api";
 
 const loadCompressWorker = () =>
   new Worker(new URL("~/utils/compressWorker", import.meta.url));
@@ -45,6 +45,7 @@ const STLDropzone = () => {
   const [compressedUrl, setCompressedUrl] = useState("" as string);
   const [fileName, setFileName] = useState("" as string);
   const { data: sessionData } = useSession();
+  const { mutate: testFetch } = api.utils.fetchFilamentPrice.useMutation()
 
   const largeScreen = useMediaQuery("(min-width: 1300px)");
 
@@ -104,6 +105,13 @@ const STLDropzone = () => {
         setWidth(response.dimensions.width);
         setHeight(response.dimensions.height);
         setDepth(response.dimensions.depth);
+        testFetch({
+          printVolume: response.volume,
+        }, {
+          onSuccess: (data) => {
+            setPrintPrice(data)
+          }
+        })
       })
       .catch(() => {
         notifications.show({
@@ -162,7 +170,6 @@ const STLDropzone = () => {
         }
       )}
     >
-      <button onClick={() => getPrice(1, 2, 13, 14)}>TEST</button>
       <h1
         className={cn("mb-4 font-semibold", {
           hidden: !isSelected,
@@ -233,16 +240,22 @@ const STLDropzone = () => {
               </div>
             </div>
             <div className={`flex h-1/6 w-full justify-between items-center p-5 ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"} rounded-lg`}>
-              <IconDimensions
-                size={50}
-              />
-              <Text className="font-semibold">Ancho: {width} cm</Text>
-              <Text className="font-semibold">Alto: {height} cm</Text>
-              <Text className="font-semibold">Profundo: {depth} cm</Text>
-              <IconAugmentedReality
-                size={45}
-              />
-              <Text className="font-semibold">Volumen: {volume} cm3</Text>
+              {
+                isSlicing ?
+                  <Skeleton height={75} radius="sm" className="mt-3" /> :
+                  <>
+                    <IconDimensions
+                      size={50}
+                    />
+                    <Text className="font-semibold">Ancho: {width} cm</Text>
+                    <Text className="font-semibold">Alto: {height} cm</Text>
+                    <Text className="font-semibold">Profundo: {depth} cm</Text>
+                    <IconAugmentedReality
+                      size={45}
+                    />
+                    <Text className="font-semibold">Volumen: {volume} cm3</Text>
+                  </>
+              }
             </div>
           </div>
           <div className={`flex h-full w-2/5 ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"} rounded-lg`}>
@@ -283,7 +296,7 @@ const STLDropzone = () => {
                         <IconInfoCircleFilled className="" size={15} />
                       </Tooltip>
                     </div>
-                    <Text className="text-2xl" fw={700}>$100</Text>
+                    {isSlicing ? <Skeleton height={30} radius="sm" className="mt-3" /> : <Text className="text-2xl" fw={700}>${printPrice}</Text>}
                   </div>
                 </div>
                 <div className="flex w-full gap-2">

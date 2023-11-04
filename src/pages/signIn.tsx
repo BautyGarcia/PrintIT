@@ -152,8 +152,7 @@ const SignInForm: React.FC = () => {
             autoClose: 2000,
           });
           setIsLoading(false);
-          window.open("/dashboard/subirArchivo", "_blank");
-          void router.push("/");
+          void router.push("/dashboard/subirArchivo");
         } else {
           notifications.show({
             title: "Error",

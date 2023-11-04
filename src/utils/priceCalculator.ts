@@ -1,4 +1,6 @@
-const getPrice = async (height: number, width: number, depth: number, volume: number) => {
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+const getPrice = (height: number, width: number, depth: number, volume: number) => {
     const meliSecret = "dA8cJ7xMtpSTe7oBdQV2O32AaakQzR9O"
     const meliId = "154519291358798"
     const redirect_uri = "https://printitweb.vercel.app/"

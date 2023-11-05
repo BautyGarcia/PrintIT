@@ -28,7 +28,7 @@ const HomeHeader: React.FC<HomeHeaderProps> = ({
       }}
     >
       <Group className="flex flex-row items-center gap-2">
-        <Link className="flex flex-row items-center gap-2" href="#" passHref>
+        <Link className="flex flex-row items-center gap-2" href="/dashboard" passHref>
           <Logo width={40} height={40} />
         </Link>
       </Group>

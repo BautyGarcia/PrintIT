@@ -13,6 +13,7 @@ import {
   IconFile3d,
   IconPackage,
   IconMessage,
+  IconSettings
 } from "@tabler/icons-react";
 import SchemeButton from "../Landing/schemeButton";
 import { signOut } from "next-auth/react";
@@ -252,6 +253,13 @@ const HomeNavBar: React.FC = () => {
           >
             <IconLogout className={classes.linkIcon} stroke={1.5} />
             <span>Logout</span>
+          </Link>
+          <Link
+            href="/settings"
+            className={classes.link}
+          >
+            <IconSettings className={classes.linkIcon} stroke={1.5} />
+            <span>Settings</span>
           </Link>
           <Group className="flex justify-end">
             <SchemeButton />

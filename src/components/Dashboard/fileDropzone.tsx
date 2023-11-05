@@ -109,7 +109,17 @@ const STLDropzone = () => {
           printVolume: response.volume,
         }, {
           onSuccess: (data) => {
-            setPrintPrice(data)
+            setPrintPrice(data);
+            setIsSlicing(false);
+          },
+          onError: (error) => {
+            notifications.show({
+              title: "Error",
+              message: error.message,
+              color: "red",
+              autoClose: 5000,
+            });
+            setIsSlicing(false);
           }
         })
       })
@@ -125,7 +135,7 @@ const STLDropzone = () => {
         return;
       });
 
-    setIsSlicing(false);
+    
     // Compress the file
     const fileData = await file.arrayBuffer();
 
@@ -242,7 +252,7 @@ const STLDropzone = () => {
             <div className={`flex h-1/6 w-full justify-between items-center p-5 ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"} rounded-lg`}>
               {
                 isSlicing ?
-                  <Skeleton height={75} radius="sm" className="mt-3" /> :
+                  <Skeleton height={50} radius="sm" className="mt-3" /> :
                   <>
                     <IconDimensions
                       size={50}

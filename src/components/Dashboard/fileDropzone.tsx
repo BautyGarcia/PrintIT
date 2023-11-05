@@ -182,14 +182,14 @@ const STLDropzone = () => {
     >
       <h1
         className={cn("mb-4 font-semibold", {
-          hidden: !isSelected,
+          hidden: !isSelected || !largeScreen,
         })}
       >
         Estás cada vez más cerca de conseguir tu impresión 3D
       </h1>
       <h3
         className={cn("mb-4", {
-          hidden: !isSelected,
+          hidden: !isSelected || !largeScreen,
         })}
       >
         Completa el formulario para poder seguir
@@ -205,14 +205,7 @@ const STLDropzone = () => {
       {!isSelected ? (
         <>
           <div
-            className={cn(
-              "flex h-full w-3/5 flex-col items-center justify-center p-5 text-center rounded-lg border-2 border-dashed border-[#3B81F6] bg-[#FFFFFF]",
-              {
-                "flex h-full w-3/5 flex-col items-center justify-center p-5 text-center rounded-lg border-2 border-dashed border-[#3B81F6] bg-[#1C2333]":
-                  colorScheme === "dark",
-                "border-none": isSelected,
-              }
-            )}
+            className={`flex h-full w-3/5 flex-col items-center justify-center p-5 text-center rounded-lg border-2 ${isSelected ? "border-none" : "border-dashed"} border-[#3B81F6] ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"}`}
           >
             <IconCloudUpload
               className="text-[#3B81F6] mb-4"
@@ -242,33 +235,29 @@ const STLDropzone = () => {
           </div>
         </>
       ) : (
-        <div className="flex h-full w-4/5 gap-5">
+        <div className={`flex h-full gap-5 bg-[#0E1525] ${largeScreen ? "w-5/6" : "w-full flex-col"}`}>
           <div className={`flex h-full w-full flex-col gap-5`}>
             <div className={`flex h-5/6 w-full ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"} rounded-lg`}>
               <div className="w-full h-full p-5">
                 <StlViewer url={stlViewerURL} orbitControls className="w-full h-full rounded-lg border-2 border-dashed border-[#3B81F6]" />
               </div>
             </div>
-            <div className={`flex h-1/6 w-full justify-between items-center p-5 ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"} rounded-lg`}>
+            <div className={`flex w-full justify-between items-center p-5 rounded-lg ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"} ${largeScreen ? "h-1/6" : "flex-col gap-1"}`}>
               {
                 isSlicing ?
                   <Skeleton height={50} radius="sm" className="mt-3" /> :
                   <>
-                    <IconDimensions
-                      size={50}
-                    />
+                    { largeScreen && <IconDimensions size={50} /> }
                     <Text className="font-semibold">Ancho: {width} cm</Text>
                     <Text className="font-semibold">Alto: {height} cm</Text>
                     <Text className="font-semibold">Profundo: {depth} cm</Text>
-                    <IconAugmentedReality
-                      size={45}
-                    />
+                    { largeScreen && <IconAugmentedReality size={45}/> }
                     <Text className="font-semibold">Volumen: {volume} cm3</Text>
                   </>
               }
             </div>
           </div>
-          <div className={`flex h-full w-2/5 ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"} rounded-lg`}>
+          <div className={`flex h-full rounded-lg ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"} ${largeScreen ? "w-2/5" : "w-full mb-5"}`}>
             <div className="flex h-full w-full flex-col gap-5 p-5 pb-2">
               <Title order={3} className="font-semibold">Tu impresión 3D</Title>
               <SimpleGrid cols={1} spacing="lg" className="flex h-full w-full flex-col justify-between">

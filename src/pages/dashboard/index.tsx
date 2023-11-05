@@ -23,6 +23,7 @@ const Dashboard: NextPage<DashboardProps> = ({ children }) => {
         <title>PrintIT</title>
         <link rel="icon" href="/General/Logo.ico" />
         <meta name="description" content="PrintIT" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <AppShell
         styles={{

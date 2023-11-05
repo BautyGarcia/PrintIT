@@ -114,6 +114,13 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    jwt: ({ token, trigger, session }) => {
+      if (trigger === "update") {
+        //eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        token.picture = session.image as string;
+      }
+      return token;
+    }
   },
 };
 

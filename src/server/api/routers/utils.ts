@@ -62,5 +62,25 @@ export const utilsRouter = createTRPCRouter({
                 throw new Error("Hubo un problema actualizando la imagen");
             }
         }),
+    removeImage: protectedProcedure
+        .input(z.object({}))
+        .mutation(async ({ ctx }) => {
+            const userId = ctx.session.user.id;
+
+            try {
+                await ctx.prisma.user.update({
+                    where: {
+                        id: userId
+                    },
+                    data: {
+                        image: null,
+                    }
+                });
+
+                return { "message": "Imagen eliminada" };
+            } catch (err) {
+                throw new Error("Hubo un problema eliminando la imagen");
+            }
+        }),
         
 });

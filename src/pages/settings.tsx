@@ -1,13 +1,13 @@
 import Head from "next/head";
 import SettingsHeader from "~/components/Settings/settingsHeader";
-import { Avatar, useMantineColorScheme, Text, Button, Divider, FileButton, TextInput } from "@mantine/core";
+import { Avatar, useMantineColorScheme, Text, Button, Divider, FileButton, TextInput, Modal } from "@mantine/core";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import { useMediaQuery } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { api } from "~/utils/api";
-import { IconCheck } from "@tabler/icons-react";
+import { IconCheck, IconTrash } from "@tabler/icons-react";
 
 interface GCSResponseProps {
   fileURL: string;
@@ -18,11 +18,21 @@ const Settings: React.FC = () => {
   const [isUpdatingImage, setIsUpdatingImage] = useState(false);
   const largeScreen = useMediaQuery("(min-width: 1300px)");
   const { colorScheme } = useMantineColorScheme();
-  const { data: sessionData } = useSession();
+  const { data: sessionData, update } = useSession();
   const router = useRouter();
-
+  
   const handleImageUpload = async (fileImage: File) => {
     setIsUpdatingImage(true);
+
+    if (Math.ceil(fileImage.size / 1024 / 1024) > 4) {
+      notifications.show({
+        title: "Error",
+        message: "El archivo seleccionado es demasiado grande, debe ser menor a 4mb",
+        color: "red",
+        autoClose: 5000,
+      });
+      return;
+    }
 
     notifications.show({
       id: 'update-image',
@@ -32,7 +42,7 @@ const Settings: React.FC = () => {
       loading: true,
       withCloseButton: false,
     });
-
+    
     const newFile = new File([fileImage], `${Date.now().toString()}_${fileImage.name}`, { type: fileImage.type });
     const formData = new FormData();
     formData.append("file", newFile);
@@ -46,7 +56,7 @@ const Settings: React.FC = () => {
       updateImage({
         imageURL
       }, {
-        onSuccess: () => {
+        onSuccess: async () => {
           notifications.update({
             id: 'update-image',
             title: 'Imagen Actualizada',
@@ -56,6 +66,7 @@ const Settings: React.FC = () => {
             icon: <IconCheck size="1rem" />,
           });
           setIsUpdatingImage(false);
+          await update({ image: imageURL });
         },
         onError: (error) => {
           notifications.update({
@@ -67,8 +78,7 @@ const Settings: React.FC = () => {
           });
           setIsUpdatingImage(false);
         }
-      }
-      )
+      });
 
     }).catch((err: Error) => {
       notifications.update({
@@ -80,7 +90,6 @@ const Settings: React.FC = () => {
       });
       setIsUpdatingImage(false);
     });
-
   };
 
   return (
@@ -117,16 +126,20 @@ const Settings: React.FC = () => {
                 </div>
               </div>
             </div>
-            <FileButton
-              onChange={(file) => handleImageUpload(file as File)}
-              accept="image/png,image/jpeg"
-            >
-              {(props) => <Button
-                {...props}
-                className="w-min bg-blue-500 hover:bg-blue-700"
-                size="lg"
-              >Cambiar Foto</Button>}
-            </FileButton>
+            <div className="flex gap-5">
+              <FileButton
+                onChange={(file) => handleImageUpload(file as File)}
+                accept="image/png,image/jpeg"
+              >
+                {(props) => <Button
+                  {...props}
+                  className="w-min bg-blue-500 hover:bg-blue-700 rounded-lg"
+                  size="lg"
+                  loading={isUpdatingImage}
+                >Cambiar Foto</Button>}
+              </FileButton>
+              <CheckDeletePopup />
+            </div>
           </div>
           {largeScreen && <Divider orientation="vertical" size={"md"} my={"100px"} />}
           <div className="flex flex-col w-[60%] py-28 ml-5 justify-between">
@@ -153,7 +166,6 @@ const Settings: React.FC = () => {
                     onClick={() => {
                       void router.push("/recoverPassword")
                     }}
-                    loading={isUpdatingImage}
                   >Cambiar Contraseña</Button>
                 </div>
               </div>
@@ -161,6 +173,7 @@ const Settings: React.FC = () => {
             <Button
               className="w-min bg-blue-500 hover:bg-blue-700"
               size="lg"
+              loading={isUpdatingImage}
             >Guardar Cambios</Button>
           </div>
         </main>
@@ -168,5 +181,68 @@ const Settings: React.FC = () => {
     </>
   );
 };
+
+const CheckDeletePopup: React.FC = () => {
+  const [opened, { open, close }] = useDisclosure(false);
+  const { mutate: removeImage } = api.utils.removeImage.useMutation();
+  const [isUpdatingImage, setIsUpdatingImage] = useState(false);
+  const { update } = useSession();
+
+  const handleRemoveImage = () => {
+    setIsUpdatingImage(true);
+    notifications.show({
+      id: 'remove-image',
+      title: 'Eliminando Imagen...',
+      message: 'Espere por favor',
+      autoClose: false,
+      loading: true,
+      withCloseButton: false,
+    });
+
+    removeImage({
+    }, {
+      onSuccess: async () => {
+        notifications.update({
+          id: 'remove-image',
+          title: 'Imagen Eliminada',
+          message: 'La imagen se eliminó correctamente.',
+          color: 'green',
+          autoClose: 3000,
+          icon: <IconCheck size="1rem" />,
+        });
+        setIsUpdatingImage(false);
+        await update({ image: null });
+        close();
+      },
+      onError: (error) => {
+        notifications.update({
+          id: 'remove-image',
+          title: 'Error',
+          message: "Hubo un error eliminando la imagen. " + error.message,
+          color: 'red',
+          autoClose: 3000,
+        });
+        setIsUpdatingImage(false);
+        close();
+      }
+    });
+  };
+
+  return (
+    <>
+      <Modal opened={opened} onClose={close} centered withCloseButton={false} padding={"md"}>
+        <Text className="font-semibold text-xl text-center">Estas por eliminar tu foto de perfil.
+          <Text className="font-bold text-xl text-center">¿Estas seguro?</Text>
+        </Text>
+        <div className="flex w-full mt-5 justify-between">
+          <Button className="w-min bg-blue-500 hover:bg-blue-700" onClick={close} loading={isUpdatingImage}>Cancelar</Button>
+          <Button className="w-min bg-red-600 p-3 hover:bg-red-700" onClick={handleRemoveImage} loading={isUpdatingImage}>Eliminar</Button>
+        </div>
+      </Modal>
+      <Button className="bg-red-600 p-3 hover:bg-red-700 rounded-lg" size="lg" onClick={open}><IconTrash /></Button>
+    </>
+  )
+}
+
 
 export default Settings;

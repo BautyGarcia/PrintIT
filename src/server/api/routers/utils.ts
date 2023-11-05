@@ -4,6 +4,7 @@ import { z } from "zod";
 import {
     createTRPCRouter,
     publicProcedure,
+    protectedProcedure
 } from "~/server/api/trpc";
 interface ResultProps {
     id: string;
@@ -40,4 +41,26 @@ export const utilsRouter = createTRPCRouter({
                     throw err;
                 });
         }),
+    updateImage: protectedProcedure
+        .input(z.object({ imageURL: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { imageURL } = input;
+            const userId = ctx.session.user.id;
+
+            try {
+                await ctx.prisma.user.update({
+                    where: {
+                        id: userId
+                    },
+                    data: {
+                        image: imageURL,
+                    }
+                });
+
+                return { "message": "Imagen actualizada" };
+            } catch (err) {
+                throw new Error("Hubo un problema actualizando la imagen");
+            }
+        }),
+        
 });

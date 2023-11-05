@@ -206,9 +206,9 @@ const STLDropzone = () => {
         <>
           <div
             className={cn(
-              "flex h-full w-3/5 flex-col items-center justify-center rounded-lg border-2 border-dashed border-[#3B81F6] bg-[#FFFFFF]",
+              "flex h-full w-3/5 flex-col items-center justify-center p-5 text-center rounded-lg border-2 border-dashed border-[#3B81F6] bg-[#FFFFFF]",
               {
-                "flex h-full w-3/5 flex-col items-center justify-center rounded-lg border-2 border-dashed border-[#3B81F6] bg-[#1C2333]":
+                "flex h-full w-3/5 flex-col items-center justify-center p-5 text-center rounded-lg border-2 border-dashed border-[#3B81F6] bg-[#1C2333]":
                   colorScheme === "dark",
                 "border-none": isSelected,
               }

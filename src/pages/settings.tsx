@@ -176,35 +176,48 @@ const Settings: React.FC = () => {
         <title>PrintIT</title>
         <link rel="icon" href="/General/Logo.ico" />
         <meta name="description" content="PrintIT" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div className={`flex flex-col h-screen ${colorScheme === "dark" ? "bg-[#0E1525]" : "bg-[#F0F1F8]"}`}>
+      <div className={`flex flex-col min-w-screen min-h-screen ${colorScheme === "dark" ? "bg-[#0E1525]" : "bg-[#F0F1F8]"}`}>
         <SettingsHeader />
-        <main className="flex flex-grow pt-[60px]">
-          <div className="flex flex-col items-center justify-between w-[40%] py-28">
-            <div className="flex flex-col items-center h-2/3 gap-16">
+        <main className={`flex flex-grow pt-[60px] ${largeScreen ? "" : "flex-col"}`}>
+          <div className={`flex flex-col items-center justify-between py-28 ${largeScreen ? "w-[40%]" : "w-screen"}`}>
+            <div className="flex flex-col items-center gap-16">
               <div className="flex flex-col items-center">
                 <Avatar className="rounded-full w-[300px] h-[300px] mb-5" src={sessionData?.user.image as string} alt="User Image" />
                 <Text className={`text-3xl font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}>{sessionData?.user.name}</Text>
                 <Text className={`text-xl font-semibold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}>{sessionData?.user.email}</Text>
               </div>
-              <div className="flex flex-row gap-8">
+              <div className={`flex gap-8 ${largeScreen ? "" : "mb-8"}`}>
                 <div className="flex flex-col items-center gap-3">
-                  <Text className={`text-4xl font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}>12</Text>
-                  <Text className="text-2xl">Pedidos</Text>
+                  <Text className={`${largeScreen ? "text-4xl" : "text-2xl"} font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}>12</Text>
+                  <Text className={`${largeScreen ? "text-2xl" : "text-lg"}`}>Pedidos</Text>
                 </div>
                 <Divider orientation="vertical" size={"md"} />
                 <div className="flex flex-col items-center gap-3">
-                  <Text className={`text-4xl font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}>2</Text>
-                  <Text className="text-2xl">Impresiones</Text>
+                  <Text 
+                    className={`${largeScreen ? "text-4xl" : "text-2xl"} font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}
+                  >2
+                  </Text>
+                  <Text 
+                    className={`${largeScreen ? "text-2xl" : "text-lg"}`}
+                  >Impresoras
+                  </Text>
                 </div>
                 <Divider orientation="vertical" size={"md"} />
                 <div className="flex flex-col items-center gap-3">
-                  <Text className={`text-4xl font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}>103</Text>
-                  <Text className="text-2xl">Trabajos</Text>
+                  <Text
+                    className={`${largeScreen ? "text-4xl" : "text-2xl"} font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}
+                  >103
+                  </Text>
+                  <Text
+                    className={`${largeScreen ? "text-2xl" : "text-lg"}`}
+                  >Trabajos
+                  </Text>
                 </div>
               </div>
             </div>
-            <div className="flex gap-5">
+            <div className={`flex gap-5`}>
               <FileButton
                 onChange={(file) => handleImageUpload(file as File)}
                 accept="image/png,image/jpeg"
@@ -220,12 +233,12 @@ const Settings: React.FC = () => {
             </div>
           </div>
           {largeScreen && <Divider orientation="vertical" size={"md"} my={"100px"} />}
-          <div className="flex flex-col w-[60%] py-28 ml-5 justify-between">
-            <div className="flex flex-col">
+          <div className={`flex flex-col py-28 px-5 justify-between ${largeScreen ? "w-[60%]" : "min-w-full"}`}>
+            <div className={`flex flex-col`}>
               <Text className={`text-5xl font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}>Informacion Personal</Text>
               <div className="flex flex-col gap-5 mt-5">
                 <TextInput
-                  className="w-[40%]"
+                  className={`${largeScreen ? "w-[40%]" : "w-full"}`}
                   label="Nombre"
                   onChange={(event) => {
                     setNewUsername(event.currentTarget.value);
@@ -236,7 +249,7 @@ const Settings: React.FC = () => {
                   size="md"
                 />
                 <TextInput
-                  className="w-[40%]"
+                  className={`${largeScreen ? "w-[40%]" : "w-full"}`}
                   label="Email"
                   onChange={(event) => {
                     setNewEmail(event.currentTarget.value);
@@ -259,7 +272,7 @@ const Settings: React.FC = () => {
               </div>
             </div>
             <Button
-              className="w-min bg-blue-500 hover:bg-blue-700"
+              className={`w-min bg-blue-500 hover:bg-blue-700 ${largeScreen ? "" : "mt-16"}`}
               size="lg"
               loading={isUpdatingUser}
               onClick={handleUserInfoUpdate}

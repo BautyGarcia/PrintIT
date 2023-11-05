@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access*/
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
@@ -115,9 +116,16 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     jwt: ({ token, trigger, session }) => {
-      if (trigger === "update") {
-        //eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        token.picture = session.image as string;
+      if (trigger === "update" && session) {
+        if(session.image){
+          token.picture = session.image as string;
+        }
+        if (session.name) {
+          token.name = session.name as string;
+        }
+        if (session.email) {
+          token.email = session.email as string;
+        }
       }
       return token;
     }

@@ -15,12 +15,17 @@ interface GCSResponseProps {
 
 const Settings: React.FC = () => {
   const { mutate: updateImage } = api.utils.updateImage.useMutation();
+  const { mutate: updateUserInfo } = api.utils.updateUserInfo.useMutation();
   const [isUpdatingImage, setIsUpdatingImage] = useState(false);
+  const [isUpdatingUser, setIsUpdatingUser] = useState(false);
+  const [newUsername, setNewUsername] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [newEmail, setNewEmail] = useState("");
   const largeScreen = useMediaQuery("(min-width: 1300px)");
   const { colorScheme } = useMantineColorScheme();
   const { data: sessionData, update } = useSession();
   const router = useRouter();
-  
+
   const handleImageUpload = async (fileImage: File) => {
     setIsUpdatingImage(true);
 
@@ -42,7 +47,7 @@ const Settings: React.FC = () => {
       loading: true,
       withCloseButton: false,
     });
-    
+
     const newFile = new File([fileImage], `${Date.now().toString()}_${fileImage.name}`, { type: fileImage.type });
     const formData = new FormData();
     formData.append("file", newFile);
@@ -91,6 +96,79 @@ const Settings: React.FC = () => {
       setIsUpdatingImage(false);
     });
   };
+
+  const handleUserInfoUpdate = () => {
+    setIsUpdatingUser(true);
+
+    if (newUsername === "" && newEmail === "") {
+      notifications.show({
+        title: "Error",
+        message: "Por favor complete al menos un campo",
+        color: "red",
+        autoClose: 5000,
+      });
+      setIsUpdatingUser(false);
+      setIsError(true);
+      return;
+    }
+
+    if (newEmail !== "" && (!newEmail.includes("@") || !newEmail.includes("."))) {
+      notifications.show({
+        title: "Error",
+        message: "Por favor ingrese un email valido",
+        color: "red",
+        autoClose: 5000,
+      });
+      setIsUpdatingUser(false);
+      setIsError(true);
+      return;
+    }
+
+    notifications.show({
+      id: 'update-user-info',
+      title: 'Actualizando Informacion...',
+      message: 'Espere por favor',
+      autoClose: false,
+      loading: true,
+      withCloseButton: false,
+    });
+
+    updateUserInfo({
+      name: newUsername || sessionData?.user.name as string,
+      email: newEmail || sessionData?.user.email as string,
+    }, {
+      onSuccess: async () => {
+        notifications.update({
+          id: 'update-user-info',
+          title: 'Informacion Actualizada',
+          message: 'La informacion se actualizó correctamente.',
+          color: 'green',
+          autoClose: 3000,
+          icon: <IconCheck size="1rem" />,
+        });
+        setIsUpdatingUser(false);
+
+        if (newUsername) {
+          await update({ name: newUsername });
+        }
+
+        if (newEmail) {
+          await update({ email: newEmail });
+        }
+      },
+      onError: (error) => {
+        notifications.update({
+          id: 'update-user-info',
+          title: 'Error',
+          message: "Hubo un error actualizando la informacion. " + error.message,
+          color: 'red',
+          autoClose: 3000,
+        });
+        setIsUpdatingUser(false);
+        setIsError(true);
+      }
+    })
+  }
 
   return (
     <>
@@ -149,13 +227,23 @@ const Settings: React.FC = () => {
                 <TextInput
                   className="w-[40%]"
                   label="Nombre"
+                  onChange={(event) => {
+                    setNewUsername(event.currentTarget.value);
+                    setIsError(false);
+                  }}
                   defaultValue={sessionData?.user.name as string}
+                  error={isError}
                   size="md"
                 />
                 <TextInput
                   className="w-[40%]"
                   label="Email"
+                  onChange={(event) => {
+                    setNewEmail(event.currentTarget.value);
+                    setIsError(false);
+                  }}
                   defaultValue={sessionData?.user.email as string}
+                  error={isError}
                   size="md"
                 />
                 <div>
@@ -173,7 +261,8 @@ const Settings: React.FC = () => {
             <Button
               className="w-min bg-blue-500 hover:bg-blue-700"
               size="lg"
-              loading={isUpdatingImage}
+              loading={isUpdatingUser}
+              onClick={handleUserInfoUpdate}
             >Guardar Cambios</Button>
           </div>
         </main>
@@ -243,6 +332,5 @@ const CheckDeletePopup: React.FC = () => {
     </>
   )
 }
-
 
 export default Settings;

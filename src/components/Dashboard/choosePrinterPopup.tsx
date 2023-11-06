@@ -12,6 +12,7 @@ interface ChoosePrinterPopupProps {
     printAmount: number;
     printPrice: number;
     printNotes: string;
+    disabled: boolean;
 }
 
 const ChoosePrinterPopup = (props: ChoosePrinterPopupProps) => {
@@ -34,6 +35,7 @@ const ChoosePrinterPopup = (props: ChoosePrinterPopupProps) => {
                     onClick={open}
                     className="mb-4 w-full rounded-lg bg-blue-500 hover:bg-blue-700"
                     loading={props.loading}
+                    disabled={props.disabled}
                 >
                     {props.loading ? "Verificando Archivo..." : "Continuar"}
                 </Button>

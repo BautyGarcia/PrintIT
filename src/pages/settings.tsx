@@ -195,11 +195,11 @@ const Settings: React.FC = () => {
                 </div>
                 <Divider orientation="vertical" size={"md"} />
                 <div className="flex flex-col items-center gap-3">
-                  <Text 
+                  <Text
                     className={`${largeScreen ? "text-4xl" : "text-2xl"} font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}
                   >2
                   </Text>
-                  <Text 
+                  <Text
                     className={`${largeScreen ? "text-2xl" : "text-lg"}`}
                   >Impresoras
                   </Text>
@@ -259,24 +259,35 @@ const Settings: React.FC = () => {
                   error={isError}
                   size="md"
                 />
-                <div>
-                  <Text>Contraseña</Text>
+                <Button
+                  className={`w-min bg-blue-500 hover:bg-blue-700 mt-3`}
+                  size="lg"
+                  loading={isUpdatingUser}
+                  onClick={handleUserInfoUpdate}
+                >Guardar Cambios</Button>
+              </div>
+              <Text className={`text-5xl font-bold mt-20 ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}>Privacidad</Text>
+              <div className="flex flex-col gap-5 mt-5">
+              <div className="flex items-center">
+                  <TextInput
+                    className={`${largeScreen ? "w-[40%]" : "w-full"}`}
+                    label="Contraseña"
+                    placeholder="**********"
+                    disabled
+                    size="md"
+                  />
                   <Button
-                    className="w-min bg-blue-500 hover:bg-blue-700"
-                    size="sm"
+                    className="w-min bg-blue-500 hover:bg-blue-700 self-end ml-5"
+                    size="md"
                     onClick={() => {
                       void router.push("/recoverPassword")
                     }}
                   >Cambiar Contraseña</Button>
+                  
                 </div>
               </div>
             </div>
-            <Button
-              className={`w-min bg-blue-500 hover:bg-blue-700 ${largeScreen ? "" : "mt-16"}`}
-              size="lg"
-              loading={isUpdatingUser}
-              onClick={handleUserInfoUpdate}
-            >Guardar Cambios</Button>
+
           </div>
         </main>
       </div>

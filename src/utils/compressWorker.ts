@@ -10,7 +10,7 @@ self.onmessage = function (e: MessageEvent<WorkerData>) {
   const compressedSize: number = Math.ceil(compressedData.byteLength / 1024 / 1024);
 
   if (compressedSize > 6) {
-    self.postMessage({ error: "File is too large to compress" });
+    self.postMessage({ error: "El archivo es demasiado pesado" });
     return;
   }
 

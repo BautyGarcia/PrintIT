@@ -44,6 +44,7 @@ const STLDropzone = () => {
   const [depth, setDepth] = useState(0 as number);
   const [compressedUrl, setCompressedUrl] = useState("" as string);
   const [fileName, setFileName] = useState("" as string);
+  const [isFileDisabled, setIsFileDisabled] = useState(false);
   const { data: sessionData } = useSession();
   const { mutate: testFetch } = api.utils.fetchFilamentPrice.useMutation()
 
@@ -62,6 +63,7 @@ const STLDropzone = () => {
         color: "red",
         autoClose: 5000,
       });
+      setIsFileDisabled(true);
       return;
     }
 
@@ -77,6 +79,7 @@ const STLDropzone = () => {
         color: "red",
         autoClose: 5000,
       });
+      setIsFileDisabled(true);
       return;
     }
 
@@ -90,6 +93,7 @@ const STLDropzone = () => {
         color: "red",
         autoClose: 5000,
       });
+      setIsFileDisabled(true);
       return;
     }
 
@@ -119,6 +123,7 @@ const STLDropzone = () => {
               color: "red",
               autoClose: 5000,
             });
+            setIsFileDisabled(true);
             setIsSlicing(false);
           }
         })
@@ -131,6 +136,7 @@ const STLDropzone = () => {
           color: "red",
           autoClose: 5000,
         });
+        setIsFileDisabled(true);
         setIsSlicing(false);
         return;
       });
@@ -151,6 +157,7 @@ const STLDropzone = () => {
           color: "red",
           autoClose: 5000,
         });
+        setIsFileDisabled(true);
       } else {
         setCompressedUrl(URL.createObjectURL(compressedFile as File));
       }
@@ -169,6 +176,7 @@ const STLDropzone = () => {
     setWidth(0);
     setHeight(0);
     setDepth(0);
+    setIsFileDisabled(false);
   };
 
   return (
@@ -300,7 +308,7 @@ const STLDropzone = () => {
                 </div>
                 <div className="flex w-full gap-2">
                   <div className="w-full">
-                    <ChoosePrinterPopup loading={isCompressing || isSlicing ? true : false} fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`} printName={printName} printAmount={amountPrints} printQuality={printQuality} printPrice={printPrice} printNotes={printNotes} />
+                    <ChoosePrinterPopup disabled={isFileDisabled} loading={isCompressing || isSlicing ? true : false} fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`} printName={printName} printAmount={amountPrints} printQuality={printQuality} printPrice={printPrice} printNotes={printNotes} />
                   </div>
                   <Button className="bg-red-600 p-1 hover:bg-red-700 rounded-lg" onClick={clearSubmit}><IconTrash /></Button>
                 </div>

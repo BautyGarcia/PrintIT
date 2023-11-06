@@ -233,7 +233,7 @@ const STLDropzone = () => {
               id="fileInput"
             />
             <Button
-              className="rounded-lg mt-5 bg-blue-500 hover:bg-blue-700"
+              className="rounded-md mt-5 bg-blue-500 hover:bg-blue-700"
               onClick={() => {
                 document.getElementById("fileInput")?.click();
               }}
@@ -310,7 +310,7 @@ const STLDropzone = () => {
                   <div className="w-full">
                     <ChoosePrinterPopup disabled={isFileDisabled} loading={isCompressing || isSlicing ? true : false} fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`} printName={printName} printAmount={amountPrints} printQuality={printQuality} printPrice={printPrice} printNotes={printNotes} />
                   </div>
-                  <Button className="bg-red-600 p-1 hover:bg-red-700 rounded-lg" onClick={clearSubmit}><IconTrash /></Button>
+                  <Button className="bg-red-600 p-1 hover:bg-red-700 rounded-md" onClick={clearSubmit}><IconTrash /></Button>
                 </div>
               </SimpleGrid>
             </div>

@@ -225,7 +225,7 @@ const Settings: React.FC = () => {
               >
                 {(props) => <Button
                   {...props}
-                  className="w-min bg-blue-500 hover:bg-blue-700 rounded-lg"
+                  className="w-min bg-blue-500 hover:bg-blue-700 rounded-md"
                   size="lg"
                   loading={isUpdatingImage}
                 >Cambiar Foto</Button>}
@@ -353,7 +353,7 @@ const CheckDeletePopup: React.FC = () => {
           <Button className="w-min bg-red-600 p-3 hover:bg-red-700" onClick={handleRemoveImage} loading={isUpdatingImage}>Eliminar</Button>
         </div>
       </Modal>
-      <Button className="bg-red-600 p-3 hover:bg-red-700 rounded-lg" size="lg" onClick={open}><IconTrash /></Button>
+      <Button className="bg-red-600 p-3 hover:bg-red-700 rounded-md" size="lg" onClick={open}><IconTrash /></Button>
     </>
   )
 }

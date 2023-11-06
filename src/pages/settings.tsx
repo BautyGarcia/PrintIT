@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { api } from "~/utils/api";
-import { IconCheck, IconTrash } from "@tabler/icons-react";
+import { IconCheck, IconTrash, IconArrowBack } from "@tabler/icons-react";
 
 interface GCSResponseProps {
   fileURL: string;
@@ -288,7 +288,16 @@ const Settings: React.FC = () => {
                 </div>
               </div>
             </div>
-
+              <Button 
+                className={`w-min bg-blue-500 hover:bg-blue-700 ${largeScreen ? "" : "mt-20"}`} 
+                size="lg"
+                onClick={() => {
+                  void router.push("/dashboard/subirArchivo")
+                }}
+              >
+                <IconArrowBack className="mr-2"/>
+                  Volver
+              </Button>
           </div>
         </main>
       </div>

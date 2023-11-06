@@ -46,7 +46,7 @@ const STLDropzone = () => {
   const [fileName, setFileName] = useState("" as string);
   const [isFileDisabled, setIsFileDisabled] = useState(false);
   const { data: sessionData } = useSession();
-  const { mutate: testFetch } = api.utils.fetchFilamentPrice.useMutation()
+  const { mutate: fetchPrice } = api.utils.fetchFilamentPrice.useMutation()
 
   const largeScreen = useMediaQuery("(min-width: 1300px)");
 
@@ -109,8 +109,10 @@ const STLDropzone = () => {
         setWidth(response.dimensions.width);
         setHeight(response.dimensions.height);
         setDepth(response.dimensions.depth);
-        testFetch({
+        fetchPrice({
           printVolume: response.volume,
+          printQuality: printQuality,
+          printAmount: amountPrints
         }, {
           onSuccess: (data) => {
             setPrintPrice(data);
@@ -141,7 +143,7 @@ const STLDropzone = () => {
         return;
       });
 
-    
+
     // Compress the file
     const fileData = await file.arrayBuffer();
 
@@ -177,6 +179,34 @@ const STLDropzone = () => {
     setHeight(0);
     setDepth(0);
     setIsFileDisabled(false);
+    setAmountPrints(1);
+    setPrintName("");
+    setPrintQuality("Media");
+    setPrintNotes("");
+    setPrintPrice(0);
+    setCompressedUrl("");
+    setFileName("");
+  };
+
+  const restatePrice = (quality: string, amount: number) => {
+    fetchPrice({
+      printVolume: volume,
+      printQuality: quality || printQuality,
+      printAmount: amount || amountPrints
+    }, {
+      onSuccess: (data) => {
+        setPrintPrice(data);
+      },
+      onError: (error) => {
+        notifications.show({
+          title: "Error",
+          message: error.message,
+          color: "red",
+          autoClose: 5000,
+        });
+        setIsFileDisabled(true);
+      }
+    })
   };
 
   return (
@@ -255,11 +285,11 @@ const STLDropzone = () => {
                 isSlicing ?
                   <Skeleton height={50} radius="sm" className="mt-3" /> :
                   <>
-                    { largeScreen && <IconDimensions size={50} /> }
+                    {largeScreen && <IconDimensions size={50} />}
                     <Text className="font-semibold">Ancho: {width} cm</Text>
                     <Text className="font-semibold">Alto: {height} cm</Text>
                     <Text className="font-semibold">Profundo: {depth} cm</Text>
-                    { largeScreen && <IconAugmentedReality size={45}/> }
+                    {largeScreen && <IconAugmentedReality size={45} />}
                     <Text className="font-semibold">Volumen: {volume} cm3</Text>
                   </>
               }
@@ -280,13 +310,28 @@ const STLDropzone = () => {
                   />
                   <div>
                     <Text size={"sm"} fw={500}>Calidad de Impresion </Text>
-                    <SegmentedControl fullWidth size="sm" className="mt-[2px]" radius="md" data={['Baja', 'Media', 'Alta']} onChange={(value) => setPrintQuality(value)} value={printQuality} />
+                    <SegmentedControl
+                      fullWidth
+                      size="sm"
+                      className="mt-[2px]"
+                      radius="md" 
+                      data={['Baja', 'Media', 'Alta']} 
+                      onChange={(value) => { 
+                        setPrintQuality(value); 
+                        restatePrice(value, 0); 
+                      }} 
+                      value={printQuality}
+                      defaultValue="Media"
+                    />
                   </div>
                   <NumberInput
                     variant="filled"
                     label="Cantidad"
                     placeholder="Cantidad de impresiones"
-                    onChange={(value) => setAmountPrints(value as number)}
+                    onChange={(value) => {
+                      setAmountPrints(value as number);
+                      restatePrice("", value as number);
+                    }}
                     defaultValue={1}
                     min={1}
                   />

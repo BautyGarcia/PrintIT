@@ -12,28 +12,40 @@ interface ResultProps {
     price: number;
 }
 
+interface DataProps {
+    results: ResultProps[];
+}
+
 export const utilsRouter = createTRPCRouter({
     fetchFilamentPrice: publicProcedure
-        .input(z.object({ printVolume: z.number() }))
+        .input(z.object({ printVolume: z.number(), printQuality: z.string(), printAmount: z.number() }))
         .mutation(async ({ input }) => {
-            const { printVolume } = input;
+            const { printVolume, printAmount, printQuality } = input;
 
-            return fetch("https://api.mercadolibre.com/sites/MLA/search?q=Filamento%20Negro%20PLA%201kg", {
+            const references: {[key: string]: number} = {
+                "Baja": 0.8,
+                "Media": 1,
+                "Alta": 1.2,
+            }
+
+            return fetch("https://api.mercadolibre.com/sites/MLA/search?q=Filamento%203D%20Rollo%20Negro%201kg%20Grillon3", {
                 headers: {
                     "Authorization": `Bearer ${process.env.MELIACCESS as string}`
                 },
             })
                 .then(response => response.json())
-                .then(data => {
+                .then((data: DataProps) => {
+                    data.results = data.results.slice(0, 3);
+
                     let filamentAverage = 0;
-                    (data.results as ResultProps[]).forEach((result: ResultProps) => {
+                    (data.results).forEach((result) => {
                         filamentAverage += result.price;
                     });
-                    const filamentAveragePrice = filamentAverage / (data.results as ResultProps[]).length;
-                    
+                    const filamentAveragePrice = filamentAverage / (data.results).length;
+
                     const gramsOfFilament = ((printVolume * 330) / 800) * 2.5;
-                    
-                    const price = ((gramsOfFilament * filamentAveragePrice) / 1000) * 1.15;
+
+                    const price = (((((gramsOfFilament * filamentAveragePrice) / 1000) * 1.15) * (references[printQuality] ?? 1)) * printAmount);
 
                     return Math.ceil(price);
                 })

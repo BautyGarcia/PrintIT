@@ -37,6 +37,7 @@ const STLDropzone = () => {
   const [isSelected, setIsSelected] = useState(false);
   const [isSlicing, setIsSlicing] = useState(false);
   const [isCompressing, setIsCompressing] = useState(false);
+  const [isUpdatingPrice, setIsUpdatingPrice] = useState(false);
   const [stlViewerURL, setSTLViewerURL] = useState("" as string);
   const [volume, setVolume] = useState(0 as number);
   const [width, setWidth] = useState(0 as number);
@@ -109,6 +110,7 @@ const STLDropzone = () => {
         setWidth(response.dimensions.width);
         setHeight(response.dimensions.height);
         setDepth(response.dimensions.depth);
+        setIsUpdatingPrice(true);
         fetchPrice({
           printVolume: response.volume,
           printQuality: printQuality,
@@ -117,6 +119,7 @@ const STLDropzone = () => {
           onSuccess: (data) => {
             setPrintPrice(data);
             setIsSlicing(false);
+            setIsUpdatingPrice(false);
           },
           onError: (error) => {
             notifications.show({
@@ -127,6 +130,7 @@ const STLDropzone = () => {
             });
             setIsFileDisabled(true);
             setIsSlicing(false);
+            setIsUpdatingPrice(false);
           }
         })
       })
@@ -179,6 +183,7 @@ const STLDropzone = () => {
     setHeight(0);
     setDepth(0);
     setIsFileDisabled(false);
+    setIsUpdatingPrice(false);
     setAmountPrints(1);
     setPrintName("");
     setPrintQuality("Media");
@@ -189,6 +194,7 @@ const STLDropzone = () => {
   };
 
   const restatePrice = (quality: string, amount: number) => {
+    setIsUpdatingPrice(true);
     fetchPrice({
       printVolume: volume,
       printQuality: quality || printQuality,
@@ -196,6 +202,7 @@ const STLDropzone = () => {
     }, {
       onSuccess: (data) => {
         setPrintPrice(data);
+        setIsUpdatingPrice(false);
       },
       onError: (error) => {
         notifications.show({
@@ -205,6 +212,7 @@ const STLDropzone = () => {
           autoClose: 5000,
         });
         setIsFileDisabled(true);
+        setIsUpdatingPrice(false);
       }
     })
   };
@@ -348,7 +356,7 @@ const STLDropzone = () => {
                         <IconInfoCircleFilled className="" size={15} />
                       </Tooltip>
                     </div>
-                    {isSlicing ? <Skeleton height={30} radius="sm" className="mt-3" /> : <Text className="text-2xl" fw={700}>${printPrice}</Text>}
+                    {isSlicing || isUpdatingPrice ? <Skeleton height={30} radius="sm" className="mt-3" /> : <Text className="text-2xl" fw={700}>${printPrice}</Text>}
                   </div>
                 </div>
                 <div className="flex w-full gap-2">

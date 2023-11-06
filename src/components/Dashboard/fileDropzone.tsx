@@ -253,7 +253,7 @@ const STLDropzone = () => {
             <h3
               className="font-semibold text-xl"
             >
-              Arrastra tu archivo aca
+              Sube o arrastra tu archivo
             </h3>
             <input
               className="absolute h-60 w-2/4 bg-opacity-0 text-transparent"

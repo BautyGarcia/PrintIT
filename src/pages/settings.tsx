@@ -16,6 +16,7 @@ interface GCSResponseProps {
 const Settings: React.FC = () => {
   const { mutate: updateImage } = api.utils.updateImage.useMutation();
   const { mutate: updateUserInfo } = api.utils.updateUserInfo.useMutation();
+  const { data: userStats } = api.utils.getUserStats.useQuery();
   const [isUpdatingImage, setIsUpdatingImage] = useState(false);
   const [isUpdatingUser, setIsUpdatingUser] = useState(false);
   const [newUsername, setNewUsername] = useState("");
@@ -190,14 +191,14 @@ const Settings: React.FC = () => {
               </div>
               <div className={`flex gap-8 ${largeScreen ? "" : "mb-8"}`}>
                 <div className="flex flex-col items-center gap-3">
-                  <Text className={`${largeScreen ? "text-4xl" : "text-2xl"} font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}>12</Text>
+                  <Text className={`${largeScreen ? "text-4xl" : "text-2xl"} font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}>{ userStats?.worksAsClient || 0 }</Text>
                   <Text className={`${largeScreen ? "text-2xl" : "text-lg"}`}>Pedidos</Text>
                 </div>
                 <Divider orientation="vertical" size={"md"} />
                 <div className="flex flex-col items-center gap-3">
                   <Text
                     className={`${largeScreen ? "text-4xl" : "text-2xl"} font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}
-                  >2
+                  >{ userStats?.printers || 0 }
                   </Text>
                   <Text
                     className={`${largeScreen ? "text-2xl" : "text-lg"}`}
@@ -208,7 +209,7 @@ const Settings: React.FC = () => {
                 <div className="flex flex-col items-center gap-3">
                   <Text
                     className={`${largeScreen ? "text-4xl" : "text-2xl"} font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}
-                  >103
+                  >{ userStats?.worksAsWorker || 0 }
                   </Text>
                   <Text
                     className={`${largeScreen ? "text-2xl" : "text-lg"}`}

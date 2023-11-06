@@ -104,5 +104,29 @@ export const utilsRouter = createTRPCRouter({
                 throw new Error("Hubo un problema actualizando la información");
             }
         }),
-        
+    getUserStats: protectedProcedure
+        .query(async ({ ctx }) => {
+            const userId = ctx.session.user.id;
+
+            const userInfo = await ctx.prisma.user.findUnique({
+                where: {
+                    id: userId
+                },
+                select: {
+                    _count: {
+                        select: {
+                            worksAsClient: true,
+                            printers: true,
+                            worksAsWorker: true,
+                        }
+                    }
+                }
+            });
+
+            if (!userInfo) {
+                throw new Error("Hubo un problema obteniendo la información");
+            }
+
+            return userInfo._count;
+        }),
 });

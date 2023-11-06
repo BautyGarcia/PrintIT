@@ -37,7 +37,7 @@ const ChoosePrinterPopup = (props: ChoosePrinterPopupProps) => {
                     loading={props.loading}
                     disabled={props.disabled}
                 >
-                    {props.loading ? "Verificando Archivo..." : "Continuar"}
+                    {props.loading ? "Verificando Archivo..." : props.disabled ? "Archivo muy pesado" : "Elegir Impresora"}
                 </Button>
             </Group>
         </>

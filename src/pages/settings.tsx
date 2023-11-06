@@ -262,7 +262,7 @@ const Settings: React.FC = () => {
                 />
                 <Button
                   className={`w-min bg-blue-500 hover:bg-blue-700 mt-3`}
-                  size="lg"
+                  size="md"
                   loading={isUpdatingUser}
                   onClick={handleUserInfoUpdate}
                 >Guardar Cambios</Button>

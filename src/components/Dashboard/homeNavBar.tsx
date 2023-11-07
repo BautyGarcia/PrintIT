@@ -176,7 +176,6 @@ const HomeNavBar: React.FC = () => {
               <span>Comunidad</span>
             </Link>
           </Group>
-
           {userTypeRole === "Cliente" && (
             <>
               <Link

@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { api } from "~/utils/api";
-import { IconCheck, IconTrash, IconArrowBack } from "@tabler/icons-react";
+import { IconCheck, IconArrowBack } from "@tabler/icons-react";
 
 interface GCSResponseProps {
   fileURL: string;
@@ -362,7 +362,7 @@ const CheckDeletePopup: React.FC = () => {
           <Button className="w-min bg-red-600 p-3 hover:bg-red-700" onClick={handleRemoveImage} loading={isUpdatingImage}>Eliminar</Button>
         </div>
       </Modal>
-      <Button className="bg-red-600 p-3 hover:bg-red-700 rounded-md" size="lg" onClick={open}><IconTrash /></Button>
+      <Button className="bg-red-600 p-3 hover:bg-red-700 rounded-md" size="lg" onClick={open}>Eliminar Foto</Button>
     </>
   )
 }

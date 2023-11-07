@@ -35,13 +35,11 @@ const Dashboard: NextPage<DashboardProps> = ({ children }) => {
         asideOffsetBreakpoint="sm"
         navbar={
           <Navbar
-            className={
-              theme.colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFF]"
-            }
+            className={`${theme.colorScheme === "dark" ? "bg-[#1C2333] " : "bg-[#FFF]"}`}
             p="md"
             hiddenBreakpoint="sm"
             hidden={!opened}
-            width={{ sm: 200, lg: 300 }}
+            width={{ base: 220, lg: 250 }}
           >
             <HomeNavBar />
           </Navbar>

@@ -28,26 +28,26 @@ const loadCompressWorker = () =>
   new Worker(new URL("~/utils/compressWorker", import.meta.url));
 
 const STLDropzone = () => {
-  const { colorScheme } = useMantineColorScheme();
-  const [amountPrints, setAmountPrints] = useState(1);
-  const [printName, setPrintName] = useState("" as string);
-  const [printQuality, setPrintQuality] = useState("Media" as string);
-  const [printNotes, setPrintNotes] = useState("" as string);
-  const [printPrice, setPrintPrice] = useState(0 as number);
+  const [isUpdatingPrice, setIsUpdatingPrice] = useState(false);
+  const [isCompressing, setIsCompressing] = useState(false);
+  const [isFileDisabled, setIsFileDisabled] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
   const [isSlicing, setIsSlicing] = useState(false);
-  const [isCompressing, setIsCompressing] = useState(false);
-  const [isUpdatingPrice, setIsUpdatingPrice] = useState(false);
+  const [printQuality, setPrintQuality] = useState("Media" as string);
+  const [compressedUrl, setCompressedUrl] = useState("" as string);
   const [stlViewerURL, setSTLViewerURL] = useState("" as string);
+  const [printNotes, setPrintNotes] = useState("" as string);
+  const [printName, setPrintName] = useState("" as string);
+  const [fileName, setFileName] = useState("" as string);
+  const [printPrice, setPrintPrice] = useState(0 as number);
   const [volume, setVolume] = useState(0 as number);
-  const [width, setWidth] = useState(0 as number);
   const [height, setHeight] = useState(0 as number);
   const [depth, setDepth] = useState(0 as number);
-  const [compressedUrl, setCompressedUrl] = useState("" as string);
-  const [fileName, setFileName] = useState("" as string);
-  const [isFileDisabled, setIsFileDisabled] = useState(false);
-  const { data: sessionData } = useSession();
+  const [width, setWidth] = useState(0 as number);
+  const [amountPrints, setAmountPrints] = useState(1);
   const { mutate: fetchPrice } = api.utils.fetchFilamentPrice.useMutation()
+  const { colorScheme } = useMantineColorScheme();
+  const { data: sessionData } = useSession();
 
   const largeScreen = useMediaQuery("(min-width: 1300px)");
 

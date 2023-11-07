@@ -220,26 +220,19 @@ const STLDropzone = () => {
   return (
     <div
       className={cn(
-        "mt-28 flex h-96 w-full flex-col items-center justify-center",
+        "flex h-96 w-full flex-col items-center justify-center",
         {
-          "mt-8 h-[800px]": isSelected,
+          "h-[800px]": isSelected,
         }
       )}
     >
-      <h1
+      { isSlicing ? <Skeleton height={50} width={"70%"} radius={"sm"} className="mb-4" /> : <h1
         className={cn("mb-4 font-semibold", {
           hidden: !isSelected || !largeScreen,
         })}
       >
-        Estás cada vez más cerca de conseguir tu impresión 3D
-      </h1>
-      <h3
-        className={cn("mb-4", {
-          hidden: !isSelected || !largeScreen,
-        })}
-      >
-        Completa el formulario para poder seguir
-      </h3>
+        ¡Estás cada vez más cerca de conseguir tu impresión 3D!
+      </h1>}
       {isSelected ? (
         <></>
       ) : (
@@ -356,7 +349,7 @@ const STLDropzone = () => {
                         <IconInfoCircleFilled className="" size={15} />
                       </Tooltip>
                     </div>
-                    {isSlicing || isUpdatingPrice ? <Skeleton height={30} radius="sm" className="mt-3" /> : <Text className="text-2xl" fw={700}>${printPrice}</Text>}
+                    {isSlicing || isUpdatingPrice ? <Skeleton height={30} width={"50%"} radius="sm" className="mt-3" /> : <Text className="text-2xl" fw={700}>${printPrice}</Text>}
                   </div>
                 </div>
                 <div className="flex w-full gap-2">

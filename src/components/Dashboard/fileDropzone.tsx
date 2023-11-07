@@ -220,10 +220,7 @@ const STLDropzone = () => {
   return (
     <div
       className={cn(
-        "flex h-96 w-full flex-col items-center justify-center",
-        {
-          "h-[800px]": isSelected,
-        }
+        "flex h-full w-full flex-col items-center justify-center py-10",
       )}
     >
       { isSlicing ? <Skeleton height={50} width={"70%"} radius={"sm"} className="mb-4" /> : <h1
@@ -244,7 +241,7 @@ const STLDropzone = () => {
       {!isSelected ? (
         <>
           <div
-            className={`flex h-full w-3/5 flex-col items-center justify-center p-5 text-center rounded-lg border-2 ${isSelected ? "border-none" : "border-dashed"} border-[#3B81F6] ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"}`}
+            className={`flex h-2/5 w-3/5 flex-col items-center justify-center p-5 text-center rounded-lg border-2 ${isSelected ? "border-none" : "border-dashed"} border-[#3B81F6] ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"}`}
           >
             <IconCloudUpload
               className="text-[#3B81F6] mb-4"

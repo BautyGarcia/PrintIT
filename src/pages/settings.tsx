@@ -234,7 +234,7 @@ const Settings: React.FC = () => {
             </div>
           </div>
           {largeScreen && <Divider orientation="vertical" size={"md"} my={"100px"} />}
-          <div className={`flex flex-col py-28 px-5 justify-between ${largeScreen ? "w-[60%]" : "min-w-full"}`}>
+          <div className={`flex flex-col py-28 px-5 justify-between ${largeScreen ? "w-[60%] pl-10" : "min-w-full"}`}>
             <div className={`flex flex-col`}>
               <Text className={`text-5xl font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}>Informacion Personal</Text>
               <div className="flex flex-col gap-5 mt-5">

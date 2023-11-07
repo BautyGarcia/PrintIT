@@ -49,7 +49,7 @@ const STLDropzone = () => {
   const { colorScheme } = useMantineColorScheme();
   const { data: sessionData } = useSession();
 
-  const largeScreen = useMediaQuery("(min-width: 1300px)");
+  const largeScreen = useMediaQuery("(min-width: 1200px)");
 
   const handleFileSubmit = async (event: ChangeEvent<HTMLInputElement>) => {
     setIsSlicing(true);
@@ -219,17 +219,15 @@ const STLDropzone = () => {
 
   return (
     <div
-      className={cn(
-        "flex h-full w-full flex-col items-center justify-center py-10",
-      )}
+      className={`flex h-full w-full flex-col items-center justify-center ${largeScreen ? "py-10" : ""}`}
     >
-      { isSlicing ? <Skeleton height={50} width={"70%"} radius={"sm"} className="mb-4" /> : <h1
+      { isSlicing && largeScreen ? <Skeleton height={50} width={"70%"} radius={"sm"} className="mb-4" /> : <h1
         className={cn("mb-4 font-semibold", {
           hidden: !isSelected || !largeScreen,
         })}
       >
         ¡Estás cada vez más cerca de conseguir tu impresión 3D!
-      </h1>}
+      </h1> }
       {isSelected ? (
         <></>
       ) : (
@@ -274,7 +272,7 @@ const STLDropzone = () => {
         <div className={`flex h-full gap-5 bg-[#0E1525] ${largeScreen ? "w-5/6" : "w-full flex-col"}`}>
           <div className={`flex h-full w-full flex-col gap-5`}>
             <div className={`flex h-5/6 w-full ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"} rounded-lg`}>
-              <div className="w-full h-full p-5">
+              <div className={`w-full p-5 ${largeScreen ? "h-full" : "h-[500px]"}`}>
                 <StlViewer url={stlViewerURL} orbitControls className="w-full h-full rounded-lg border-2 border-dashed border-[#3B81F6]" />
               </div>
             </div>

@@ -218,7 +218,7 @@ const Settings: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className={`flex gap-5`}>
+            <div className={`flex gap-5 pt-10`}>
               <FileButton
                 onChange={(file) => handleImageUpload(file as File)}
                 accept="image/png,image/jpeg"

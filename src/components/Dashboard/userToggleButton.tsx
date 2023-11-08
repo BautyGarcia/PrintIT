@@ -1,4 +1,4 @@
-import { SegmentedControl, Group, Center, Box } from "@mantine/core";
+import { SegmentedControl, Group, Center, Box, useMantineColorScheme } from "@mantine/core";
 
 interface UserToggleProps {
   userTypeRole: string;
@@ -6,13 +6,14 @@ interface UserToggleProps {
 }
 
 const UserToggle = ({ userTypeRole, setUserTypeRole }: UserToggleProps) => {
+  const { colorScheme } = useMantineColorScheme();
   return (
     <Group position="center" my="xl">
       <SegmentedControl
         classNames={{
           "root":"bg-transparent w-[80%] h-[50px]",
-          "indicator":"bg-[#1D3250]",
-          "label":"hover:text-white"
+          "indicator":`${colorScheme === "dark" ? "bg-[#1D3250]" : "bg-[#E7F5FF]"}`,
+          "label":`${colorScheme === "dark" ? "hover:text-white" : "hover:text-black"}`,
         }}
         value={userTypeRole}
         onChange={(value) => setUserTypeRole(value as "Cliente" | "Vendedor")}
@@ -21,7 +22,7 @@ const UserToggle = ({ userTypeRole, setUserTypeRole }: UserToggleProps) => {
             value: "Cliente",
             label: (
               <Center>
-                <Box className={userTypeRole === "Cliente" ? "text-[#A5D8FF]" : ""}>Cliente</Box>
+                <Box className={`${userTypeRole === "Cliente" ? colorScheme === "dark" ? "text-[#A5D8FF]" : " text-[#228BE6]" : ""}`}>Cliente</Box>
               </Center>
             ),
           },
@@ -29,7 +30,7 @@ const UserToggle = ({ userTypeRole, setUserTypeRole }: UserToggleProps) => {
             value: "Vendedor",
             label: (
               <Center>
-                <Box className={userTypeRole === "Vendedor" ? "text-[#A5D8FF]" : ""}>Vendedor</Box>
+                <Box className={`${userTypeRole === "Vendedor" ? colorScheme === "dark" ? "text-[#A5D8FF]" : " text-[#228BE6]" : ""}`}>Vendedor</Box>
               </Center>
             ),
           },

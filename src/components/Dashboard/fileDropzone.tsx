@@ -269,7 +269,7 @@ const STLDropzone = () => {
           </div>
         </>
       ) : (
-        <div className={`flex h-full gap-5 bg-[#0E1525] ${largeScreen ? "w-5/6" : "w-full flex-col"}`}>
+        <div className={`flex h-full gap-5 ${colorScheme === "dark" ? "bg-[#0E1525]" : "bg-[#F0F1F7]"} ${largeScreen ? "w-5/6" : "w-full flex-col"}`}>
           <div className={`flex h-full w-full flex-col gap-5`}>
             <div className={`flex h-5/6 w-full ${colorScheme === "dark" ? "bg-[#1C2333]" : "bg-[#FFFFFF]"} rounded-lg`}>
               <div className={`w-full p-5 ${largeScreen ? "h-full" : "h-[500px]"}`}>

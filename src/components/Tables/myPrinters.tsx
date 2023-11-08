@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { createStyles, Table, ScrollArea, Button } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { createStyles, Table, ScrollArea, Button, Loader } from '@mantine/core';
 import { api } from '~/utils/api';
 import { notifications } from '@mantine/notifications';
 import EditPrinterPopup from '../Dashboard/editPrinterPopup';
@@ -20,10 +20,17 @@ const useStyles = createStyles((theme) => ({
 const MyPrintersTable = () => {
     const { classes, cx } = useStyles();
     const [scrolled, setScrolled] = useState(false);
-
-    const { data: printersList, refetch: refetchPrintersList } = api.printer.getMyPrinters.useQuery();
+    const { data: printersList, refetch: refetchPrintersList, isLoading } = api.printer.getMyPrinters.useQuery();
     const { mutate: deletePrinter } = api.printer.deletePrinter.useMutation();
     const { mutate: switchPrinterState } = api.printer.switchPrinterAvailability.useMutation();
+    const [isFetchingData, setIsFetchingData] = useState(true);
+    let content = <></>;
+
+    useEffect(() => {
+        if (!isLoading) {
+            setIsFetchingData(false);
+        }
+    }, [isLoading]);
 
     const SwitchPrinterState = (id: string) => {
         switchPrinterState({ printerId: id }, {
@@ -90,14 +97,20 @@ const MyPrintersTable = () => {
                     >
                         Eliminar
                     </Button>
-                    <EditPrinterPopup printerInfo={printer} refreshPrinters={refetchPrintersList}/>
+                    <EditPrinterPopup printerInfo={printer} refreshPrinters={refetchPrintersList} />
                 </div>
             </td>
         </tr>
     ));
 
-    return (
-        <ScrollArea h={"89vh"} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+    if (isFetchingData) {
+        content = (
+            <div className='flex h-screen w-full items-center justify-center'>
+                <Loader size='xl' />
+            </div>
+        );
+    } else {
+        content = (
             <Table miw={700} verticalSpacing="sm" fontSize="md" horizontalSpacing="xl">
                 <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
                     <tr>
@@ -106,11 +119,17 @@ const MyPrintersTable = () => {
                         <th>Tipo</th>
                         <th>Tamaño</th>
                         <th>Estado</th>
-                        <th/>
+                        <th />
                     </tr>
                 </thead>
                 <tbody>{rows}</tbody>
             </Table>
+        )
+    }
+
+    return (
+        <ScrollArea className='h-full' onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+            {content}
         </ScrollArea>
     );
 }

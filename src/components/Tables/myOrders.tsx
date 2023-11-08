@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { createStyles, Table, ScrollArea } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { createStyles, Table, ScrollArea, Loader } from '@mantine/core';
 import { api } from '~/utils/api';
 import WorkSatusPopup from '../Dashboard/workStatusPopup';
 
@@ -19,8 +19,15 @@ const useStyles = createStyles((theme) => ({
 const MyOrdersTable = () => {
     const { classes, cx } = useStyles();
     const [scrolled, setScrolled] = useState(false);
+    const { data: ordersList, refetch: refetchOrdersList, isLoading } = api.work.getMyOrders.useQuery();
+    const [isFetchingData, setIsFetchingData] = useState(true);
+    let content = <></>;
 
-    const { data: ordersList, refetch: refetchOrdersList } = api.work.getMyOrders.useQuery();
+    useEffect(() => {
+        if (!isLoading) {
+            setIsFetchingData(false);
+        }
+    }, [isLoading]);
 
     const rows = ordersList?.map((order) => (
         <tr key={order.id}>
@@ -53,13 +60,19 @@ const MyOrdersTable = () => {
         </tr>
     ));
 
-    return (
-        <ScrollArea h={300} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+    if (isFetchingData) {
+        content = (
+            <div className='flex h-screen w-full items-center justify-center'>
+                <Loader size='xl' />
+            </div>
+        );
+    } else {
+        content = (
             <Table miw={700} verticalSpacing="sm" fontSize="md" horizontalSpacing="xl">
                 <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
                     <tr>
                         <th>Nombre</th>
-                        <th>Vendedor</th>
+                        <th>Cliente</th>
                         <th>Precio</th>
                         <th>Estado</th>
                         <th>Calidad</th>
@@ -71,6 +84,12 @@ const MyOrdersTable = () => {
                 </thead>
                 <tbody>{rows}</tbody>
             </Table>
+        )
+    }
+
+    return (
+        <ScrollArea className='h-full' onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+            {content}
         </ScrollArea>
     );
 }

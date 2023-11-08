@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { createStyles, Table, ScrollArea, Button } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { createStyles, Table, ScrollArea, Button, Loader } from '@mantine/core';
 import { api } from '~/utils/api';
 import WorkSatusPopup from '../Dashboard/workStatusPopup';
 
@@ -19,8 +19,15 @@ const useStyles = createStyles((theme) => ({
 const MyWorksTable = () => {
     const { classes, cx } = useStyles();
     const [scrolled, setScrolled] = useState(false);
+    const { data: worksList, refetch: refetchWorksList, isLoading } = api.work.getMyWorks.useQuery();
+    const [isFetchingData, setIsFetchingData] = useState(true);
+    let content;
 
-    const { data: worksList, refetch: refetchWorksList } = api.work.getMyWorks.useQuery();
+    useEffect(() => {
+        if (!isLoading) {
+            setIsFetchingData(false);
+        }
+    }, [isLoading]);
 
     const handleFileDownload = (fileURL: string) => {
         const fileName = fileURL.split('https://storage.googleapis.com/printit-app/')[1];
@@ -67,8 +74,14 @@ const MyWorksTable = () => {
         </tr>
     ));
 
-    return (
-        <ScrollArea h={300} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+    if (isFetchingData) {
+        content = (
+            <div className='flex h-screen w-full items-center justify-center'>
+                <Loader size='xl' />
+            </div>
+        );
+    } else {
+        content = (
             <Table miw={700} verticalSpacing="sm" fontSize="md" horizontalSpacing="xl">
                 <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
                     <tr>
@@ -85,6 +98,12 @@ const MyWorksTable = () => {
                 </thead>
                 <tbody>{rows}</tbody>
             </Table>
+        );
+    }
+
+    return (
+        <ScrollArea className='h-full' onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+            {content}
         </ScrollArea>
     );
 }

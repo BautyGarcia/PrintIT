@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { createStyles, Table, ScrollArea, rem, Button } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { createStyles, Table, ScrollArea, rem, Button, Loader } from '@mantine/core';
 import { api } from '~/utils/api';
 import { notifications } from '@mantine/notifications';
 import { useSession } from 'next-auth/react';
@@ -44,12 +44,20 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
     const { classes, cx } = useStyles();
     const [scrolled, setScrolled] = useState(false);
     const { data: sessionData } = useSession();
-    const { data: printersList } = api.printer.getPrinterForSTL.useQuery({
+    const { data: printersList, isLoading } = api.printer.getPrinterForSTL.useQuery({
         bedSize: props.bedSize
     });
     const { mutate: createWork } = api.work.createWork.useMutation();
     const { mutate: sendCreateWorkEmail } = api.email.sendCreateWorkEmail.useMutation();
     const { mutate: updateWorkURL } = api.work.addStlUrlToWork.useMutation();
+    const [isFetchingData, setIsFetchingData] = useState(true);
+    let content = <></>;
+
+    useEffect(() => {
+        if (!isLoading) {
+            setIsFetchingData(false);
+        }
+    }, [isLoading]);
 
     const rows = printersList?.map((printer) => (
         <tr key={printer.id}>
@@ -164,8 +172,14 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
         });
     };
 
-    return (
-        <ScrollArea onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+    if (isFetchingData) {
+        content = (
+            <div className='flex h-screen w-full items-center justify-center'>
+                <Loader size='xl' />
+            </div>
+        );
+    } else {
+        content = (
             <Table miw={700}>
                 <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
                     <tr>
@@ -178,6 +192,11 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
                 </thead>
                 <tbody>{rows}</tbody>
             </Table>
+        );
+    };
+    return (
+        <ScrollArea className='h-full' onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+            {content}
         </ScrollArea>
     );
 }

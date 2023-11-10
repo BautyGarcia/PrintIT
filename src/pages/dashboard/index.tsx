@@ -6,6 +6,7 @@ import HomeHeader from "~/components/Dashboard/homeHeader";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import SessionChecker from "~/components/Sign/sessionChecker";
+import { useMediaQuery } from '@mantine/hooks';
 
 interface DashboardProps {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ const Dashboard: NextPage<DashboardProps> = ({ children }) => {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const { data: sessionData } = useSession();
+  const isMobile = useMediaQuery('(max-width: 760px)');
 
   return (
     <>
@@ -39,7 +41,7 @@ const Dashboard: NextPage<DashboardProps> = ({ children }) => {
             p="md"
             hiddenBreakpoint="sm"
             hidden={!opened}
-            width={{ base: 220, lg: 250 }}
+            width={ isMobile ? {} : { base: 250 } }
           >
             <HomeNavBar />
           </Navbar>

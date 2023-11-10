@@ -35,9 +35,18 @@ const MisImpresoras: NextPage = () => {
   }, [isLoading]);
 
   const SwitchPrinterState = (id: string) => {
+    notifications.show({
+      title: "Actualizando estado",
+      id: "switchPrinterState",
+      message: "Espere por favor",
+      autoClose: false,
+      loading: true,
+      withCloseButton: false,
+    });
     switchPrinterState({ printerId: id }, {
       onSuccess: () => {
-        notifications.show({
+        notifications.update({
+          id: "switchPrinterState",
           title: "Estado cambiado",
           message: "El estado de la impresora ha sido cambiado correctamente.",
           color: "green",
@@ -46,7 +55,8 @@ const MisImpresoras: NextPage = () => {
         void refetchPrintersList();
       },
       onError: (error) => {
-        notifications.show({
+        notifications.update({
+          id: "switchPrinterState",
           title: "Error",
           message: error.message,
           color: "red",
@@ -57,9 +67,19 @@ const MisImpresoras: NextPage = () => {
   }
 
   const DeletePrinter = (id: string) => {
+    notifications.show({
+      title: "Eliminando impresora",
+      id: "deletePrinter",
+      message: "Espere por favor",
+      autoClose: false,
+      loading: true,
+      withCloseButton: false,
+    });
+
     deletePrinter({ printerId: id }, {
       onSuccess: () => {
-        notifications.show({
+        notifications.update({
+          id: "deletePrinter",
           title: "Impresora eliminada",
           message: "La impresora ha sido eliminada correctamente.",
           color: "green",
@@ -68,7 +88,8 @@ const MisImpresoras: NextPage = () => {
         void refetchPrintersList();
       },
       onError: (error) => {
-        notifications.show({
+        notifications.update({
+          id: "deletePrinter",
           title: "Error",
           message: error.message,
           color: "red",

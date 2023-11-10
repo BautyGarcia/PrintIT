@@ -81,6 +81,14 @@ const EditPrinterPopup = ({ printerInfo, refreshPrinters }: EditPrinterPopupProp
 
     const handleFormSubmit = (values: typeof editPrinterForm.values) => {
         setIsLoading(true);
+        notifications.show({
+            title: "Actualizando impresora",
+            id: "updatePrinter",
+            message: "Espere por favor",
+            autoClose: false,
+            loading: true,
+            withCloseButton: false,
+        });
         editPrinter(
           {
             printerId: printerInfo.id,
@@ -92,7 +100,8 @@ const EditPrinterPopup = ({ printerInfo, refreshPrinters }: EditPrinterPopupProp
           },
           {
             onSuccess: () => {
-              notifications.show({
+              notifications.update({
+                id: "updatePrinter",
                 title: "Impresora actualizada",
                 message: "La impresora ha sido actualizada correctamente.",
                 color: "green",
@@ -103,7 +112,8 @@ const EditPrinterPopup = ({ printerInfo, refreshPrinters }: EditPrinterPopupProp
               handlePopupClose();
             },
             onError: (error) => {
-              notifications.show({
+              notifications.update({
+                id: "updatePrinter",
                 title: "Error",
                 message: error.message,
                 color: "red",

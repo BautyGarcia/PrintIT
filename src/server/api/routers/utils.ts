@@ -45,7 +45,7 @@ export const utilsRouter = createTRPCRouter({
 
                     const gramsOfFilament = ((printVolume * 330) / 800) * 2.5;
 
-                    const price = (((((gramsOfFilament * filamentAveragePrice) / 1000) * 1.15) * (references[printQuality] ?? 1)) * printAmount) + 200;
+                    const price = ((((((gramsOfFilament * filamentAveragePrice) / 1000) * 1.15) + 200) * (references[printQuality] ?? 1)) * printAmount);
 
                     return Math.ceil(price);
                 })

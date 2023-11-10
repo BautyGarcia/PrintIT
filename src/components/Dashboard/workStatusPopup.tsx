@@ -5,12 +5,15 @@ import {
     Text,
     NumberInput,
     Timeline,
-    Checkbox
+    Checkbox,
+    Tooltip,
+    Divider
 } from "@mantine/core";
 import { useState } from "react";
 import { type RoleTypes, type WorkStatus } from "@prisma/client";
 import { api } from "~/utils/api";
 import { notifications } from "@mantine/notifications";
+import { IconInfoCircleFilled } from "@tabler/icons-react";
 
 interface PriceProps {
     id: string;
@@ -211,7 +214,14 @@ const WorkSatusPopup = ({ workInfo, refreshWorks }: WorkSatusPopupProps) => {
                 onClose={close}
                 centered
                 radius="md"
-                title={<Text className="font-bold text-xl">Negociación de Precio</Text>}
+                title={
+                    <div className="flex items-center gap-2">
+                        <Text className="font-bold text-xl">Negociación de Precio</Text>
+                        <Tooltip position="right" multiline w={220} withArrow label="Esta es la ventana de negociacion, donde podes ver todos los precios ofrecidos y poder llegar a un precio en comun con la otra persona. Si fuiste la ultima persona en ofertar, debes esperar a una respuesta.">
+                            <IconInfoCircleFilled className="" size={20} />
+                        </Tooltip>
+                    </div>
+                }
                 trapFocus={false}
                 padding="xl"
                 overlayProps={{
@@ -234,7 +244,7 @@ const WorkSatusPopup = ({ workInfo, refreshWorks }: WorkSatusPopupProps) => {
                                 <Timeline.Item key={"NewPrice"}>
                                     <div className="flex flex-col gap-5">
                                         <Checkbox
-                                            label="Quiero dar una contraoferta"
+                                            label={"Quiero hacer una contraoferta"}
                                             checked={isBidding}
                                             size={"md"}
 
@@ -275,6 +285,14 @@ const WorkSatusPopup = ({ workInfo, refreshWorks }: WorkSatusPopupProps) => {
                             )
                         }
                     </Timeline>
+                    {
+                        userRoleType === lastBidder && status === "Negociacion" && (
+                            <>
+                                <Divider variant="dashed" size={"md"} mt={20}/>
+                                <Text className="font-bold text-xl mt-4 text-center">Espera a una respuesta para poder proponer otro precio.</Text>
+                            </>
+                        )
+                    }
                 </div>
             </Modal>
         </>

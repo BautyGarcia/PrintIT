@@ -1,7 +1,7 @@
 import { notifications } from "@mantine/notifications";
 import { useState, type ChangeEvent } from "react";
 import sliceSTL from "~/utils/fileSlicer";
-import { NumberInput, SegmentedControl, Skeleton, Text, Textarea, Tooltip } from "@mantine/core";
+import { Checkbox, NumberInput, SegmentedControl, Skeleton, Text, Textarea, Tooltip } from "@mantine/core";
 import "remixicon/fonts/remixicon.css";
 import {
   TextInput,
@@ -21,16 +21,17 @@ import { useMediaQuery } from "@mantine/hooks";
 import { cn } from "~/utils/util";
 import { StlViewer } from "react-stl-viewer";
 import { useSession } from "next-auth/react";
-import ChoosePrinterModal from "./choosePrinterModal";
 import { api } from "~/utils/api";
+import ChoosePrinterModal from "./choosePrinterModal";
 
 const loadCompressWorker = () =>
   new Worker(new URL("~/utils/compressWorker", import.meta.url));
 
 const STLDropzone = () => {
+  const [isUsingEstimatedPrice, setIsUsingEstimatedPrice] = useState(true);
   const [isUpdatingPrice, setIsUpdatingPrice] = useState(false);
-  const [isCompressing, setIsCompressing] = useState(false);
   const [isFileDisabled, setIsFileDisabled] = useState(false);
+  const [isCompressing, setIsCompressing] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
   const [isSlicing, setIsSlicing] = useState(false);
   const [printQuality, setPrintQuality] = useState("Media" as string);
@@ -39,7 +40,8 @@ const STLDropzone = () => {
   const [printNotes, setPrintNotes] = useState("" as string);
   const [printName, setPrintName] = useState("" as string);
   const [fileName, setFileName] = useState("" as string);
-  const [printPrice, setPrintPrice] = useState(0 as number);
+  const [desiredPrintPrice, setDesiredPrintPrice] = useState(0 as number);
+  const [estimatedPrintPrice, setEstimatedPrintPrice] = useState(0 as number);
   const [volume, setVolume] = useState(0 as number);
   const [height, setHeight] = useState(0 as number);
   const [depth, setDepth] = useState(0 as number);
@@ -117,7 +119,7 @@ const STLDropzone = () => {
           printAmount: amountPrints
         }, {
           onSuccess: (data) => {
-            setPrintPrice(data);
+            setEstimatedPrintPrice(data);
             setIsSlicing(false);
             setIsUpdatingPrice(false);
           },
@@ -188,7 +190,8 @@ const STLDropzone = () => {
     setPrintName("");
     setPrintQuality("Media");
     setPrintNotes("");
-    setPrintPrice(0);
+    setEstimatedPrintPrice(0);
+    setDesiredPrintPrice(0);
     setCompressedUrl("");
     setFileName("");
   };
@@ -201,7 +204,7 @@ const STLDropzone = () => {
       printAmount: amount || amountPrints
     }, {
       onSuccess: (data) => {
-        setPrintPrice(data);
+        setEstimatedPrintPrice(data);
         setIsUpdatingPrice(false);
       },
       onError: (error) => {
@@ -221,13 +224,13 @@ const STLDropzone = () => {
     <div
       className={`flex h-full w-full flex-col items-center justify-center ${largeScreen ? "py-10" : ""}`}
     >
-      { isSlicing && largeScreen ? <Skeleton height={50} width={"70%"} radius={"sm"} className="mb-4" /> : <h1
+      {isSlicing && largeScreen ? <Skeleton height={50} width={"70%"} radius={"sm"} className="mb-4" /> : <h1
         className={cn("mb-4 font-semibold", {
           hidden: !isSelected || !largeScreen,
         })}
       >
         ¡Estás cada vez más cerca de conseguir tu impresión 3D!
-      </h1> }
+      </h1>}
       {isSelected ? (
         <></>
       ) : (
@@ -310,12 +313,12 @@ const STLDropzone = () => {
                       fullWidth
                       size="sm"
                       className="mt-[2px]"
-                      radius="md" 
-                      data={['Baja', 'Media', 'Alta']} 
-                      onChange={(value) => { 
-                        setPrintQuality(value); 
-                        restatePrice(value, 0); 
-                      }} 
+                      radius="md"
+                      data={['Baja', 'Media', 'Alta']}
+                      onChange={(value) => {
+                        setPrintQuality(value);
+                        restatePrice(value, 0);
+                      }}
                       value={printQuality}
                       defaultValue="Media"
                     />
@@ -339,17 +342,43 @@ const STLDropzone = () => {
                   />
                   <div className="flex flex-col">
                     <div className="flex gap-1 items-center">
-                      <Text size={"sm"} fw={500}>Precio estimado </Text>
-                      <Tooltip position="top" multiline w={220} withArrow label="Este precio es una estimacion automatica de referencia, no tiene porque coincidir con el precio final de la impreison.">
+                      <Text size={"sm"} fw={500}>{`${isUsingEstimatedPrice ? "Precio estimado" : "Precio a ofrecer"}`}</Text>
+                      <Tooltip position="top" multiline w={220} withArrow label={isUsingEstimatedPrice ? "Este precio es una estimacion automatica de referencia, no tiene porque coincidir con el precio final de la impreison." : "Este campo se refiere al precio que deseas pagar por el pedido. Si no tienes un precio en mente usa el precio estimado."}>
                         <IconInfoCircleFilled className="" size={15} />
                       </Tooltip>
                     </div>
-                    {isSlicing || isUpdatingPrice ? <Skeleton height={30} width={"50%"} radius="sm" className="mt-3" /> : <Text className="text-2xl" fw={700}>${printPrice}</Text>}
+                    {
+                      isSlicing || isUpdatingPrice ?
+                        <Skeleton height={50} width={"50%"} radius="sm" className="mt-3" /> :
+                        <>
+                          {
+                            isUsingEstimatedPrice ?
+                            <Text className="text-2xl" fw={700}>${estimatedPrintPrice}</Text> :
+                            <NumberInput
+                              variant="filled"
+                              placeholder="Precio"
+                              onChange={(value) => setDesiredPrintPrice(value as number)}
+                              defaultValue={0}
+                              min={0}
+                              max={1000000}
+                              step={50}
+                              prefix="$"
+                              className="mb-2"
+                            />
+                          }
+                          <Checkbox
+                            className="mt-2"
+                            label={"Usar el precio estimado"}
+                            checked={isUsingEstimatedPrice}
+                            onChange={() => setIsUsingEstimatedPrice(!isUsingEstimatedPrice)}
+                          />
+                        </>
+                    }
                   </div>
                 </div>
                 <div className="flex w-full gap-2">
                   <div className="w-full">
-                    <ChoosePrinterModal disabled={isFileDisabled} loading={isCompressing || isSlicing ? true : false} fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`} printName={printName} printAmount={amountPrints} printQuality={printQuality} printPrice={printPrice} printNotes={printNotes} />
+                    <ChoosePrinterModal disabled={isFileDisabled} loading={isCompressing || isSlicing ? true : false} fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`} printName={printName} printAmount={amountPrints} printQuality={printQuality} printPrice={isUsingEstimatedPrice ? estimatedPrintPrice : desiredPrintPrice} printNotes={printNotes} />
                   </div>
                   <Button className="bg-red-600 p-1 hover:bg-red-700 rounded-md" onClick={clearSubmit}><IconTrash /></Button>
                 </div>

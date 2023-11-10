@@ -51,6 +51,8 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
     const { mutate: sendCreateWorkEmail } = api.email.sendCreateWorkEmail.useMutation();
     const { mutate: updateWorkURL } = api.work.addStlUrlToWork.useMutation();
     const [isFetchingData, setIsFetchingData] = useState(true);
+    const [isCreatingWork, setIsCreatingWork] = useState(false);
+
     let content = <></>;
 
     useEffect(() => {
@@ -71,6 +73,7 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
                     <Button
                         className='bg-blue-500 py-2 mr-2 w-[60%] text-white hover:bg-blue-700'
                         onClick={() => setWork(printer.id, printer.user.id, printer.user.name, printer.user.email, props.fileUrl, props.fileName)}
+                        disabled={isCreatingWork}
                     >
                         Elegir
                     </Button>
@@ -80,6 +83,7 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
     ));
 
     const setWork = (printerId: string, workerId: string, workerName: string, workerEmail: string, fileUrl: string, fileName: string) => {
+        setIsCreatingWork(true);
         notifications.show({
             id: 'create-work',
             title: 'Creando pedido...',
@@ -133,6 +137,7 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
                                         autoClose: 3000,
                                         icon: <IconCheck size="1rem" />,
                                     });
+                                    setIsCreatingWork(false);
                                     props.closePopup();
                                 },
                                 onError: (error) => {
@@ -143,6 +148,7 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
                                         color: 'red',
                                         autoClose: 3000,
                                     });
+                                    setIsCreatingWork(false);
                                     props.closePopup();
                                 }
                             });
@@ -155,6 +161,7 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
                             color: 'red',
                             autoClose: 3000,
                         });
+                        setIsCreatingWork(false);
                         props.closePopup();
                     });
                 }
@@ -167,6 +174,7 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
                     color: 'red',
                     autoClose: 3000,
                 });
+                setIsCreatingWork(false);
                 props.closePopup();
             }
         });

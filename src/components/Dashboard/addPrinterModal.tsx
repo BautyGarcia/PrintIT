@@ -15,11 +15,11 @@ import { useSession } from "next-auth/react";
 import { Logo } from "../Logos/logo";
 import { api } from "~/utils/api";
 
-interface AddPrinterPopupProps {
+interface AddPrinterModalProps {
   refreshPrinters: () => void;
 }
 
-const AddPrinterPopup = ({ refreshPrinters }: AddPrinterPopupProps) => {
+const AddPrinterModal = ({ refreshPrinters }: AddPrinterModalProps) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [isLoading, setIsLoading] = useState(false);
   const { data: SessionData } = useSession();
@@ -210,4 +210,4 @@ const AddPrinterPopup = ({ refreshPrinters }: AddPrinterPopupProps) => {
   );
 };
 
-export default AddPrinterPopup;
+export default AddPrinterModal;

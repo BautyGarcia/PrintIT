@@ -18,7 +18,7 @@ import {
 import SchemeButton from "../Landing/schemeButton";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import PrinterPopup from "~/components/Dashboard/addPrinterPopup";
+import AddPrinterModal from "~/components/Dashboard/addPrinterModal";
 import { useRouter } from "next/router";
 import UserToggle from "./userToggleButton";
 import { api } from "~/utils/api";
@@ -166,7 +166,7 @@ const HomeNavBar: React.FC = () => {
       <Navbar.Section grow className="flex flex-col">
         <div className="flex flex-col h-[100%]">
           <Group className={classes.header} position="apart">
-            <PrinterPopup refreshPrinters={getMyPrinters} />
+            <AddPrinterModal refreshPrinters={getMyPrinters} />
             <Link
               href=""
               className={classes.community}

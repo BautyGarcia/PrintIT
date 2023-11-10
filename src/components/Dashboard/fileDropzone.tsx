@@ -21,7 +21,7 @@ import { useMediaQuery } from "@mantine/hooks";
 import { cn } from "~/utils/util";
 import { StlViewer } from "react-stl-viewer";
 import { useSession } from "next-auth/react";
-import ChoosePrinterPopup from "./choosePrinterPopup";
+import ChoosePrinterModal from "./choosePrinterModal";
 import { api } from "~/utils/api";
 
 const loadCompressWorker = () =>
@@ -349,7 +349,7 @@ const STLDropzone = () => {
                 </div>
                 <div className="flex w-full gap-2">
                   <div className="w-full">
-                    <ChoosePrinterPopup disabled={isFileDisabled} loading={isCompressing || isSlicing ? true : false} fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`} printName={printName} printAmount={amountPrints} printQuality={printQuality} printPrice={printPrice} printNotes={printNotes} />
+                    <ChoosePrinterModal disabled={isFileDisabled} loading={isCompressing || isSlicing ? true : false} fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`} printName={printName} printAmount={amountPrints} printQuality={printQuality} printPrice={printPrice} printNotes={printNotes} />
                   </div>
                   <Button className="bg-red-600 p-1 hover:bg-red-700 rounded-md" onClick={clearSubmit}><IconTrash /></Button>
                 </div>

@@ -5,7 +5,7 @@ import { Button, createStyles } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { api } from "~/utils/api";
 import { notifications } from "@mantine/notifications";
-import EditPrinterPopup from "~/components/Dashboard/editPrinterPopup";
+import EditPrinterModal from "~/components/Dashboard/editPrinterModal";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -120,7 +120,7 @@ const MisImpresoras: NextPage = () => {
           >
             Eliminar
           </Button>
-          <EditPrinterPopup printerInfo={printer} refreshPrinters={refetchPrintersList} />
+          <EditPrinterModal printerInfo={printer} refreshPrinters={refetchPrintersList} />
         </div>
       </td>
     </tr>

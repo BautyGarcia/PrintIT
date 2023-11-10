@@ -23,12 +23,12 @@ interface PrinterInfo {
     bedSize: string;
 }
 
-interface EditPrinterPopupProps {
+interface EditPrinterModalProps {
     printerInfo: PrinterInfo;
     refreshPrinters: () => void;
 }
 
-const EditPrinterPopup = ({ printerInfo, refreshPrinters }: EditPrinterPopupProps) => {
+const EditPrinterModal = ({ printerInfo, refreshPrinters }: EditPrinterModalProps) => {
     const [opened, { open, close }] = useDisclosure(false);
     const [isLoading, setIsLoading] = useState(false);
     const { data: SessionData } = useSession();
@@ -225,4 +225,4 @@ const EditPrinterPopup = ({ printerInfo, refreshPrinters }: EditPrinterPopupProp
     );
 };
 
-export default EditPrinterPopup;
+export default EditPrinterModal;

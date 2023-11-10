@@ -2,7 +2,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { Modal, Button, Group } from '@mantine/core';
 import PrintersForSTLTable from "../Tables/possiblePrinters";
 
-interface ChoosePrinterPopupProps {
+interface ChoosePrinterModalProps {
     fileSize: string;
     fileName: string;
     fileUrl: string;
@@ -15,7 +15,7 @@ interface ChoosePrinterPopupProps {
     disabled: boolean;
 }
 
-const ChoosePrinterPopup = (props: ChoosePrinterPopupProps) => {
+const ChoosePrinterModal = (props: ChoosePrinterModalProps) => {
     const [opened, { open, close }] = useDisclosure(false);
     
     return (
@@ -44,4 +44,4 @@ const ChoosePrinterPopup = (props: ChoosePrinterPopupProps) => {
     );
 }
 
-export default ChoosePrinterPopup;
+export default ChoosePrinterModal;

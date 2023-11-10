@@ -3,25 +3,25 @@ import {
     Button,
     Modal,
     Text,
-    Switch,
-    useMantineTheme,
-    Divider,
     NumberInput,
+    Timeline,
+    Checkbox
 } from "@mantine/core";
-import {
-    Badge,
-    HoverCard,
-} from "@mantine/core";
-import { IconCheck, IconX } from "@tabler/icons-react";
 import { useState } from "react";
 import { type RoleTypes, type WorkStatus } from "@prisma/client";
 import { api } from "~/utils/api";
 import { notifications } from "@mantine/notifications";
 
+interface PriceProps {
+    id: string;
+    amount: number;
+    offeredAt: Date;
+}
+
 interface WorkInfo {
     id: string;
     status: WorkStatus;
-    price: number;
+    prices: PriceProps[];
     lastBidder: RoleTypes;
 }
 
@@ -31,7 +31,7 @@ interface WorkSatusPopupProps {
 }
 
 const WorkSatusPopup = ({ workInfo, refreshWorks }: WorkSatusPopupProps) => {
-    const { id, status, price, lastBidder } = workInfo;
+    const { id, status, prices, lastBidder } = workInfo;
     const [opened, { open, close }] = useDisclosure(false);
     const [isBidding, setIsBidding] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +44,28 @@ const WorkSatusPopup = ({ workInfo, refreshWorks }: WorkSatusPopupProps) => {
         workId: id,
     });
 
-    const theme = useMantineTheme();
+    const formatDate = (DateToFormat: Date) => {
+        const inputDate = new Date(DateToFormat);
+        const now = new Date();
+        const timeDifference = now.getTime() - inputDate.getTime();
+        const minutesAgo = Math.floor(timeDifference / 60000);
+        const hoursAgo = Math.floor(minutesAgo / 60);
+        const day = String(inputDate.getDate()).padStart(2, '0');
+        const month = String(inputDate.getMonth() + 1).padStart(2, '0');
+        const year = inputDate.getFullYear().toString().slice(2);
+
+        if (hoursAgo < 24) {
+            if (hoursAgo < 1) {
+                return "Hace menos de una hora";
+            } else if (hoursAgo === 1) {
+                return "Hace 1 hora";
+            } else {
+                return `Hace ${hoursAgo} horas`;
+            }
+        } else {
+            return `${day}/${month}/${year}`;
+        }
+    }
 
     const handleNewPrice = () => {
         setIsLoading(true);
@@ -189,8 +210,8 @@ const WorkSatusPopup = ({ workInfo, refreshWorks }: WorkSatusPopupProps) => {
                 opened={opened}
                 onClose={close}
                 centered
-                withCloseButton={false}
                 radius="md"
+                title={<Text className="font-bold text-xl">Negociación de Precio</Text>}
                 trapFocus={false}
                 padding="xl"
                 overlayProps={{
@@ -198,89 +219,62 @@ const WorkSatusPopup = ({ workInfo, refreshWorks }: WorkSatusPopupProps) => {
                     blur: 4,
                 }}>
                 <div className="flex flex-col">
-                    <div className="flex flex-row justify-between">
-                        <HoverCard>
-                            <HoverCard.Target>
-                                <Badge size="xl" radius="sm" variant="filled" className="bg-[#3b82f6]">{status}</Badge>
-                            </HoverCard.Target>
-                            <HoverCard.Dropdown>
-                                <Text>Estado del trabajo</Text>
-                            </HoverCard.Dropdown>
-                        </HoverCard>
-                        <HoverCard>
-                            <HoverCard.Target>
-                                <Badge size="xl" radius="sm" variant="filled" className="bg-[#3b82f6]">{price}$</Badge>
-                            </HoverCard.Target>
-                            <HoverCard.Dropdown>
-                                <Text>Ultima propuesta de Precio</Text>
-                            </HoverCard.Dropdown>
-                        </HoverCard>
-                        <HoverCard>
-                            <HoverCard.Target>
-                                <Badge size="xl" radius="sm" variant="filled" className="bg-[#3b82f6]">{lastBidder === "CLIENT" ? "Cliente" : "Vendedor"}</Badge>
-                            </HoverCard.Target>
-                            <HoverCard.Dropdown>
-                                <Text>Último postor</Text>
-                            </HoverCard.Dropdown>
-                        </HoverCard>
-                    </div>
-                    <Divider className="mt-6" size="sm" />
-                    {
-                        lastBidder !== userRoleType && status === "Negociacion" ?
-                            <>
-                                <div className="flex flex-row items-end justify-around mt-10">
-                                    <h1 className="text-lg font-bold text-center">¿Desea presentar una contraoferta?</h1>
-                                    <Switch
-                                        size="md"
-                                        checked={isBidding}
-                                        onChange={() => setIsBidding(!isBidding)}
-                                        color="teal"
-                                        className="self-center"
-                                        thumbIcon={
+                    <Timeline bulletSize={24} active={prices.length - 1} lineWidth={6}>
+                        {
+                            prices.map((price, index) => (
+                                <Timeline.Item pb={10} key={price.id}>
+                                    <Text className="font-bold text-xl">${price.amount}</Text>
+                                    <Text className="font-semibold">{index % 2 === 0 ? 'Cliente' : "Vendedor"}</Text>
+                                    <Text>{formatDate(price.offeredAt)}</Text>
+                                </Timeline.Item>
+                            ))
+                        }
+                        {
+                            (userRoleType !== lastBidder && status === "Negociacion") && (
+                                <Timeline.Item key={"NewPrice"}>
+                                    <div className="flex flex-col gap-5">
+                                        <Checkbox
+                                            label="Quiero dar una contraoferta"
+                                            checked={isBidding}
+                                            size={"md"}
+
+                                            onChange={() => setIsBidding(!isBidding)}
+                                        />
+                                        {
                                             isBidding ? (
-                                                <IconCheck size="0.8rem" color={theme.colors.teal[theme.fn.primaryShade()]} stroke={3} />
+                                                <div className="flex flex-col w-2/3 gap-5">
+                                                    <NumberInput
+                                                        placeholder="Precio"
+                                                        value={newPrice}
+                                                        onChange={(value) => setNewPrice(value as number)}
+                                                        size="md"
+                                                        min={0}
+                                                        max={100000}
+                                                        step={1}
+                                                    />
+                                                    <Button
+                                                        className='bg-blue-500 py-2 text-white hover:bg-blue-700'
+                                                        onClick={handleNewPrice}
+                                                        loading={isLoading}
+                                                    >
+                                                        Enviar contraoferta
+                                                    </Button>
+                                                </div>
                                             ) : (
-                                                <IconX size="0.8rem" color={theme.colors.red[theme.fn.primaryShade()]} stroke={3} />
+                                                <Button
+                                                    className='bg-blue-500 py-2 text-white hover:bg-blue-700 w-2/3'
+                                                    onClick={handleAcceptWork}
+                                                    loading={isLoading}
+                                                >
+                                                    Aceptar precio
+                                                </Button>
                                             )
                                         }
-                                    />
-                                </div>
-                                {
-                                    status === "Negociacion" &&
-                                    isBidding &&
-                                    <div>
-                                        <NumberInput
-                                            value={newPrice}
-                                            className="mt-6"
-                                            defaultValue={1000}
-                                            parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
-                                            onChange={(value) => setNewPrice(value || 0)}
-                                            min={0}
-                                            hideControls
-                                            formatter={(value) =>
-                                                !Number.isNaN(parseFloat(value))
-                                                    ? `$ ${value}`.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, '.')
-                                                    : '$ '
-                                            }
-                                        />
                                     </div>
-                                }
-                            </>
-                            :
-                            <Text fw={500} className="mt-6 text-xl text-center">Su contraoferta ha sido enviada, por favor espere a una respuesta antes de continuar.</Text>
-                    }
-                </div>
-                <div className="mt-6 flex justify-between">
-                    <Button className="bg-[#3B82F6]" onClick={close}>
-                        Cerrar
-                    </Button>
-                    {
-                        status === "Negociacion" &&
-                        lastBidder !== userRoleType &&
-                        <Button className="bg-[#3B82F6]" disabled={isLoading} onClick={isBidding ? () => handleNewPrice() : () => handleAcceptWork()}>
-                            {isBidding ? "Enviar" : "Aceptar"}
-                        </Button>
-                    }
+                                </Timeline.Item>
+                            )
+                        }
+                    </Timeline>
                 </div>
             </Modal>
         </>

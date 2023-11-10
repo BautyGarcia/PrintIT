@@ -193,7 +193,7 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
                 <tbody>{rows}</tbody>
             </Table>
         );
-    };
+    }
     return (
         <ScrollArea className='h-full' onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
             {content}

@@ -44,6 +44,13 @@ export const workRouter = createTRPCRouter({
                 },
                 include: {
                     client: true,
+                    prices: {
+                        select: {
+                            amount: true,
+                            offeredAt: true,
+                            id: true,
+                        }
+                    }
                 }
             });
 
@@ -64,6 +71,13 @@ export const workRouter = createTRPCRouter({
                 },
                 include: {
                     worker: true,
+                    prices: {
+                        select: {
+                            amount: true,
+                            offeredAt: true,
+                            id: true,
+                        }
+                    }
                 }
             });
 
@@ -97,11 +111,16 @@ export const workRouter = createTRPCRouter({
                         },
                     },
                     status: "Negociacion",
-                    price,
                     notes,
                     name,
                     amount,
                     quality,
+                    prices: {
+                        create: {
+                            amount: price,
+                            offeredAt: new Date(),
+                        }
+                    }
                 }
             })
 
@@ -159,8 +178,13 @@ export const workRouter = createTRPCRouter({
                     id: workId,
                 },
                 data: {
-                    price: bid,
                     lastBidder: workInfo.roleType,
+                    prices: {
+                        create: {
+                            amount: bid,
+                            offeredAt: new Date(),
+                        }
+                    }
                 },
             });
 

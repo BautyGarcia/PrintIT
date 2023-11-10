@@ -30,7 +30,6 @@ model Work {
   notes      String?
   quality    String
   amount     Int
-  price      Float      @default(0)
   lastBidder RoleTypes  @default(CLIENT)
   clientId   String
   workerId   String
@@ -39,10 +38,21 @@ model Work {
   printer    Printer    @relation(fields: [printerId], references: [id])
   client     User       @relation("ClientRelation", fields: [clientId], references: [id])
   worker     User       @relation("WorkerRelation", fields: [workerId], references: [id])
+  prices     Prices[]
 
   @@index([clientId])
   @@index([workerId])
   @@index([printerId])
+}
+
+model Prices {
+  id        String   @id @default(cuid())
+  amount    Int
+  offeredAt DateTime @default(now())
+  workId    String
+  work      Work     @relation(fields: [workId], references: [id])
+
+  @@index([workId])
 }
 
 enum WorkStatus {

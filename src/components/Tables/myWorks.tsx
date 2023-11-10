@@ -41,7 +41,7 @@ const MyWorksTable = () => {
         <tr key={work.id}>
             <td>{work.name}</td>
             <td>{work.client.name}</td>
-            <td>{(work.price).toString() + "$"}</td>
+            <td>{`$${work.prices[work.prices.length - 1]?.amount as number}`}</td>
             <td>{work.status}</td>
             <td>{work.quality}</td>
             <td>{work.amount}</td>
@@ -57,7 +57,7 @@ const MyWorksTable = () => {
                                     {
                                         id: work.id,
                                         lastBidder: work.lastBidder,
-                                        price: work.price,
+                                        prices: work.prices,
                                         status: work.status,
                                     }
                                 }

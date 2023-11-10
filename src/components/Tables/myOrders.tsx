@@ -28,12 +28,12 @@ const MyOrdersTable = () => {
             setIsFetchingData(false);
         }
     }, [isLoading]);
-
+    
     const rows = ordersList?.map((order) => (
         <tr key={order.id}>
             <td>{order.name}</td>
             <td>{order.worker.name}</td>
-            <td>{(order.price).toString() + "$"}</td>
+            <td>{`$${order.prices[order.prices.length - 1]?.amount as number}`}</td>
             <td>{order.status}</td>
             <td>{order.quality}</td>
             <td>{order.amount}</td>
@@ -49,7 +49,7 @@ const MyOrdersTable = () => {
                                     {
                                         id: order.id,
                                         lastBidder: order.lastBidder,
-                                        price: order.price,
+                                        prices: order.prices,
                                         status: order.status,
                                     }
                                 }

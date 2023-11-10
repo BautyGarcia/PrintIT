@@ -367,7 +367,7 @@ const STLDropzone = () => {
                             />
                           }
                           <Checkbox
-                            className="mt-2"
+                            className="mt-1"
                             label={"Usar el precio estimado"}
                             checked={isUsingEstimatedPrice}
                             onChange={() => setIsUsingEstimatedPrice(!isUsingEstimatedPrice)}

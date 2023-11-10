@@ -33,7 +33,7 @@ interface WorkSatusPopupProps {
     refreshWorks: () => void;
 }
 
-const WorkSatusPopup = ({ workInfo, refreshWorks }: WorkSatusPopupProps) => {
+const PriceNegotiationModal = ({ workInfo, refreshWorks }: WorkSatusPopupProps) => {
     const { id, status, prices, lastBidder } = workInfo;
     const [opened, { open, close }] = useDisclosure(false);
     const [isBidding, setIsBidding] = useState(true);
@@ -299,4 +299,4 @@ const WorkSatusPopup = ({ workInfo, refreshWorks }: WorkSatusPopupProps) => {
     );
 };
 
-export default WorkSatusPopup;
+export default PriceNegotiationModal;

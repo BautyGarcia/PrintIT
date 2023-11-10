@@ -2,7 +2,7 @@ import { type NextPage } from "next";
 import Dashboard from ".";
 import { createStyles } from "@mantine/core";
 import { useEffect, useState } from "react";
-import WorkSatusPopup from "~/components/Dashboard/workStatusPopup";
+import PriceNegotiationModal from "~/components/Dashboard/priceNegotiationModal";
 import TableTemplate from "~/components/Tables/tableTemplate";
 import { api } from "~/utils/api";
 
@@ -45,7 +45,7 @@ const MisPedidos: NextPage = () => {
         {
           order.status === "Negociacion" ?
             <div className='flex justify-end'>
-              <WorkSatusPopup
+              <PriceNegotiationModal
                 refreshWorks={refetchOrdersList}
                 workInfo={
                   {

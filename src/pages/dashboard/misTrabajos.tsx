@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import Dashboard from ".";
-import WorkSatusPopup from "~/components/Dashboard/workStatusPopup";
+import PriceNegotiationModal from "~/components/Dashboard/priceNegotiationModal";
 import { Button, createStyles } from "@mantine/core";
 import { useEffect, useState } from "react";
 import TableTemplate from "~/components/Tables/tableTemplate";
@@ -54,7 +54,7 @@ const MisTrabajos: NextPage = () => {
         <div className='flex justify-end '>
           {
             work.status === "Negociacion" ?
-              <WorkSatusPopup
+              <PriceNegotiationModal
                 refreshWorks={refetchWorksList}
                 workInfo={
                   {

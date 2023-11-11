@@ -6,6 +6,7 @@ import {
     publicProcedure,
     protectedProcedure
 } from "~/server/api/trpc";
+
 interface ResultProps {
     id: string;
     title: string;

@@ -28,11 +28,7 @@ export const utilsRouter = createTRPCRouter({
                 "Alta": 1.2,
             }
 
-            return fetch("https://api.mercadolibre.com/sites/MLA/search?q=Filamento%203D%20Rollo%20Negro%201kg%20Grillon3", {
-                headers: {
-                    "Authorization": `Bearer ${process.env.MELIACCESS as string}`
-                },
-            })
+            return fetch("https://api.mercadolibre.com/sites/MLA/search?q=Filamento%203D%20Rollo%20Negro%201kg%20Grillon3")
                 .then(response => response.json())
                 .then((data: DataProps) => {
                     data.results = data.results.slice(0, 3);

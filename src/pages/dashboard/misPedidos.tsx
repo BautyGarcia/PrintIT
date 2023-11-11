@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import Dashboard from ".";
-import { createStyles } from "@mantine/core";
+import { Button, createStyles } from "@mantine/core";
 import { useEffect, useState } from "react";
 import PriceNegotiationModal from "~/components/Dashboard/priceNegotiationModal";
 import TableTemplate from "~/components/Tables/tableTemplate";
@@ -42,22 +42,29 @@ const MisPedidos: NextPage = () => {
       <td>{order.notes}</td>
       <td>{order.lastBidder === "CLIENT" ? "Cliente" : "Vendedor"}</td>
       <td>
-        {
-          order.status === "Negociacion" ?
-            <div className='flex justify-end'>
+        <div className='flex justify-end'>
+          {
+            order.status === "Negociacion" ?
               <PriceNegotiationModal
-                refreshWorks={refetchOrdersList}
-                workInfo={
-                  {
-                    id: order.id,
-                    lastBidder: order.lastBidder,
-                    prices: order.prices,
-                    status: order.status,
-                  }
+              refreshWorks={refetchOrdersList}
+              workInfo={
+                {
+                  id: order.id,
+                  lastBidder: order.lastBidder,
+                  prices: order.prices,
+                  status: order.status,
                 }
-              />
-            </div> : <></>
-        }
+              }
+              /> :
+              order.status === "Pagando" ?
+              <Button
+                className="bg-blue-500 py-2 mr-2 text-white hover:bg-blue-700"
+              >
+                Pagar
+              </Button> :
+              <></>
+          }
+        </div>
       </td>
     </tr>
   ));

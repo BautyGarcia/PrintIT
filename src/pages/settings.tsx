@@ -2,7 +2,7 @@ import Head from "next/head";
 import SettingsHeader from "~/components/Settings/settingsHeader";
 import { Avatar, useMantineColorScheme, Text, Button, Divider, FileButton, TextInput, Modal } from "@mantine/core";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
@@ -26,6 +26,12 @@ const Settings: React.FC = () => {
   const { colorScheme } = useMantineColorScheme();
   const { data: sessionData, update } = useSession();
   const router = useRouter();
+ 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    console.log(code);
+  }, []);
 
   const handleImageUpload = async (fileImage: File) => {
     setIsUpdatingImage(true);
@@ -191,14 +197,14 @@ const Settings: React.FC = () => {
               </div>
               <div className={`flex gap-8 ${largeScreen ? "" : "mb-8"}`}>
                 <div className="flex flex-col items-center gap-3">
-                  <Text className={`${largeScreen ? "text-4xl" : "text-2xl"} font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}>{ userStats?.worksAsClient || 0 }</Text>
+                  <Text className={`${largeScreen ? "text-4xl" : "text-2xl"} font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}>{userStats?.worksAsClient || 0}</Text>
                   <Text className={`${largeScreen ? "text-2xl" : "text-lg"}`}>Pedidos</Text>
                 </div>
                 <Divider orientation="vertical" size={"md"} />
                 <div className="flex flex-col items-center gap-3">
                   <Text
                     className={`${largeScreen ? "text-4xl" : "text-2xl"} font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}
-                  >{ userStats?.printers || 0 }
+                  >{userStats?.printers || 0}
                   </Text>
                   <Text
                     className={`${largeScreen ? "text-2xl" : "text-lg"}`}
@@ -209,7 +215,7 @@ const Settings: React.FC = () => {
                 <div className="flex flex-col items-center gap-3">
                   <Text
                     className={`${largeScreen ? "text-4xl" : "text-2xl"} font-bold ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}
-                  >{ userStats?.worksAsWorker || 0 }
+                  >{userStats?.worksAsWorker || 0}
                   </Text>
                   <Text
                     className={`${largeScreen ? "text-2xl" : "text-lg"}`}
@@ -267,9 +273,9 @@ const Settings: React.FC = () => {
                   onClick={handleUserInfoUpdate}
                 >Guardar Cambios</Button>
               </div>
-              <Text className={`text-5xl font-bold mt-20 ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}>Privacidad</Text>
+              <Text className={`text-5xl font-bold mt-8 ${colorScheme === "dark" ? "text-[#FFF]" : ""}`}>Privacidad</Text>
               <div className="flex flex-col gap-5 mt-5">
-              <div className="flex items-center">
+                <div className="flex items-center">
                   <TextInput
                     className={`${largeScreen ? "w-[40%]" : "w-full"}`}
                     label="Contraseña"
@@ -284,20 +290,30 @@ const Settings: React.FC = () => {
                       void router.push("/recoverPassword")
                     }}
                   >Cambiar Contraseña</Button>
-                  
                 </div>
+                <Button
+                  className="w-min bg-blue-500 hover:bg-blue-700 mt-4"
+                  size="md"
+                  onClick={() => {
+                    const clientId = process.env.NEXT_PUBLIC_MP_APP_ID as string;
+                    const state = `${sessionData?.user.id as string}_${Date.now()}`;
+                    const redirectUri = "https://printitweb.vercel.app/settings"
+                    const authUrl = `https://auth.mercadopago.com/authorization?client_id=${clientId}&response_type=code&platform_id=mp&state=${state}&redirect_uri=${redirectUri}`;
+                    void router.push(authUrl);
+                  }}
+                >Conectar Mercado Pago</Button>
               </div>
             </div>
-              <Button 
-                className={`w-min bg-blue-500 hover:bg-blue-700 ${largeScreen ? "" : "mt-20"}`} 
-                size="lg"
-                onClick={() => {
-                  void router.push("/dashboard/subirArchivo")
-                }}
-              >
-                <IconArrowBack className="mr-2"/>
-                  Volver
-              </Button>
+            <Button
+              className={`w-min bg-blue-500 hover:bg-blue-700 ${largeScreen ? "" : "mt-20"}`}
+              size="lg"
+              onClick={() => {
+                void router.push("/dashboard/subirArchivo")
+              }}
+            >
+              <IconArrowBack className="mr-2" />
+              Volver
+            </Button>
           </div>
         </main>
       </div>

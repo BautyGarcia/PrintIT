@@ -36,7 +36,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    // NEXT_PUBLIC_CLIENTVAR: z.string().min(1),
+    NEXT_PUBLIC_MP_APP_ID: z.string(),
   },
 
   /**
@@ -55,5 +55,6 @@ export const env = createEnv({
     MAILUSER: process.env.MAILUSER,
     MP_ACCESS_TOKEN: process.env.MP_ACCESS_TOKEN,
     MP_PUBLIC_KEY: process.env.MP_PUBLIC_KEY,
+    NEXT_PUBLIC_MP_APP_ID: process.env.NEXT_PUBLIC_MP_APP_ID,
   },
 });

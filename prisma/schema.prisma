@@ -106,6 +106,7 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
+  mp_token      String?
   accounts      Account[]
   sessions      Session[]
   printers      Printer[]

@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import {
     createTRPCRouter,
     publicProcedure,
+    protectedProcedure
 } from "~/server/api/trpc";
 
 export const authRouter = createTRPCRouter({
@@ -79,7 +80,7 @@ export const authRouter = createTRPCRouter({
 
             return true;
         }
-    ),
+        ),
     checkIfTokenIsValid: publicProcedure
         .input(z.object({ token: z.string() }))
         .query(async ({ input, ctx }) => {
@@ -106,5 +107,48 @@ export const authRouter = createTRPCRouter({
 
             return true;
         }
-    ),
+        ),
+    saveMercadoPagoToken: protectedProcedure
+        .input(z.object({ token: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { token } = input;
+            const userId = ctx.session.user.id;
+
+            try {
+                await ctx.prisma.user.update({
+                    where: {
+                        id: userId,
+                    },
+                    data: {
+                        mp_token: token,
+                    },
+                });
+
+                return true;
+            } catch (err) {
+                throw new Error("Hubo un problema conectando tu cuenta de Mercado Pago");
+            }
+        }
+        ),
+    isMercadoPagoConnected: protectedProcedure
+        .query(async ({ ctx }) => {
+            const userId = ctx.session.user.id;
+
+            const user = await ctx.prisma.user.findUnique({
+                where: {
+                    id: userId,
+                },
+                select: {
+                    mp_token: true,
+                },
+            });
+
+            if (!user?.mp_token) {
+                return false;
+            } else {
+                return true;
+            }
+
+        }
+        ),
 });

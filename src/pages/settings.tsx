@@ -8,6 +8,7 @@ import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { api } from "~/utils/api";
 import { IconCheck, IconArrowBack } from "@tabler/icons-react";
+import MercadoPagoLogo from "~/components/Utils/mercadoPagoLogo";
 
 interface GCSResponseProps {
   fileURL: string;
@@ -16,7 +17,9 @@ interface GCSResponseProps {
 const Settings: React.FC = () => {
   const { mutate: updateImage } = api.utils.updateImage.useMutation();
   const { mutate: updateUserInfo } = api.utils.updateUserInfo.useMutation();
+  const { mutate: saveToken } = api.auth.saveMercadoPagoToken.useMutation();
   const { data: userStats } = api.utils.getUserStats.useQuery();
+  const { data: isConnected } = api.auth.isMercadoPagoConnected.useQuery();
   const [isUpdatingImage, setIsUpdatingImage] = useState(false);
   const [isUpdatingUser, setIsUpdatingUser] = useState(false);
   const [newUsername, setNewUsername] = useState("");
@@ -30,8 +33,30 @@ const Settings: React.FC = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
-    console.log(code);
-  }, []);
+    
+    if (code) {
+      saveToken({
+        token: code,
+      }, {
+        onSuccess: () => {
+          notifications.show({
+            title: "Exito",
+            message: "Se conecto correctamente con Mercado Pago",
+            color: "green",
+            autoClose: 5000,
+          });
+        },
+        onError: (error) => {
+          notifications.show({
+            title: "Error",
+            message: error.message,
+            color: "red",
+            autoClose: 5000,
+          });
+        }
+      })
+    }
+  }, [saveToken]);
 
   const handleImageUpload = async (fileImage: File) => {
     setIsUpdatingImage(true);
@@ -295,13 +320,14 @@ const Settings: React.FC = () => {
                   className="w-min bg-blue-500 hover:bg-blue-700 mt-4"
                   size="md"
                   onClick={() => {
+                    if (isConnected) return true;
                     const clientId = process.env.NEXT_PUBLIC_MP_APP_ID as string;
                     const state = `${sessionData?.user.id as string}_${Date.now()}`;
                     const redirectUri = "https://printitweb.vercel.app/settings"
                     const authUrl = `https://auth.mercadopago.com/authorization?client_id=${clientId}&response_type=code&platform_id=mp&state=${state}&redirect_uri=${redirectUri}`;
                     void router.push(authUrl);
                   }}
-                >Conectar Mercado Pago</Button>
+                ><MercadoPagoLogo/>{ isConnected ? "Cuenta conectada" : "Conectar Mercado Pago"}</Button>
               </div>
             </div>
             <Button

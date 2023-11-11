@@ -5,7 +5,7 @@ import {
     publicProcedure,
     protectedProcedure
 } from "~/server/api/trpc";
-import { MercadoPagoConfig, Preference } from 'MercadoPago';
+import { MercadoPagoConfig, Preference } from 'mercadopago';
 
 interface ResultProps {
     id: string;

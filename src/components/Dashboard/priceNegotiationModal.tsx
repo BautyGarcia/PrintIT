@@ -7,7 +7,6 @@ import {
     Timeline,
     Checkbox,
     Tooltip,
-    Divider
 } from "@mantine/core";
 import { useState } from "react";
 import { type RoleTypes, type WorkStatus } from "@prisma/client";
@@ -34,7 +33,7 @@ interface WorkSatusPopupProps {
 }
 
 const PriceNegotiationModal = ({ workInfo, refreshWorks }: WorkSatusPopupProps) => {
-    const { id, status, prices, lastBidder } = workInfo;
+    const { id, prices, lastBidder } = workInfo;
     const [opened, { open, close }] = useDisclosure(false);
     const [isBidding, setIsBidding] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
@@ -232,7 +231,7 @@ const PriceNegotiationModal = ({ workInfo, refreshWorks }: WorkSatusPopupProps) 
                     <Timeline bulletSize={24} active={prices.length - 1} lineWidth={6}>
                         {
                             prices.map((price, index) => (
-                                <Timeline.Item pb={10} key={price.id}>
+                                <Timeline.Item pb={10} key={price.id} lineVariant={ index === prices.length - 1 ? "dashed" : "solid" }>
                                     <Text className="font-bold text-xl">${price.amount}</Text>
                                     <Text className="font-semibold">{index % 2 === 0 ? 'Cliente' : "Vendedor"}</Text>
                                     <Text>{formatDate(price.offeredAt)}</Text>
@@ -240,7 +239,7 @@ const PriceNegotiationModal = ({ workInfo, refreshWorks }: WorkSatusPopupProps) 
                             ))
                         }
                         {
-                            (userRoleType !== lastBidder && status === "Negociacion") && (
+                            userRoleType !== lastBidder && (
                                 <Timeline.Item key={"NewPrice"}>
                                     <div className="flex flex-col gap-5">
                                         <Checkbox
@@ -284,15 +283,14 @@ const PriceNegotiationModal = ({ workInfo, refreshWorks }: WorkSatusPopupProps) 
                                 </Timeline.Item>
                             )
                         }
+                        {
+                            userRoleType === lastBidder && (
+                                <Timeline.Item>
+                                    <Text className="font-bold text-xl mt-4">Espera a una respuesta para poder proponer otro precio.</Text>
+                                </Timeline.Item>
+                            )
+                        }
                     </Timeline>
-                    {
-                        userRoleType === lastBidder && status === "Negociacion" && (
-                            <>
-                                <Divider variant="dashed" size={"md"} mt={20}/>
-                                <Text className="font-bold text-xl mt-4 text-center">Espera a una respuesta para poder proponer otro precio.</Text>
-                            </>
-                        )
-                    }
                 </div>
             </Modal>
         </>

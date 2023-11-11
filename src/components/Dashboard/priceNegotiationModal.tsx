@@ -259,7 +259,7 @@ const PriceNegotiationModal = ({ workInfo, refreshWorks }: WorkSatusPopupProps) 
                                                         size="md"
                                                         min={0}
                                                         max={100000}
-                                                        step={1}
+                                                        step={100}
                                                     />
                                                     <Button
                                                         className='bg-blue-500 py-2 text-white hover:bg-blue-700'

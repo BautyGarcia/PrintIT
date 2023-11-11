@@ -361,7 +361,7 @@ const STLDropzone = () => {
                               defaultValue={0}
                               min={0}
                               max={1000000}
-                              step={50}
+                              step={100}
                               prefix="$"
                               className="mb-2"
                             />

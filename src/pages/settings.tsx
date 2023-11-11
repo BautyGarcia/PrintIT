@@ -323,7 +323,7 @@ const Settings: React.FC = () => {
                   >Cambiar Contraseña</Button>
                 </div>
                 <Button
-                  className="w-min bg-blue-500 hover:bg-blue-700 mt-4"
+                  className={`w-min mt-4 bg-blue-500 hover:bg-blue-700`}
                   size="md"
                   loading={isConnecting}
                   onClick={() => {
@@ -335,9 +335,10 @@ const Settings: React.FC = () => {
                     const authUrl = `https://auth.mercadopago.com/authorization?client_id=${clientId}&response_type=code&platform_id=mp&state=${state}&redirect_uri=${redirectUri}`;
                     void router.push(authUrl);
                   }}
+                  
                 >
-                  {isConnecting ? "" : <MercadoPagoLogo />}
                   {isConnected ? "Cuenta conectada" : isConnecting ? "Conectando..." : "Conectar Mercado Pago"}
+                  {isConnecting ? "" : <MercadoPagoLogo />}
                 </Button>
               </div>
             </div>

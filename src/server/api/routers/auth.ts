@@ -1,6 +1,5 @@
 import { z } from "zod";
 import bcrypt from "bcrypt";
-
 import {
     createTRPCRouter,
     publicProcedure,
@@ -149,6 +148,5 @@ export const authRouter = createTRPCRouter({
                 return true;
             }
 
-        }
-        ),
+        }),
 });

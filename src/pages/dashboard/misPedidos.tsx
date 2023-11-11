@@ -23,6 +23,7 @@ const MisPedidos: NextPage = () => {
   const { classes, cx } = useStyles();
   const [scrolled, setScrolled] = useState(false);
   const { data: ordersList, refetch: refetchOrdersList, isLoading } = api.work.getMyOrders.useQuery();
+  const { mutate: createPreference } = api.utils.createPreference.useMutation();
   const [isFetchingData, setIsFetchingData] = useState(true);
 
   useEffect(() => {
@@ -30,6 +31,21 @@ const MisPedidos: NextPage = () => {
       setIsFetchingData(false);
     }
   }, [isLoading]);
+
+  const handleCreatePreference = (id: string, price: number, quantity: number) => {
+    createPreference({
+      id,
+      price,
+      quantity,
+    }, {
+      onSuccess(data) {
+        console.log(data);
+      },
+      onError(error) {
+        console.log(error);
+      }
+    })
+  }
 
   const rows = ordersList?.map((order) => (
     <tr key={order.id}>
@@ -58,7 +74,8 @@ const MisPedidos: NextPage = () => {
               /> :
               order.status === "Pagando" ?
               <Button
-                className="bg-blue-500 py-2 mr-2 text-white hover:bg-blue-700"
+                className="bg-blue-500 py-2 text-white hover:bg-blue-700"
+                onClick={() => handleCreatePreference(order.id, order.prices[order.prices.length - 1]?.amount as number, order.amount)}
               >
                 Pagar
               </Button> :

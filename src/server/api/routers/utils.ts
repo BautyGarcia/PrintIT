@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
 import { z } from "zod";
 import {
     createTRPCRouter,
     publicProcedure,
     protectedProcedure
 } from "~/server/api/trpc";
+import { MercadoPagoConfig, Preference } from 'MercadoPago';
 
 interface ResultProps {
     id: string;
@@ -23,7 +23,7 @@ export const utilsRouter = createTRPCRouter({
         .mutation(async ({ input }) => {
             const { printVolume, printAmount, printQuality } = input;
 
-            const references: {[key: string]: number} = {
+            const references: { [key: string]: number } = {
                 "Baja": 0.8,
                 "Media": 1,
                 "Alta": 1.2,
@@ -138,4 +138,47 @@ export const utilsRouter = createTRPCRouter({
 
             return userInfo._count;
         }),
-});
+    createPreference: protectedProcedure
+        .input(z.object({ quantity: z.number(), id: z.string(), price: z.number() }))
+        .mutation(({ input, ctx }) => {
+            const { quantity, price, id } = input;
+
+            const client = new MercadoPagoConfig({
+                accessToken: "TEST-154519291358798-110521-0715e092e1ef0d47b68d9c5da1298de4-200994358",
+            });
+
+            const preference = new Preference(client);
+
+            preference.create({
+                body: {
+                    items: [
+                        {
+                            id: id,
+                            title: "Impresion 3D PrintIT",
+                            quantity: quantity,
+                            currency_id: "ARS",
+                            unit_price: price
+                        }
+                    ],
+                    payer: {
+                        name: ctx.session.user.name?.split(" ")[0] as string,
+                        surname: ctx.session.user.name?.split(" ")[1] as string || "",
+                        email: ctx.session.user.email as string,
+                    },
+                    back_urls: {
+                        success: "https://printit.vercel.app/dashboard/misPedidos",
+                        failure: "https://printit.vercel.app/dashboard/misPedidos",
+                        pending: "https://printit.vercel.app/dashboard/misPedidos",
+                    },
+                    marketplace_fee: 0.1,
+                }
+            })
+                .then((response) => {
+                    console.log(response.id);
+                    return response.id;
+                })
+                .catch((error: Error) => {
+                    throw new Error(`Hubo un problema creando el formulario de pago. ${error.message}`);
+                });
+        }),
+})

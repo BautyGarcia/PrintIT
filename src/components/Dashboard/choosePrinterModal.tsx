@@ -33,7 +33,7 @@ const ChoosePrinterModal = (props: ChoosePrinterModalProps) => {
             <Group position="center">
                 <Button
                     onClick={open}
-                    className="mb-4 w-full rounded-lg bg-blue-500 hover:bg-blue-700"
+                    className="mb-4 w-full rounded-md bg-blue-500 hover:bg-blue-700"
                     loading={props.loading}
                     disabled={props.disabled}
                 >

@@ -134,9 +134,6 @@ dependencies:
   react-icons:
     specifier: ^4.8.0
     version: 4.11.0(react@18.2.0)
-  react-payment-icons-inline:
-    specifier: ^1.0.22
-    version: 1.0.22(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
   react-query:
     specifier: ^3.39.3
     version: 3.39.3(react-dom@18.2.0)(react@18.2.0)
@@ -5931,19 +5928,6 @@ packages:
 
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
-
-  /react-payment-icons-inline@1.0.22(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-uG0Ix/CO00MtsiBRc+KnqJvI8h34a12eIsHnj7hPDco4qYXb5evIhHcAyCB/hLcuBLcS6RzVuWsP+rHm6CjfAw==}
-    engines: {node: '>=8.0.0'}
-    peerDependencies:
-      prop-types: ^15.7.2
-      react: ^16.11.0
-      react-dom: ^16.11.0
-    dependencies:
-      prop-types: 15.8.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    dev: false
 
   /react-query@3.39.3(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-nLfLz7GiohKTJDuT4us4X3h/8unOh+00MLb2yJoGTPjxKs2bc1iDhkNx2bd5MKklXnOD3NrVZ+J2UXujA5In4g==}

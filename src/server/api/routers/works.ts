@@ -264,6 +264,29 @@ export const workRouter = createTRPCRouter({
 
             return confirmedWork;
         }),
+    setWorkToPaying: protectedProcedure
+        .input(z.object({ workId: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { workId } = input;
+            const userId = ctx.session.user.id;
+
+            await getWorkInfoAndUserRoleType(ctx.prisma, workId, userId);
+
+            const confirmedWork = await ctx.prisma.work.update({
+                where: {
+                    id: workId,
+                },
+                data: {
+                    status: "Pagando",
+                },
+            });
+
+            if (!confirmedWork) {
+                throw new Error("Hubo un problema confirmando el trabajo");
+            }
+
+            return confirmedWork;
+        }),
     getWorkById: protectedProcedure
         .input(z.object({ workId: z.string() }))
         .query(async ({ input, ctx }) => {

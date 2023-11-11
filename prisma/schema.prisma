@@ -17,7 +17,7 @@ model Printer {
   bedSize     String
   userId      String
   isAvailable Boolean @default(true)
-  user        User    @relation(fields: [userId], references: [id])
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   Work        Work[]
 
   @@index([userId])
@@ -35,9 +35,9 @@ model Work {
   workerId   String
   printerId  String
   stlUrl     String?
-  printer    Printer    @relation(fields: [printerId], references: [id])
-  client     User       @relation("ClientRelation", fields: [clientId], references: [id])
-  worker     User       @relation("WorkerRelation", fields: [workerId], references: [id])
+  printer    Printer    @relation(fields: [printerId], references: [id], onDelete: Cascade)
+  client     User       @relation("ClientRelation", fields: [clientId], references: [id], onDelete: Cascade)
+  worker     User       @relation("WorkerRelation", fields: [workerId], references: [id], onDelete: Cascade)
   prices     Prices[]
 
   @@index([clientId])
@@ -50,7 +50,7 @@ model Prices {
   amount    Int
   offeredAt DateTime @default(now())
   workId    String
-  work      Work     @relation(fields: [workId], references: [id])
+  work      Work     @relation(fields: [workId], references: [id], onDelete: Cascade)
 
   @@index([workId])
 }
@@ -58,6 +58,7 @@ model Prices {
 enum WorkStatus {
   Cancelado
   Negociacion
+  Pagando
   Imprimiendo
   Enviando
   Finalizado

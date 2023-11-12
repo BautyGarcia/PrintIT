@@ -68,13 +68,13 @@ const UserBox = ({ user }: UserBoxProps) => {
       </Menu.Target>
       <Menu.Dropdown>
         <Link href="/settings">
-          <Menu.Item icon={<i className="ri-settings-2-line"></i>}>
-            Settings
+          <Menu.Item icon={<i className="ri-user-settings-line"></i>}>
+            Perfil
           </Menu.Item>
         </Link>
         <Link href="/" passHref onClick={() => signOut({ callbackUrl: "/" })}>
           <Menu.Item icon={<IconLogout size="0.9rem" stroke={1.5} />}>
-            Logout
+            Cerrar Sesion
           </Menu.Item>
         </Link>
       </Menu.Dropdown>

@@ -24,6 +24,7 @@ const AddPrinterModal = ({ refreshPrinters }: AddPrinterModalProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const { data: SessionData } = useSession();
   const { mutate: addPrinter } = api.printer.addPrinter.useMutation();
+  const { data: isMPConnected } = api.auth.isMercadoPagoConnected.useQuery();
 
   const handlePopupClose = () => {
     close();
@@ -106,13 +107,26 @@ const AddPrinterModal = ({ refreshPrinters }: AddPrinterModalProps) => {
     );
   };
 
+  const handleIsMPConnected = () => {
+    if (!isMPConnected) {
+      notifications.show({
+        title: "Error",
+        message: "Para poder registrar una impresora debes conectarte a Mercado Pago. Ve a la pestaña de Perfil para hacerlo.",
+        color: "red",
+        autoClose: 5000,
+      });
+      return;
+    }
+    open();
+  }
+
   return (
     <>
       <Link
         href="#"
         passHref
         className="mb-4 flex items-center rounded-md bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white no-underline"
-        onClick={open}
+        onClick={handleIsMPConnected}
       >
         <IconPlus className="mr-2.5 text-white" />
         <span>Registrar Impresora</span>

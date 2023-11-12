@@ -140,14 +140,32 @@ export const utilsRouter = createTRPCRouter({
         }),
     createPreference: protectedProcedure
         .input(z.object({ quantity: z.number(), id: z.string(), price: z.number() }))
-        .mutation(({ input, ctx }) => {
+        .mutation(async ({ input, ctx }) => {
             const { quantity, price, id } = input;
 
+            const sellerInfo = await ctx.prisma.work.findUnique({
+                where: {
+                    id: id,
+                },
+                select: {
+                    worker: {
+                        select: {
+                            mp_token: true,
+                        }
+                    }
+                },
+            });
+
+            if (!sellerInfo) {
+                throw new Error("Hubo un problema obteniendo la información del vendedor");
+            }
+
             const client = new MercadoPagoConfig({
-                accessToken: process.env.MP_TEST_ACCESS as string
+                accessToken: process.env.MP_ACCESS_TOKEN as string
             });
 
             const preference = new Preference(client);
+
 
             return preference.create({
                 body: {
@@ -175,7 +193,7 @@ export const utilsRouter = createTRPCRouter({
                 }
             })
                 .then((response) => {
-                    return { redirectURL: response.init_point };
+                    return { redirectURL: response.init_point, mp_token: sellerInfo.worker.mp_token };
                 })
                 .catch((error: Error) => {
                     throw new Error(`Hubo un problema creando el formulario de pago. ${error.message}`);

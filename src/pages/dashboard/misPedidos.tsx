@@ -14,7 +14,6 @@ const useStyles = createStyles((theme) => ({
     backgroundColor: theme.colorScheme === 'dark' ? "#1c2333" : theme.white,
     transition: 'box-shadow 150ms ease',
   },
-
   scrolled: {
     boxShadow: theme.shadows.sm,
   },
@@ -26,14 +25,6 @@ const MisPedidos: NextPage = () => {
   const { data: ordersList, refetch: refetchOrdersList, isLoading } = api.work.getMyOrders.useQuery();
   const { mutate: createPreference } = api.utils.createPreference.useMutation();
   const [isFetchingData, setIsFetchingData] = useState(true);
-
-  useEffect( () => {
-    if (typeof window !== "undefined") {
-      void import("@mercadopago/sdk-react").then(({ initMercadoPago }) => {
-        initMercadoPago(process.env.NEXT_PUBLIC_MP_TEST_PK as string);
-      });
-    }
-  }, []);
 
   useEffect(() => {
     if (!isLoading) {
@@ -76,6 +67,9 @@ const MisPedidos: NextPage = () => {
                       quantity: order.amount,
                     }, {
                       onSuccess: (data) => {
+                        void import("@mercadopago/sdk-react").then(({ initMercadoPago }) => {
+                          initMercadoPago(data.mp_token as string);
+                        });
                         void window.open(data.redirectURL, "_blank");
                       },
                       onError: (error) => {

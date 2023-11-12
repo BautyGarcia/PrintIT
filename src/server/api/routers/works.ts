@@ -195,16 +195,13 @@ export const workRouter = createTRPCRouter({
             return updatedWork;
         }),
     setWorkToPrinting: protectedProcedure
-        .input(z.object({ workId: z.string() }))
+        .input(z.object({ preferenceId: z.string() }))
         .mutation(async ({ input, ctx }) => {
-            const { workId } = input;
-            const userId = ctx.session.user.id;
-
-            await getWorkInfoAndUserRoleType(ctx.prisma, workId, userId);
+            const { preferenceId } = input;
 
             const confirmedWork = await ctx.prisma.work.update({
                 where: {
-                    id: workId,
+                    preferenceId
                 },
                 data: {
                     status: "Imprimiendo",

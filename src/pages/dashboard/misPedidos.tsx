@@ -24,7 +24,44 @@ const MisPedidos: NextPage = () => {
   const [scrolled, setScrolled] = useState(false);
   const { data: ordersList, refetch: refetchOrdersList, isLoading } = api.work.getMyOrders.useQuery();
   const { mutate: createPreference } = api.utils.createPreference.useMutation();
+  const { mutate: setWorkPaid } = api.work.setWorkToPrinting.useMutation();
   const [isFetchingData, setIsFetchingData] = useState(true);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get("status");
+    const preferenceId = urlParams.get("preference_id");
+    if (status === "approved") {
+      setWorkPaid({
+        preferenceId: preferenceId as string,
+      }, {
+        onSuccess: () => {
+          notifications.show({
+            title: "Pago aprobado!",
+            message: "El pago fue aprobado.",
+            color: "green",
+            autoClose: 5000,
+          });
+          void refetchOrdersList();
+        },
+        onError: (error) => {
+          notifications.show({
+            title: "Error",
+            message: error.message,
+            color: "red",
+            autoClose: 5000,
+          });
+        }
+      })
+    } else if (status === "failure") {
+      notifications.show({
+        title: "Pago rechazado!",
+        message: "El pago fue rechazado.",
+        color: "red",
+        autoClose: 5000,
+      });
+    }
+  }, [setWorkPaid, refetchOrdersList]);
 
   useEffect(() => {
     if (!isLoading) {

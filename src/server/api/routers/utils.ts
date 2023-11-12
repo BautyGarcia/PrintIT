@@ -192,8 +192,16 @@ export const utilsRouter = createTRPCRouter({
                     auto_return: "approved",
                 }
             })
-                .then((response) => {
-                    return { redirectURL: response.init_point, mp_token: sellerInfo.worker.mp_token };
+                .then(async (response) => {
+                    await ctx.prisma.work.update({
+                        where: {
+                            id: id,
+                        },
+                        data: {
+                            preferenceId: response.id,
+                        },
+                    });
+                    return { redirectURL: response.init_point, mp_token: sellerInfo.worker.mp_token, id: response.id };
                 })
                 .catch((error: Error) => {
                     throw new Error(`Hubo un problema creando el formulario de pago. ${error.message}`);

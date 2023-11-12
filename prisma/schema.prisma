@@ -24,21 +24,22 @@ model Printer {
 }
 
 model Work {
-  id         String     @id @default(cuid())
-  status     WorkStatus
-  name       String
-  notes      String?
-  quality    String
-  amount     Int
-  lastBidder RoleTypes  @default(CLIENT)
-  clientId   String
-  workerId   String
-  printerId  String
-  stlUrl     String?
-  printer    Printer    @relation(fields: [printerId], references: [id], onDelete: Cascade)
-  client     User       @relation("ClientRelation", fields: [clientId], references: [id], onDelete: Cascade)
-  worker     User       @relation("WorkerRelation", fields: [workerId], references: [id], onDelete: Cascade)
-  prices     Prices[]
+  id           String     @id @default(cuid())
+  status       WorkStatus
+  name         String
+  notes        String?
+  quality      String
+  amount       Int
+  lastBidder   RoleTypes  @default(CLIENT)
+  clientId     String
+  workerId     String
+  printerId    String
+  stlUrl       String?
+  preferenceId String?    @unique
+  printer      Printer    @relation(fields: [printerId], references: [id], onDelete: Cascade)
+  client       User       @relation("ClientRelation", fields: [clientId], references: [id], onDelete: Cascade)
+  worker       User       @relation("WorkerRelation", fields: [workerId], references: [id], onDelete: Cascade)
+  prices       Prices[]
 
   @@index([clientId])
   @@index([workerId])

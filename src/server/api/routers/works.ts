@@ -5,7 +5,7 @@ import {
     protectedProcedure,
 } from "~/server/api/trpc";
 
-const getWorkInfoAndUserRoleType = async (prisma: PrismaClient, workId: string, userId: string) => { 
+const getWorkInfoAndUserRoleType = async (prisma: PrismaClient, workId: string, userId: string) => {
     let roleType: RoleTypes = "CLIENT" || "WORKER";
     const work = await prisma.work.findUnique({
         where: {
@@ -23,7 +23,7 @@ const getWorkInfoAndUserRoleType = async (prisma: PrismaClient, workId: string, 
 
     if (work.clientId === userId) {
         roleType = "CLIENT";
-    } 
+    }
 
     if (work.workerId === userId) {
         roleType = "WORKER";
@@ -212,9 +212,9 @@ export const workRouter = createTRPCRouter({
                 throw new Error("Hubo un problema confirmando el trabajo");
             }
 
-            return confirmedWork;
+            return { id: confirmedWork.id };
         }
-    ),
+        ),
     setWorkToShipping: protectedProcedure
         .input(z.object({ workId: z.string() }))
         .mutation(async ({ input, ctx }) => {
@@ -323,5 +323,5 @@ export const workRouter = createTRPCRouter({
             const workInfo = await getWorkInfoAndUserRoleType(ctx.prisma, workId, userId);
 
             return workInfo.roleType;
-    }),
+        }),
 })

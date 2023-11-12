@@ -283,3 +283,219 @@ export const updateBidTemplate = (username: string, redirectURL: string, redirec
         </body>
     </html>
 `;
+
+export const payedPrintToWorkerTemplate = (workerName: string, redirectURL: string, redirectSection: string) => `
+    <!DOCTYPE html>
+
+    <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Se pago la impresion</title>
+            <style>
+                body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #f2f2f2;
+                }
+
+                .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                border-radius: 4px;
+                overflow: hidden;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+
+                .header {
+                padding: 20px;
+                background-color: #007bff;
+                color: #ffffff;
+                text-align: center;
+                }
+
+                .logo {
+                max-width: 50px;
+                margin: 0 auto;
+                display: block;
+                }
+
+                .content {
+                padding: 20px;
+                text-align: center;
+                }
+
+                .button {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #ffffff;
+                text-decoration: none;
+                border-radius: 4px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <img src="cid:logoBlanco" alt="App Logo" class="logo">
+                </div>
+                <div class="content">
+                    <h1>Pago realizado</h1>
+                    <p>Hola <b>${workerName}</b>,</p>
+                    <p>Recientemente se ha terminado de pagar uno de tus trabajos. Por favor dirigite a la sección de</p>
+                    <a href="${redirectURL}" class="button text-white">${redirectSection}</a>
+                    <p>para poder iniciar con la impresion. ahora si, ¡Manos a la obra!.</p>
+                    <p>Un abrazo,</p>
+                    <p>El equipo de PrintIT</p>
+                </div>
+            </div>
+        </body>
+    </html>
+`;
+
+export const payedPrintToBuyerTemplate = (buyerName: string, redirectURL: string, redirectSection: string) => `
+    <!DOCTYPE html>
+
+    <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Se pago la impresion</title>
+            <style>
+                body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #f2f2f2;
+                }
+
+                .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                border-radius: 4px;
+                overflow: hidden;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+
+                .header {
+                padding: 20px;
+                background-color: #007bff;
+                color: #ffffff;
+                text-align: center;
+                }
+
+                .logo {
+                max-width: 50px;
+                margin: 0 auto;
+                display: block;
+                }
+
+                .content {
+                padding: 20px;
+                text-align: center;
+                }
+
+                .button {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #ffffff;
+                text-decoration: none;
+                border-radius: 4px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <img src="cid:logoBlanco" alt="App Logo" class="logo">
+                </div>
+                <div class="content">
+                    <h1>Pago realizado</h1>
+                    <p>Hola <b>${buyerName}</b>,</p>
+                    <p>Queremos informarte que se registro correctamente tu pago y que ya le informamos al vendedor. Por favor dirigete a la seccion de</p>
+                    <a href="${redirectURL}" class="button text-white">${redirectSection}</a>
+                    <p>para poder ver la informacion del vendedor tu mismo. Esperamos que todo vaya bien.</p>
+                    <p>Un abrazo,</p>
+                    <p>El equipo de PrintIT</p>
+                </div>
+            </div>
+        </body>
+    </html>
+`;
+
+export const finishedPrintingTemplate = (buyerName: string, redirectURL: string, redirectSection: string) => `
+    <!DOCTYPE html>
+
+    <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Se termino la impresion</title>
+            <style>
+                body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #f2f2f2;
+                }
+
+                .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                border-radius: 4px;
+                overflow: hidden;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+
+                .header {
+                padding: 20px;
+                background-color: #007bff;
+                color: #ffffff;
+                text-align: center;
+                }
+
+                .logo {
+                max-width: 50px;
+                margin: 0 auto;
+                display: block;
+                }
+
+                .content {
+                padding: 20px;
+                text-align: center;
+                }
+
+                .button {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #ffffff;
+                text-decoration: none;
+                border-radius: 4px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <img src="cid:logoBlanco" alt="App Logo" class="logo">
+                </div>
+                <div class="content">
+                    <h1>Impresion Finalizada</h1>
+                    <p>Hola <b>${buyerName}</b>,</p>
+                    <p>Queremos informarte que el vendedor confirmo que la impresion ya esta terminada. Por favor dirigete a la seccion de</p>
+                    <a href="${redirectURL}" class="button text-white">${redirectSection}</a>
+                    <p>para poder ver esto. Recuerda que puedes contactarte con el vendedor con la informacion de la pestaña Mis Pedidos. Esperamos que todo vaya bien.</p>
+                    <p>Un abrazo,</p>
+                    <p>El equipo de PrintIT</p>
+                </div>
+            </div>
+        </body>
+    </html>
+`;

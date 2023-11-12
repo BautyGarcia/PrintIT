@@ -6,6 +6,7 @@ import PriceNegotiationModal from "~/components/Dashboard/priceNegotiationModal"
 import TableTemplate from "~/components/Tables/tableTemplate";
 import { api } from "~/utils/api";
 import { notifications } from "@mantine/notifications";
+import SellerInformationModal from "~/components/Dashboard/sellerInformationModal";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -25,6 +26,7 @@ const MisPedidos: NextPage = () => {
   const { data: ordersList, refetch: refetchOrdersList, isLoading } = api.work.getMyOrders.useQuery();
   const { mutate: createPreference } = api.utils.createPreference.useMutation();
   const { mutate: setWorkPaid } = api.work.setWorkToPrinting.useMutation();
+  const { mutate: sendPaymentEmail } = api.email.sendPaymentEmail.useMutation();
   const [isFetchingData, setIsFetchingData] = useState(true);
 
   useEffect(() => {
@@ -35,13 +37,14 @@ const MisPedidos: NextPage = () => {
       setWorkPaid({
         preferenceId: preferenceId as string,
       }, {
-        onSuccess: () => {
+        onSuccess: (data) => {
           notifications.show({
             title: "Pago aprobado!",
             message: "El pago fue aprobado.",
             color: "green",
             autoClose: 5000,
           });
+          sendPaymentEmail({ workId: data.id })
           void refetchOrdersList();
         },
         onError: (error) => {
@@ -61,7 +64,7 @@ const MisPedidos: NextPage = () => {
         autoClose: 5000,
       });
     }
-  }, [setWorkPaid, refetchOrdersList]);
+  }, [setWorkPaid, refetchOrdersList, sendPaymentEmail]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -122,7 +125,12 @@ const MisPedidos: NextPage = () => {
                 >
                   Pagar
                 </Button> :
-                <></>
+                order.status === "Imprimiendo" ?
+                  <SellerInformationModal
+                    imageUrl={order.worker.image || ""}
+                    username={order.worker.name}
+                    email={order.worker.email}
+                  /> : <></>
           }
         </div>
       </td>

@@ -5,6 +5,7 @@ import { Button, createStyles } from "@mantine/core";
 import { useEffect, useState } from "react";
 import TableTemplate from "~/components/Tables/tableTemplate";
 import { api } from "~/utils/api";
+import { notifications } from "@mantine/notifications";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -24,7 +25,9 @@ const MisTrabajos: NextPage = () => {
   const { classes, cx } = useStyles();
   const [scrolled, setScrolled] = useState(false);
   const { data: worksList, refetch: refetchWorksList, isLoading } = api.work.getMyWorks.useQuery();
+  const { mutate: finishWork } = api.work.setWorkToFinished.useMutation();
   const [isFetchingData, setIsFetchingData] = useState(true);
+  const { mutate: sendFinishedWorkEmail } = api.email.sendFinishedWorkEmail.useMutation();
 
   useEffect(() => {
     if (!isLoading) {
@@ -64,7 +67,35 @@ const MisTrabajos: NextPage = () => {
                     status: work.status,
                   }
                 }
-              /> : <></>
+              /> :
+              work.status === "Imprimiendo" ?
+                <Button
+                  onClick={() => {
+                    finishWork({ workId: work.id }, {
+                      onSuccess: () => {
+                        notifications.show({
+                          title: "Trabajo finalizado",
+                          message: "El trabajo ha sido finalizado correctamente.",
+                          color: "green",
+                          autoClose: 5000,
+                        });
+                        sendFinishedWorkEmail({ workId: work.id });
+                        void refetchWorksList();
+                      },
+                      onError: (error) => {
+                        notifications.show({
+                          title: "Error",
+                          message: error.message,
+                          color: "red",
+                          autoClose: 5000,
+                        });
+                      }
+                    })
+                  }}
+                  className='bg-blue-500 py-2 ml-2 text-white hover:bg-blue-700'
+                >
+                  Termine de imprimir
+                </Button> : <></>
           }
           <Button
             onClick={() => handleFileDownload(work.stlUrl as string)}

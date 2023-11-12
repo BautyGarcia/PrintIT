@@ -8,11 +8,14 @@ import {
     publicProcedure,
 } from "~/server/api/trpc";
 import path from "path";
-import { 
-    recoverPasswordTemplate, 
-    createWorkTemplate, 
+import {
+    recoverPasswordTemplate,
+    createWorkTemplate,
     finishNegotiationTemplate,
-    updateBidTemplate
+    updateBidTemplate,
+    payedPrintToBuyerTemplate,
+    payedPrintToWorkerTemplate,
+    finishedPrintingTemplate
 } from "~/utils/emailTemplates";
 
 const transporter = nodemailer.createTransport({
@@ -250,6 +253,134 @@ export const emailRouter = createTRPCRouter({
             } catch (error) {
                 console.log(error);
                 throw new Error("No se pudo enviar el Email de contraoferta");
+            }
+        }),
+    sendPaymentEmail: protectedProcedure
+        .input(z.object({ workId: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { workId } = input;
+            const userId = ctx.session.user.id;
+
+            const work = await ctx.prisma.work.findUnique({
+                where: {
+                    id: workId,
+                },
+                include: {
+                    client: {
+                        select: {
+                            email: true,
+                            name: true,
+                            id: true,
+                        }
+                    },
+                    worker: {
+                        select: {
+                            email: true,
+                            name: true,
+                            id: true,
+                        }
+                    },
+                }
+            });
+
+            if (!work) {
+                throw new Error("No se pudo encontrar el trabajo");
+            }
+
+            if (work.client.id !== userId && work.worker.id !== userId) {
+                throw new Error("No tienes permiso para ver este trabajo");
+            }
+
+            let redirectURL = env.NODE_ENV === "production" ? `https://printitweb.vercel.app/dashboard/misPedidos` : `http://localhost:3000/dashboard/misPedidos`;
+            let redirectName = "Mis Pedidos";
+
+            let mailOptions = {
+                from: 'PrintIT <contact.printit.app@gmail.com>',
+                to: work.client.email,
+                subject: 'PrintIT - ¡Pago Realizdo!',
+                html: payedPrintToBuyerTemplate(work.client.name, redirectURL, redirectName),
+                attachments
+            };
+
+            try {
+                await transporter.sendMail(mailOptions);
+            } catch (error) {
+                console.log(error);
+                throw new Error("No se pudo enviar el Email de realizacion de pago a comprador");
+            }
+
+            redirectURL = env.NODE_ENV === "production" ? `https://printitweb.vercel.app/dashboard/misTrabajos` : `http://localhost:3000/dashboard/misTrabajos`;
+            redirectName = "Mis Trabajos";
+
+            mailOptions = {
+                from: 'PrintIT <contact.printit.app@gmail.com>',
+                to: work.worker.email,
+                subject: 'PrintIT - ¡Pago Realizdo!',
+                html: payedPrintToWorkerTemplate(work.worker.name, redirectURL, redirectName),
+                attachments
+            };
+
+            try {
+                await transporter.sendMail(mailOptions);
+                return { message: "Emails sent successfully." };
+            } catch (error) {
+                console.log(error);
+                throw new Error("No se pudo enviar el Email de realizacion de pago a vendedor");
+            }
+        }),
+    sendFinishedWorkEmail: protectedProcedure
+        .input(z.object({ workId: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { workId } = input;
+            const userId = ctx.session.user.id;
+
+            const work = await ctx.prisma.work.findUnique({
+                where: {
+                    id: workId,
+                },
+                include: {
+                    client: {
+                        select: {
+                            email: true,
+                            name: true,
+                            id: true,
+                        }
+                    },
+                    worker: {
+                        select: {
+                            email: true,
+                            name: true,
+                            id: true,
+                        }
+                    },
+                }
+            });
+
+            if (!work) {
+                throw new Error("No se pudo encontrar el trabajo");
+            }
+
+            if (work.client.id !== userId && work.worker.id !== userId) {
+                throw new Error("No tienes permiso para ver este trabajo");
+            }
+
+            const redirectURL = env.NODE_ENV === "production" ? `https://printitweb.vercel.app/dashboard/misPedidos` : `http://localhost:3000/dashboard/misPedidos`;
+            const redirectName = "Mis Pedidos";
+
+            const mailOptions = {
+                from: 'PrintIT <contact.printit.app@gmail.com>',
+                to: work.client.email,
+                subject: 'PrintIT - ¡Se Termino!',
+                html: finishedPrintingTemplate(work.client.name, redirectURL, redirectName),
+                attachments
+            };
+
+            try {
+                await transporter.sendMail(mailOptions);
+                return { message: "Emails sent successfully." };
+            } catch (error) {
+                console.log(error);
+                throw new Error("No se pudo enviar el Email de finalizar impresion");
             }
         }),
 });

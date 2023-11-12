@@ -23,6 +23,7 @@ const useStyles = createStyles((theme) => ({
 const MisPedidos: NextPage = () => {
   const { classes, cx } = useStyles();
   const [scrolled, setScrolled] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const { data: ordersList, refetch: refetchOrdersList, isLoading } = api.work.getMyOrders.useQuery();
   const { mutate: createPreference } = api.utils.createPreference.useMutation();
   const { mutate: setWorkPaid } = api.work.setWorkToPrinting.useMutation();
@@ -33,6 +34,9 @@ const MisPedidos: NextPage = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const status = urlParams.get("status");
     const preferenceId = urlParams.get("preference_id");
+    
+    if (status) setIsUpdating(true);
+
     if (status === "approved") {
       setWorkPaid({
         preferenceId: preferenceId as string,
@@ -45,6 +49,7 @@ const MisPedidos: NextPage = () => {
             autoClose: 5000,
           });
           sendPaymentEmail({ workId: data.id })
+          setIsUpdating(false);
           void refetchOrdersList();
         },
         onError: (error) => {
@@ -54,6 +59,7 @@ const MisPedidos: NextPage = () => {
             color: "red",
             autoClose: 5000,
           });
+          setIsUpdating(false);
         }
       })
     } else if (status === "failure") {
@@ -63,6 +69,7 @@ const MisPedidos: NextPage = () => {
         color: "red",
         autoClose: 5000,
       });
+      setIsUpdating(false);
     }
   }, [setWorkPaid, refetchOrdersList, sendPaymentEmail]);
 
@@ -100,6 +107,7 @@ const MisPedidos: NextPage = () => {
               order.status === "Pagando" ?
                 <Button
                   className='bg-blue-500 py-2 ml-2 text-white hover:bg-blue-700'
+                  loading={isUpdating}
                   onClick={() => {
                     createPreference({
                       id: order.id,
@@ -123,7 +131,7 @@ const MisPedidos: NextPage = () => {
                     })
                   }}
                 >
-                  Pagar
+                  { isUpdating ? "Verificando Pago" : "Pagar" }
                 </Button> :
                 order.status === "Imprimiendo" ?
                   <SellerInformationModal

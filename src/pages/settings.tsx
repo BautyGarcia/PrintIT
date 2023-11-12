@@ -36,6 +36,7 @@ const Settings: React.FC = () => {
     const code = urlParams.get('code');
 
     if (code) {
+      setIsConnecting(true);
       saveToken({
         token: code,
       }, {

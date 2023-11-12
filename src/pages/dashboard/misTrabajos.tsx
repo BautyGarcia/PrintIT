@@ -21,7 +21,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const MisTrabajos: NextPage = () => {
-
+  const [isUpdating, setIsUpdating] = useState(false);
   const { classes, cx } = useStyles();
   const [scrolled, setScrolled] = useState(false);
   const { data: worksList, refetch: refetchWorksList, isLoading } = api.work.getMyWorks.useQuery();
@@ -70,7 +70,9 @@ const MisTrabajos: NextPage = () => {
               /> :
               work.status === "Imprimiendo" ?
                 <Button
+                  loading={isUpdating}
                   onClick={() => {
+                    setIsUpdating(true);
                     finishWork({ workId: work.id }, {
                       onSuccess: () => {
                         notifications.show({
@@ -80,6 +82,7 @@ const MisTrabajos: NextPage = () => {
                           autoClose: 5000,
                         });
                         sendFinishedWorkEmail({ workId: work.id });
+                        setIsUpdating(false);
                         void refetchWorksList();
                       },
                       onError: (error) => {
@@ -89,6 +92,7 @@ const MisTrabajos: NextPage = () => {
                           color: "red",
                           autoClose: 5000,
                         });
+                        setIsUpdating(false);
                       }
                     })
                   }}

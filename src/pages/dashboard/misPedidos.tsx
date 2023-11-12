@@ -97,7 +97,7 @@ const MisPedidos: NextPage = () => {
       <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
         <tr>
           <th>Nombre</th>
-          <th>Cliente</th>
+          <th>Vendedor</th>
           <th>Precio</th>
           <th>Estado</th>
           <th>Calidad</th>

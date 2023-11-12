@@ -184,9 +184,9 @@ export const utilsRouter = createTRPCRouter({
                         email: ctx.session.user.email as string,
                     },
                     back_urls: {
-                        success: "https://printit.vercel.app/dashboard/misPedidos",
-                        failure: "https://printit.vercel.app/dashboard/misPedidos",
-                        pending: "https://printit.vercel.app/dashboard/misPedidos",
+                        success: "https://printitweb.vercel.app/dashboard/misPedidos",
+                        failure: "https://printitweb.vercel.app/dashboard/misPedidos",
+                        pending: "https://printitweb.vercel.app/dashboard/misPedidos",
                     },
                     marketplace_fee: 0.1,
                     auto_return: "approved",

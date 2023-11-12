@@ -144,12 +144,12 @@ export const utilsRouter = createTRPCRouter({
             const { quantity, price, id } = input;
 
             const client = new MercadoPagoConfig({
-                accessToken: "TEST-154519291358798-110521-0715e092e1ef0d47b68d9c5da1298de4-200994358",
+                accessToken: process.env.MP_TEST_ACCESS as string
             });
 
             const preference = new Preference(client);
 
-            preference.create({
+            return preference.create({
                 body: {
                     items: [
                         {
@@ -174,8 +174,7 @@ export const utilsRouter = createTRPCRouter({
                 }
             })
                 .then((response) => {
-                    console.log(response.id);
-                    return response.id;
+                    return { redirectURL: response.init_point };
                 })
                 .catch((error: Error) => {
                     throw new Error(`Hubo un problema creando el formulario de pago. ${error.message}`);

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import PriceNegotiationModal from "~/components/Dashboard/priceNegotiationModal";
 import TableTemplate from "~/components/Tables/tableTemplate";
 import { api } from "~/utils/api";
+import { notifications } from "@mantine/notifications";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -32,21 +33,6 @@ const MisPedidos: NextPage = () => {
     }
   }, [isLoading]);
 
-  const handleCreatePreference = (id: string, price: number, quantity: number) => {
-    createPreference({
-      id,
-      price,
-      quantity,
-    }, {
-      onSuccess(data) {
-        console.log(data);
-      },
-      onError(error) {
-        console.log(error);
-      }
-    })
-  }
-
   const rows = ordersList?.map((order) => (
     <tr key={order.id}>
       <td>{order.name}</td>
@@ -62,24 +48,42 @@ const MisPedidos: NextPage = () => {
           {
             order.status === "Negociacion" ?
               <PriceNegotiationModal
-              refreshWorks={refetchOrdersList}
-              workInfo={
-                {
-                  id: order.id,
-                  lastBidder: order.lastBidder,
-                  prices: order.prices,
-                  status: order.status,
+                refreshWorks={refetchOrdersList}
+                workInfo={
+                  {
+                    id: order.id,
+                    lastBidder: order.lastBidder,
+                    prices: order.prices,
+                    status: order.status,
+                  }
                 }
-              }
               /> :
               order.status === "Pagando" ?
-              <Button
-                className="bg-blue-500 py-2 text-white hover:bg-blue-700"
-                onClick={() => handleCreatePreference(order.id, order.prices[order.prices.length - 1]?.amount as number, order.amount)}
-              >
-                Pagar
-              </Button> :
-              <></>
+                <Button
+                  className='bg-blue-500 py-2 ml-2 text-white hover:bg-blue-700'
+                  onClick={() => {
+                    createPreference({
+                      id: order.id,
+                      price: order.prices[order.prices.length - 1]?.amount as number,
+                      quantity: order.amount,
+                    }, {
+                      onSuccess: (data) => {
+                        void window.open(data.redirectURL, "_blank");
+                      },
+                      onError: (error) => {
+                        notifications.show({
+                          title: "Error",
+                          message: error.message,
+                          color: "red",
+                          autoClose: 5000,
+                        });
+                      }
+                    })
+                  }}
+                >
+                  Pagar
+                </Button> :
+                <></>
           }
         </div>
       </td>

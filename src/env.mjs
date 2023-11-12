@@ -27,6 +27,7 @@ export const env = createEnv({
     MAILPASSWORD: z.string(),
     MAILUSER: z.string(),
     MP_ACCESS_TOKEN: z.string(),
+    MP_TEST_ACCESS: z.string(),
   },
 
   /**
@@ -36,6 +37,7 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_MP_APP_ID: z.string(),
+    NEXT_PUBLIC_MP_TEST_PK: z.string(),
   },
 
   /**
@@ -54,5 +56,7 @@ export const env = createEnv({
     MAILUSER: process.env.MAILUSER,
     MP_ACCESS_TOKEN: process.env.MP_ACCESS_TOKEN,
     NEXT_PUBLIC_MP_APP_ID: process.env.NEXT_PUBLIC_MP_APP_ID,
+    MP_TEST_ACCESS: process.env.MP_TEST_ACCESS,
+    NEXT_PUBLIC_MP_TEST_PK: process.env.NEXT_PUBLIC_MP_TEST_PK,
   },
 });

@@ -27,9 +27,9 @@ const MisPedidos: NextPage = () => {
   const { mutate: createPreference } = api.utils.createPreference.useMutation();
   const [isFetchingData, setIsFetchingData] = useState(true);
 
-  useEffect(() => {
+  useEffect( () => {
     if (typeof window !== "undefined") {
-      import("@mercadopago/sdk-react").then(({ initMercadoPago }) => {
+      void import("@mercadopago/sdk-react").then(({ initMercadoPago }) => {
         initMercadoPago(process.env.NEXT_PUBLIC_MP_TEST_PK as string);
       });
     }

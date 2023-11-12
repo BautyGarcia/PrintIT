@@ -28,6 +28,14 @@ const MisPedidos: NextPage = () => {
   const [isFetchingData, setIsFetchingData] = useState(true);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      import("@mercadopago/sdk-react").then(({ initMercadoPago }) => {
+        initMercadoPago(process.env.NEXT_PUBLIC_MP_TEST_PK as string);
+      });
+    }
+  }, []);
+
+  useEffect(() => {
     if (!isLoading) {
       setIsFetchingData(false);
     }

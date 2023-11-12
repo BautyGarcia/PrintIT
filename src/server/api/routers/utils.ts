@@ -171,6 +171,7 @@ export const utilsRouter = createTRPCRouter({
                         pending: "https://printit.vercel.app/dashboard/misPedidos",
                     },
                     marketplace_fee: 0.1,
+                    auto_return: "approved",
                 }
             })
                 .then((response) => {

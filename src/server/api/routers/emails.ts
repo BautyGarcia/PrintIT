@@ -92,18 +92,18 @@ export const emailRouter = createTRPCRouter({
             }
         }),
     sendUsEmail: publicProcedure
-        .input(z.object({ email: z.string(), subject: z.string(), message: z.string() }))
+        .input(z.object({ email: z.string(), name: z.string(), message: z.string(), surname: z.string() }))
         .mutation(async ({ input }) => {
 
             //Get input
-            const { email, subject, message } = input;
+            const { email, name, message, surname } = input;
 
             //Set mail options
             const mailOptions = {
                 from: 'PrintIT <contact.printit.app@gmail.com>',
                 to: 'PrintIT <contact.printit.app@gmail.com>',
-                subject: subject,
-                html: `<p>De: ${email}</p><p>${message}</p>`,
+                subject: "Mensaje",
+                html: `<p>De: ${email}, Nombre: ${name}, Apellido: ${surname}</p><p>${message}</p>`,
             };
 
             //Send Email

@@ -5,8 +5,8 @@ export const ContactIMG: React.FC = () => {
     <Image
       src="/ContactUs/ContactImg.png"
       alt="ContactIMg"
-      width={680}
-      height={880}
+      width={500}
+      height={500}
     />
   );
 };

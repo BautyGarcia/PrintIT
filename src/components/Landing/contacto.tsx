@@ -51,10 +51,15 @@ const Contacto = () => {
         autoClose: 5000,
       });
       setIsSending(false);
-      return;
+    } else {
+      notifications.show({
+        title: "Mensaje enviado!",
+        message: "Su mensaje fue enviado correctamente.",
+        color: "green",
+        autoClose: 5000,
+      });
+      setIsSending(false);
     }
-
-    setIsSending(false);
   };
 
   return (

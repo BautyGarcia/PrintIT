@@ -21,10 +21,12 @@ import Contacto from "~/components/Landing/contacto";
 import { useMediaQuery } from "@mantine/hooks";
 import { cn } from "../utils/util";
 import { TopLandingPhone } from "~/components/Landing/topLandingPhone";
+import { useRouter } from "next/router";
 
 const Landing: NextPage = () => {
   const { colorScheme } = useMantineColorScheme();
   const largeScreen = useMediaQuery("(min-width: 1300px)");
+  const router = useRouter();
 
   return (
     <>
@@ -248,6 +250,7 @@ const Landing: NextPage = () => {
                     ? "font-family-Inter flex w-1/6 flex-col items-center rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"
                     : "font-family-Inter flex w-5/6 flex-col items-center rounded-lg bg-blue-500 py-2 text-white hover:bg-blue-700"
                 }
+                onClick={() => void router.push("/about")}
               >
                 Sobre nosotros
               </button>

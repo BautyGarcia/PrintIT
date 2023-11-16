@@ -49,7 +49,7 @@ const SignInPage: NextPage = () => {
               : "font-family-Inter text-4xl text-black"
           }
         >
-          Bienvenido Devuelta
+          ¡Hola! Bienvenido
         </h1>
         <h3 className="font-family-Inter text-#AFAFAF">Ingrese sus datos</h3>
         <SignInForm />
@@ -193,7 +193,7 @@ const SignInForm: React.FC = () => {
         </div>
         <div className="mb-2 w-4/5">
           <Text fw={500} className="font-family-Inter justify-left flex">
-            Password
+            Contraseña
           </Text>
           <PasswordInput
             value={password}
@@ -217,7 +217,7 @@ const SignInForm: React.FC = () => {
           type="submit"
           loading={isLoading}
         >
-          {isLoading ? "Loading..." : "Sign In"}
+          {isLoading ? "Loading..." : "Ingresar"}
         </Button>
       </form>
     </>

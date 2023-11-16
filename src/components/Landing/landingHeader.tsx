@@ -124,11 +124,11 @@ export const LandingHeader: React.FC = () => {
           <Group className={classes.hiddenMobile}>
             <SchemeButton />
             <Link href="/signIn" passHref>
-              <Button variant="default">Sign in</Button>
+              <Button variant="default">Ingresar</Button>
             </Link>
             <Link href="/signUp" passHref>
               <Button variant="undefined" className="bg-indigo-400 text-white">
-                Sign up
+                Crear Cuenta
               </Button>
             </Link>
           </Group>
@@ -174,14 +174,14 @@ export const LandingHeader: React.FC = () => {
           <Group position="apart">
             <Group position="left" pb="lg" px="sm">
               <Link href="/signIn" passHref>
-                <Button variant="default">Log in</Button>
+                <Button variant="default">Iniciar Sesión</Button>
               </Link>
               <Link href="/signUp" passHref>
                 <Button
                   variant="undefined"
                   className="bg-indigo-400 text-white"
                 >
-                  Sign up
+                  Crear Cuenta
                 </Button>
               </Link>
             </Group>

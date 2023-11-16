@@ -19,7 +19,7 @@ export const AuthShowcase: React.FC = () => {
         }
       >
         <LogoGoogle height={20} width={20} />
-        Sign In with Google
+        Ingresar con Google
       </button>
     </div>
   );

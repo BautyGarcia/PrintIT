@@ -183,7 +183,7 @@ const RegisterForm: React.FC = () => {
     >
       <div className="mb-2 w-4/5">
         <Text fw={500} className="font-family-Inter justify-left flex">
-          User
+          Nombre
         </Text>
         <TextInput
           value={name}
@@ -211,7 +211,7 @@ const RegisterForm: React.FC = () => {
       </div>
       <div className="mb-2 w-4/5">
         <Text fw={500} className="font-family-Inter justify-left flex">
-          Password
+          Contraseña
         </Text>
         <PasswordInput
           value={password}
@@ -229,7 +229,7 @@ const RegisterForm: React.FC = () => {
         type="submit"
         loading={isLoading}
       >
-        Sign Up
+        Crear Cuenta
       </Button>
     </form>
   );

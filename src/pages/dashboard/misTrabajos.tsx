@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import TableTemplate from "~/components/Tables/tableTemplate";
 import { api } from "~/utils/api";
 import { notifications } from "@mantine/notifications";
+import CancelWorkModal from "~/components/Dashboard/cancelWorkModal";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -54,7 +55,7 @@ const MisTrabajos: NextPage = () => {
       <td>{work.notes}</td>
       <td>{work.lastBidder === "CLIENT" ? "Cliente" : "Vos"}</td>
       <td>
-        <div className='flex justify-end '>
+        { work.status !== "Cancelado" && <div className='flex justify-end gap-3'>
           {
             work.status === "Negociacion" ?
               <PriceNegotiationModal
@@ -96,18 +97,22 @@ const MisTrabajos: NextPage = () => {
                       }
                     })
                   }}
-                  className='bg-blue-500 py-2 ml-2 text-white hover:bg-blue-700'
+                  className='bg-blue-500 py-2 text-white hover:bg-blue-700'
                 >
                   Termine de imprimir
                 </Button> : <></>
           }
           <Button
             onClick={() => handleFileDownload(work.stlUrl as string)}
-            className='bg-blue-500 py-2 ml-2 text-white hover:bg-blue-700'
+            className='bg-blue-500 py-2 text-white hover:bg-blue-700'
           >
             Descargar Archivo
           </Button>
-        </div>
+          <CancelWorkModal 
+            workId={work.id}
+            refetch={refetchWorksList}
+          />
+        </div> }
       </td>
     </tr>
   ));

@@ -499,3 +499,76 @@ export const finishedPrintingTemplate = (buyerName: string, redirectURL: string,
         </body>
     </html>
 `;
+
+export const cancelWorkTemplate = (clientName: string, workerName: string, reason: string) => `
+    <!DOCTYPE html>
+
+    <html>
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Se cancelo un trabajo</title>
+            <style>
+                body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #f2f2f2;
+                }
+
+                .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #ffffff;
+                border-radius: 4px;
+                overflow: hidden;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+
+                .header {
+                padding: 20px;
+                background-color: #007bff;
+                color: #ffffff;
+                text-align: center;
+                }
+
+                .logo {
+                max-width: 50px;
+                margin: 0 auto;
+                display: block;
+                }
+
+                .content {
+                padding: 20px;
+                text-align: center;
+                }
+
+                .button {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #ffffff;
+                text-decoration: none;
+                border-radius: 4px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <img src="cid:logoBlanco" alt="App Logo" class="logo">
+                </div>
+                <div class="content">
+                    <h1>Trabajo cancelado</h1>
+                    <p>Hola <b>${clientName}</b>,</p>
+                    <p>Nos entristece informarte que el usuario ${workerName} ha decidido cancelar un trabajo donde te ves involucrado. Al comunicarnos con ${workerName} nos expresó esta razón para la cancelación: </p>
+                    <p>${reason}</p>
+                    <p>Sentimos que esto haya sido así y te invitamos a seguir utilizando PrintIT. Esperamos que todo vaya bien.</p>
+                    <p>Un abrazo,</p>
+                    <p>El equipo de PrintIT</p>
+                </div>
+            </div>
+        </body>
+    </html>
+`;
+

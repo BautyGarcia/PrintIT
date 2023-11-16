@@ -7,6 +7,7 @@ import TableTemplate from "~/components/Tables/tableTemplate";
 import { api } from "~/utils/api";
 import { notifications } from "@mantine/notifications";
 import SellerInformationModal from "~/components/Dashboard/sellerInformationModal";
+import CancelWorkModal from "~/components/Dashboard/cancelWorkModal";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -90,7 +91,7 @@ const MisPedidos: NextPage = () => {
       <td>{order.notes}</td>
       <td>{order.lastBidder === "CLIENT" ? "Cliente" : "Vendedor"}</td>
       <td>
-        <div className='flex justify-end'>
+        { order.status !== "Cancelado" && <div className='flex justify-end gap-3'>
           {
             order.status === "Negociacion" ?
               <PriceNegotiationModal
@@ -106,7 +107,7 @@ const MisPedidos: NextPage = () => {
               /> :
               order.status === "Pagando" ?
                 <Button
-                  className='bg-blue-500 py-2 ml-2 text-white hover:bg-blue-700'
+                  className='bg-blue-500 py-2 text-white hover:bg-blue-700'
                   loading={isUpdating}
                   onClick={() => {
                     createPreference({
@@ -140,7 +141,11 @@ const MisPedidos: NextPage = () => {
                     email={order.worker.email}
                   /> : <></>
           }
-        </div>
+          <CancelWorkModal 
+            workId={order.id}
+            refetch={refetchOrdersList}
+          />
+        </div> }
       </td>
     </tr>
   ));

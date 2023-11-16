@@ -15,7 +15,8 @@ import {
     updateBidTemplate,
     payedPrintToBuyerTemplate,
     payedPrintToWorkerTemplate,
-    finishedPrintingTemplate
+    finishedPrintingTemplate,
+    cancelWorkTemplate
 } from "~/utils/emailTemplates";
 
 const transporter = nodemailer.createTransport({
@@ -372,6 +373,58 @@ export const emailRouter = createTRPCRouter({
                 to: work.client.email,
                 subject: 'PrintIT - ¡Se Termino!',
                 html: finishedPrintingTemplate(work.client.name, redirectURL, redirectName),
+                attachments
+            };
+
+            try {
+                await transporter.sendMail(mailOptions);
+                return { message: "Emails sent successfully." };
+            } catch (error) {
+                console.log(error);
+                throw new Error("No se pudo enviar el Email de finalizar impresion");
+            }
+        }),
+    sendCancelationEmail: protectedProcedure
+        .input(z.object({ workId: z.string(), reason: z.string() }))
+        .mutation(async ({ input, ctx }) => {
+            const { workId, reason } = input;
+            const userId = ctx.session.user.id;
+
+            const work = await ctx.prisma.work.findUnique({
+                where: {
+                    id: workId,
+                },
+                include: {
+                    client: {
+                        select: {
+                            email: true,
+                            name: true,
+                            id: true,
+                        }
+                    },
+                    worker: {
+                        select: {
+                            email: true,
+                            name: true,
+                            id: true,
+                        }
+                    },
+                }
+            });
+
+            if (!work) {
+                throw new Error("No se pudo encontrar el trabajo");
+            }
+
+            if (work.client.id !== userId && work.worker.id !== userId) {
+                throw new Error("No tienes permiso para ver este trabajo");
+            }
+
+            const mailOptions = {
+                from: 'PrintIT <contact.printit.app@gmail.com>',
+                to: work.client.email,
+                subject: 'PrintIT - ¡Cancelado!',
+                html: cancelWorkTemplate(work.client.name, work.worker.name, reason),
                 attachments
             };
 

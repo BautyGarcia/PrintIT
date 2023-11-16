@@ -18,6 +18,7 @@ const Settings: React.FC = () => {
   const { mutate: updateImage } = api.utils.updateImage.useMutation();
   const { mutate: updateUserInfo } = api.utils.updateUserInfo.useMutation();
   const { mutate: saveToken } = api.auth.saveMercadoPagoToken.useMutation();
+  const { mutate: removeToken } = api.auth.removeMercadoPagoToken.useMutation();
   const { data: userStats } = api.utils.getUserStats.useQuery();
   const { data: isConnected, refetch: refetchConnection } = api.auth.isMercadoPagoConnected.useQuery();
   const [isConnecting, setIsConnecting] = useState(true);
@@ -323,24 +324,59 @@ const Settings: React.FC = () => {
                     }}
                   >Cambiar Contraseña</Button>
                 </div>
-                <Button
-                  className={`w-min mt-4 bg-blue-500 hover:bg-blue-700`}
-                  size="md"
-                  loading={isConnecting}
-                  onClick={() => {
-                    if (isConnected) return true;
-                    setIsConnecting(true);
-                    const clientId = process.env.NEXT_PUBLIC_MP_APP_ID as string;
-                    const state = `${sessionData?.user.id as string}_${Date.now()}`;
-                    const redirectUri = "https://printitweb.vercel.app/settings"
-                    const authUrl = `https://auth.mercadopago.com/authorization?client_id=${clientId}&response_type=code&platform_id=mp&state=${state}&redirect_uri=${redirectUri}`;
-                    void router.push(authUrl);
-                  }}
-                  
-                >
-                  {isConnected ? "Cuenta conectada" : isConnecting ? "Conectando..." : "Conectar Mercado Pago"}
-                  {isConnecting ? "" : <MercadoPagoLogo />}
-                </Button>
+                <div className="flex items-center mt-4 gap-5">
+                  <Button
+                    className={`w-min h-[42px] bg-blue-500 hover:bg-blue-700`}
+                    size="md"
+                    loading={isConnecting}
+                    onClick={() => {
+                      if (isConnected) return true;
+                      setIsConnecting(true);
+                      const clientId = process.env.NEXT_PUBLIC_MP_APP_ID as string;
+                      const state = `${sessionData?.user.id as string}_${Date.now()}`;
+                      const redirectUri = "https://printitweb.vercel.app/settings"
+                      const authUrl = `https://auth.mercadopago.com/authorization?client_id=${clientId}&response_type=code&platform_id=mp&state=${state}&redirect_uri=${redirectUri}`;
+                      void router.push(authUrl);
+                    }}
+
+                  >
+                    {isConnected ? "Cuenta conectada" : isConnecting ? "Conectando..." : "Conectar Mercado Pago"}
+                    {isConnecting ? "" : <MercadoPagoLogo />}
+                  </Button>
+                  {
+                    isConnected && 
+                    <Button
+                      className="w-min h-[42px] bg-red-500 hover:bg-red-700"
+                      loading={isConnecting}
+                      onClick={() => {
+                        setIsConnecting(true);
+                        removeToken({}, {
+                          onSuccess: async () => {
+                            notifications.show({
+                              title: "Exito",
+                              message: "Se desconecto correctamente de Mercado Pago",
+                              color: "green",
+                              autoClose: 5000,
+                            });
+                            setIsConnecting(false);
+                            await refetchConnection();
+                          },
+                          onError: (error) => {
+                            notifications.show({
+                              title: "Error",
+                              message: error.message,
+                              color: "red",
+                              autoClose: 5000,
+                            });
+                            setIsConnecting(false);
+                          }
+                        })
+                      }}
+                    >
+                      Desconectar
+                    </Button>
+                  }
+                </div>
               </div>
             </div>
             <Button

@@ -149,4 +149,24 @@ export const authRouter = createTRPCRouter({
             }
 
         }),
+    removeMercadoPagoToken: protectedProcedure
+        .input(z.object({}))
+        .mutation(async ({ ctx }) => {
+            const userId = ctx.session.user.id;
+
+            try {
+                await ctx.prisma.user.update({
+                    where: {
+                        id: userId,
+                    },
+                    data: {
+                        mp_token: null,
+                    },
+                });
+
+                return true;
+            } catch (err) {
+                throw new Error("Hubo un problema conectando tu cuenta de Mercado Pago");
+            }
+        }),
 });

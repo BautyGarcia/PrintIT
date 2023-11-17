@@ -4,6 +4,7 @@ import { api } from '~/utils/api';
 import { notifications } from '@mantine/notifications';
 import { useSession } from 'next-auth/react';
 import { IconCheck } from '@tabler/icons-react';
+import NoPrintersImage from './NoPrintersImage';
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -186,6 +187,8 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
                 <Loader size='xl' />
             </div>
         );
+    } else if (rows?.length === 0) {
+        content = <NoPrintersImage />;
     } else {
         content = (
             <Table miw={700}>

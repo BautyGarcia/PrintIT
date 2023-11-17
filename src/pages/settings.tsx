@@ -348,6 +348,7 @@ const Settings: React.FC = () => {
                     <Button
                       className="w-min h-[42px] bg-red-500 hover:bg-red-700"
                       loading={isConnecting}
+                      size="md"
                       onClick={() => {
                         setIsConnecting(true);
                         removeToken({}, {

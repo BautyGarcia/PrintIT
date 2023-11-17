@@ -1,12 +1,13 @@
 import { type NextPage } from "next";
 import Dashboard from ".";
 import PriceNegotiationModal from "~/components/Dashboard/priceNegotiationModal";
-import { Button, createStyles } from "@mantine/core";
+import { Button, createStyles, Text } from "@mantine/core";
 import { useEffect, useState } from "react";
 import TableTemplate from "~/components/Tables/tableTemplate";
 import { api } from "~/utils/api";
 import { notifications } from "@mantine/notifications";
 import CancelWorkModal from "~/components/Dashboard/cancelWorkModal";
+import BrokenShovelImage from "~/components/Tables/BrokenShoveImage";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -55,7 +56,7 @@ const MisTrabajos: NextPage = () => {
       <td>{work.notes}</td>
       <td>{work.lastBidder === "CLIENT" ? "Cliente" : "Vos"}</td>
       <td>
-        { work.status !== "Cancelado" && <div className='flex justify-end gap-3'>
+        {work.status !== "Cancelado" && <div className='flex justify-end gap-3'>
           {
             work.status === "Negociacion" ?
               <PriceNegotiationModal
@@ -108,39 +109,42 @@ const MisTrabajos: NextPage = () => {
           >
             Descargar Archivo
           </Button>
-          <CancelWorkModal 
+          <CancelWorkModal
             workId={work.id}
             refetch={refetchWorksList}
           />
-        </div> }
+        </div>}
       </td>
     </tr>
   ));
 
-  const content = (
-    <>
-      <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
-        <tr>
-          <th>Nombre</th>
-          <th>Cliente</th>
-          <th>Precio</th>
-          <th>Estado</th>
-          <th>Calidad</th>
-          <th>Cantidad</th>
-          <th>Notas</th>
-          <th>Ultimo Postor</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>{rows}</tbody>
-    </>
-  );
+  const content = <>
+    <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
+      <tr>
+        <th>Nombre</th>
+        <th>Cliente</th>
+        <th>Precio</th>
+        <th>Estado</th>
+        <th>Calidad</th>
+        <th>Cantidad</th>
+        <th>Notas</th>
+        <th>Ultimo Postor</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>{rows}</tbody>
+  </>
 
   return (
     <Dashboard>
-      <TableTemplate setScrolled={setScrolled} isFetchingData={isFetchingData}>
-        {content}
-      </TableTemplate>
+      {
+        rows?.length === 0 && !isFetchingData ?
+          <BrokenShovelImage />
+          :
+          <TableTemplate setScrolled={setScrolled} isFetchingData={isFetchingData}>
+            {content}
+          </TableTemplate>
+      }
     </Dashboard>
   );
 };

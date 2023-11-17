@@ -8,6 +8,7 @@ import { api } from "~/utils/api";
 import { notifications } from "@mantine/notifications";
 import SellerInformationModal from "~/components/Dashboard/sellerInformationModal";
 import CancelWorkModal from "~/components/Dashboard/cancelWorkModal";
+import BrokenShovelImage from "~/components/Tables/BrokenShoveImage";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -171,9 +172,14 @@ const MisPedidos: NextPage = () => {
 
   return (
     <Dashboard>
-      <TableTemplate setScrolled={setScrolled} isFetchingData={isFetchingData}>
-        {content}
-      </TableTemplate>
+      {
+        rows?.length === 0 && !isFetchingData ?
+          <BrokenShovelImage />
+          :
+          <TableTemplate setScrolled={setScrolled} isFetchingData={isFetchingData}>
+            {content}
+          </TableTemplate>
+      }
     </Dashboard>
   );
 };

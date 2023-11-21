@@ -28,6 +28,12 @@ export const env = createEnv({
     MAILUSER: z.string(),
     MP_ACCESS_TOKEN: z.string(),
     MP_TEST_ACCESS: z.string(),
+    TYPE: z.string(),
+    PROJECT_ID: z.string(),
+    PRIVATE_KEY: z.string(),
+    CLIENT_EMAIL: z.string(),
+    CLIENT_ID: z.string(),
+    PROJECT_NAME: z.string(),
   },
 
   /**
@@ -58,5 +64,11 @@ export const env = createEnv({
     NEXT_PUBLIC_MP_APP_ID: process.env.NEXT_PUBLIC_MP_APP_ID,
     MP_TEST_ACCESS: process.env.MP_TEST_ACCESS,
     NEXT_PUBLIC_MP_TEST_PK: process.env.NEXT_PUBLIC_MP_TEST_PK,
+    TYPE: process.env.TYPE,
+    PROJECT_ID: process.env.PROJECT_ID,
+    PRIVATE_KEY: process.env.PRIVATE_KEY,
+    CLIENT_EMAIL: process.env.CLIENT_EMAIL,
+    CLIENT_ID: process.env.CLIENT_ID,
+    PROJECT_NAME: process.env.PROJECT_NAME,
   },
 });

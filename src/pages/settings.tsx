@@ -10,10 +10,6 @@ import { api } from "~/utils/api";
 import { IconCheck, IconArrowBack } from "@tabler/icons-react";
 import MercadoPagoLogo from "~/components/Utils/mercadoPagoLogo";
 
-interface GCSResponseProps {
-  fileURL: string;
-}
-
 const Settings: React.FC = () => {
   const { mutate: updateImage } = api.utils.updateImage.useMutation();
   const { mutate: updateUserInfo } = api.utils.updateUserInfo.useMutation();
@@ -28,6 +24,7 @@ const Settings: React.FC = () => {
   const [isError, setIsError] = useState(false);
   const [newEmail, setNewEmail] = useState("");
   const largeScreen = useMediaQuery("(min-width: 1300px)");
+  const { mutate: getSignedURL } = api.utils.getPresignedURL.useMutation();
   const { colorScheme } = useMantineColorScheme();
   const { data: sessionData, update } = useSession();
   const router = useRouter();
@@ -66,7 +63,7 @@ const Settings: React.FC = () => {
     setIsConnecting(false);
   }, [saveToken, refetchConnection]);
 
-  const handleImageUpload = async (fileImage: File) => {
+  const handleImageUpload = (fileImage: File) => {
     setIsUpdatingImage(true);
 
     if (Math.ceil(fileImage.size / 1024 / 1024) > 4) {
@@ -89,52 +86,58 @@ const Settings: React.FC = () => {
     });
 
     const newFile = new File([fileImage], `${Date.now().toString()}_${fileImage.name}`, { type: fileImage.type });
-    const formData = new FormData();
-    formData.append("file", newFile);
-    await fetch("https://printitweb-filehandler.cyclic.app/", {
-      method: 'POST',
-      body: formData,
-    }).then(async (response: Response) => {
-      const data: GCSResponseProps = await response.json() as GCSResponseProps;
-      const imageURL: string = data.fileURL;
-
-      updateImage({
-        imageURL
-      }, {
-        onSuccess: async () => {
-          notifications.update({
-            id: 'update-image',
-            title: 'Imagen Actualizada',
-            message: 'La imagen se actualizó correctamente.',
-            color: 'green',
-            autoClose: 3000,
-            icon: <IconCheck size="1rem" />,
-          });
-          setIsUpdatingImage(false);
-          await update({ image: imageURL });
-        },
-        onError: (error) => {
-          notifications.update({
-            id: 'update-image',
-            title: 'Error',
-            message: "Hubo un error subiendo la imagen. " + error.message,
-            color: 'red',
-            autoClose: 3000,
-          });
-          setIsUpdatingImage(false);
-        }
-      });
-
-    }).catch((err: Error) => {
-      notifications.update({
-        id: 'update-image',
-        title: 'Error',
-        message: `Hubo un error subiendo la imagen. ${err.message}`,
-        color: 'red',
-        autoClose: 3000,
-      });
-      setIsUpdatingImage(false);
-    });
+    getSignedURL({
+      fileName: newFile.name,
+      contentType: newFile.type,
+    }, {
+      onSuccess: async (signedUrlData) => {
+        await fetch(signedUrlData.fetchUrl, {
+          method: "PUT",
+          body: newFile,
+          headers: {
+            'Content-Type': newFile.type,
+          },
+        }).then(() => {
+          const fileUrl = signedUrlData.fileUrl;
+          updateImage({
+            imageURL: fileUrl,
+          }, {
+            onSuccess: async () => {
+              notifications.update({
+                id: 'update-image',
+                title: 'Imagen Subida',
+                message: 'La imagen se subió correctamente.',
+                color: 'green',
+                autoClose: 3000,
+                icon: <IconCheck size="1rem" />,
+              });
+              setIsUpdatingImage(false);
+              await update({ image: fileUrl });
+            },
+            onError: (error) => {
+              notifications.update({
+                id: 'update-image',
+                title: 'Error',
+                message: "Hubo un error subiendo la imagen. " + error.message,
+                color: 'red',
+                autoClose: 3000,
+              });
+              setIsUpdatingImage(false);
+            }
+          })
+        })
+      },
+      onError: (error) => {
+        notifications.update({
+          id: 'update-image',
+          title: 'Error',
+          message: "Hubo un error subiendo la imagen. " + error.message,
+          color: 'red',
+          autoClose: 3000,
+        });
+        setIsUpdatingImage(false);
+      }
+    })
   };
 
   const handleUserInfoUpdate = () => {

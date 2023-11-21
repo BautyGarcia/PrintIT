@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { z } from "zod";
 import {
     createTRPCRouter,
@@ -6,6 +5,7 @@ import {
     protectedProcedure
 } from "~/server/api/trpc";
 import { MercadoPagoConfig, Preference } from 'mercadopago';
+import { Storage } from "@google-cloud/storage";
 
 interface ResultProps {
     id: string;
@@ -16,6 +16,17 @@ interface ResultProps {
 interface DataProps {
     results: ResultProps[];
 }
+
+const storage = new Storage({
+    projectId: process.env.PROJECT_ID,
+    credentials: {
+        type: process.env.TYPE,
+        project_id: process.env.PROJECT_ID,
+        private_key: process.env.PRIVATE_KEY,
+        client_email: process.env.CLIENT_EMAIL,
+        client_id: process.env.CLIENT_ID,
+    }
+});
 
 export const utilsRouter = createTRPCRouter({
     fetchFilamentPrice: publicProcedure
@@ -206,5 +217,25 @@ export const utilsRouter = createTRPCRouter({
                 .catch((error: Error) => {
                     throw new Error(`Hubo un problema creando el formulario de pago. ${error.message}`);
                 });
+        }),
+    getPresignedURL: protectedProcedure
+        .input(z.object({ fileName: z.string(), contentType: z.string() }))
+        .mutation(async ({ input }) => {
+            const { fileName, contentType } = input;
+
+            const expires = Date.now() + 7 * 24 * 60 * 60 * 1000;
+            const bucket = storage.bucket(process.env.PROJECT_NAME ?? "");
+            
+            const [url] = await bucket.file(fileName).getSignedUrl({
+                action: "write",
+                version: "v4",
+                expires,
+                contentType,
+            })
+
+            return {
+                fetchUrl: url, 
+                fileUrl: `https://storage.googleapis.com/${process.env.PROJECT_NAME ?? ""}/${fileName}` 
+            };
         }),
 })

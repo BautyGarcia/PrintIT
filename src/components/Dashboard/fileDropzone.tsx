@@ -24,18 +24,13 @@ import { useSession } from "next-auth/react";
 import { api } from "~/utils/api";
 import ChoosePrinterModal from "./choosePrinterModal";
 
-const loadCompressWorker = () =>
-  new Worker(new URL("~/utils/compressWorker", import.meta.url));
-
 const STLDropzone = () => {
   const [isUsingEstimatedPrice, setIsUsingEstimatedPrice] = useState(true);
   const [isUpdatingPrice, setIsUpdatingPrice] = useState(false);
   const [isFileDisabled, setIsFileDisabled] = useState(false);
-  const [isCompressing, setIsCompressing] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
   const [isSlicing, setIsSlicing] = useState(false);
   const [printQuality, setPrintQuality] = useState("Media" as string);
-  const [compressedUrl, setCompressedUrl] = useState("" as string);
   const [stlViewerURL, setSTLViewerURL] = useState("" as string);
   const [printNotes, setPrintNotes] = useState("" as string);
   const [printName, setPrintName] = useState("" as string);
@@ -55,7 +50,6 @@ const STLDropzone = () => {
 
   const handleFileSubmit = async (event: ChangeEvent<HTMLInputElement>) => {
     setIsSlicing(true);
-    setIsCompressing(true);
     const files = event.target.files;
 
     // Check if files were selected
@@ -71,20 +65,8 @@ const STLDropzone = () => {
     }
 
     const file = files[0];
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    setFileName(`${(sessionData?.user?.name as string)}-${(file.name).split(".")[0]}-${Date.now()}`.replace(/ /g, "_"));
-    setPrintName((file.name).split(".")[0] as string);
-    // Check file size
-    if (Math.ceil(file.size / 1024 / 1024) > 20) {
-      notifications.show({
-        title: "Error",
-        message: "El archivo seleccionado es demasiado grande",
-        color: "red",
-        autoClose: 5000,
-      });
-      setIsFileDisabled(true);
-      return;
-    }
+    setFileName(`${(sessionData?.user?.name ?? "")}-${(file.name).split(".")[0] ?? ""}-${Date.now()}`.replace(/ /g, "_"));
+    setPrintName((file.name).split(".")[0] ?? "");
 
     // Check file extension
     const allowedExtensions = ["stl", "STL"];
@@ -148,33 +130,6 @@ const STLDropzone = () => {
         setIsSlicing(false);
         return;
       });
-
-
-    // Compress the file
-    const fileData = await file.arrayBuffer();
-
-    const worker = loadCompressWorker();
-
-    worker.onmessage = function (e: MessageEvent<{ compressedFile: File | null; error?: string }>) {
-      const { compressedFile, error } = e.data;
-
-      if (error) {
-        notifications.show({
-          title: "Error",
-          message: error,
-          color: "red",
-          autoClose: 5000,
-        });
-        setIsFileDisabled(true);
-      } else {
-        setCompressedUrl(URL.createObjectURL(compressedFile as File));
-      }
-
-      setIsCompressing(false);
-      worker.terminate();
-    };
-
-    worker.postMessage({ arrayBuffer: fileData });
   };
 
   const clearSubmit = () => {
@@ -192,7 +147,6 @@ const STLDropzone = () => {
     setPrintNotes("");
     setEstimatedPrintPrice(0);
     setDesiredPrintPrice(0);
-    setCompressedUrl("");
     setFileName("");
   };
 
@@ -378,7 +332,7 @@ const STLDropzone = () => {
                 </div>
                 <div className="flex w-full gap-2">
                   <div className="w-full">
-                    <ChoosePrinterModal disabled={isFileDisabled} loading={isCompressing || isSlicing ? true : false} fileName={fileName} fileUrl={compressedUrl} fileSize={`${height}x${width}x${depth}`} printName={printName} printAmount={amountPrints} printQuality={printQuality} printPrice={isUsingEstimatedPrice ? estimatedPrintPrice : desiredPrintPrice} printNotes={printNotes} />
+                    <ChoosePrinterModal disabled={isFileDisabled} loading={isSlicing ? true : false} fileName={fileName} fileUrl={stlViewerURL} fileSize={`${height}x${width}x${depth}`} printName={printName} printAmount={amountPrints} printQuality={printQuality} printPrice={isUsingEstimatedPrice ? estimatedPrintPrice : desiredPrintPrice} printNotes={printNotes} />
                   </div>
                   <Button className="bg-red-600 p-1 hover:bg-red-700 rounded-md" onClick={clearSubmit}><IconTrash /></Button>
                 </div>

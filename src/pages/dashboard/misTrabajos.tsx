@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import Dashboard from ".";
 import PriceNegotiationModal from "~/components/Dashboard/priceNegotiationModal";
-import { Button, createStyles, Text } from "@mantine/core";
+import { Button, createStyles } from "@mantine/core";
 import { useEffect, useState } from "react";
 import TableTemplate from "~/components/Tables/tableTemplate";
 import { api } from "~/utils/api";

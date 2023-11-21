@@ -51,6 +51,7 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
     const { mutate: createWork } = api.work.createWork.useMutation();
     const { mutate: sendCreateWorkEmail } = api.email.sendCreateWorkEmail.useMutation();
     const { mutate: updateWorkURL } = api.work.addStlUrlToWork.useMutation();
+    const { mutate: getSignedUrl } = api.utils.getPresignedURL.useMutation();
     const [isFetchingData, setIsFetchingData] = useState(true);
     const [isCreatingWork, setIsCreatingWork] = useState(false);
 
@@ -103,7 +104,7 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
             name: props.printName,
             notes: props.printNotes,
         },{
-            onSuccess: async (data) => {
+            onSuccess: async (workData) => {
                 sendCreateWorkEmail({
                     email: workerEmail,
                     clientName: sessionData?.user.name || "",
@@ -113,58 +114,71 @@ const PrintersForSTLTable = (props: PrintersForSTLTableProps) => {
                 const urlInfo = await fetch(fileUrl);
                 if (urlInfo.ok) {
                     const blob = await urlInfo.blob();
-                    const file = new File([blob], fileName + ".stl", { type: "application/octet-stream" });
-                    const formData = new FormData();
-                    formData.append("file", file);
+                    const file = new File([blob], fileName + ".stl", { type: "application/octet-stream", lastModified: new Date().getTime() });
 
-                    await fetch("https://printitweb-filehandler.cyclic.app/", {
-                        method: 'POST',
-                        body: formData,
-                    }).then(async (response) => {
-                        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                        const responseData: { fileURL: string } = await response.json();
-                        
-                        if (response.ok) {
-                            updateWorkURL({
-                                stlUrl: responseData.fileURL,
-                                workId: data.id,
-                            }, {
-                                onSuccess: () => {
-                                    notifications.update({
-                                        id: 'create-work',
-                                        title: 'Pedido creado',
-                                        message: 'El pedido se creó correctamente. Ve a la seccion de Mis Pedidos',
-                                        color: 'green',
-                                        autoClose: 3000,
-                                        icon: <IconCheck size="1rem" />,
-                                    });
-                                    setIsCreatingWork(false);
-                                    props.closePopup();
+                    getSignedUrl({
+                        fileName: file.name,
+                        contentType: "application/octet-stream",
+                    }, {
+                        onSuccess: async (signedUrlData) => {
+                            await fetch(signedUrlData.fetchUrl, {
+                                method: "PUT",
+                                body: file,
+                                headers: {
+                                  'Content-Type': "application/octet-stream",
                                 },
-                                onError: (error) => {
-                                    notifications.update({
-                                        id: 'create-work',
-                                        title: 'Error',
-                                        message: "Hubo un error subiendo la URL. " + error.message,
-                                        color: 'red',
-                                        autoClose: 3000,
-                                    });
-                                    setIsCreatingWork(false);
-                                    props.closePopup();
-                                }
+                            }).then(() => {
+                                const fileUrl = signedUrlData.fileUrl;
+                                updateWorkURL({
+                                    stlUrl: fileUrl,
+                                    workId: workData.id, 
+                                }, {
+                                    onSuccess: () => {
+                                        notifications.update({
+                                            id: 'create-work',
+                                            title: 'Pedido creado',
+                                            message: 'El pedido se ha creado correctamente',
+                                            color: 'green',
+                                            autoClose: 3000,
+                                            icon: <IconCheck />,
+                                        });
+                                        setIsCreatingWork(false);
+                                        props.closePopup();
+                                    },
+                                    onError: (error) => {
+                                        notifications.update({
+                                            id: 'create-work',
+                                            title: 'Error',
+                                            message: "Hubo un error creando el trabajo. " + error.message,
+                                            color: 'red',
+                                            autoClose: 3000,
+                                        });
+                                        setIsCreatingWork(false);
+                                        props.closePopup();
+                                    }
+                                })
+                            }).catch((err: Error) => {
+                                notifications.update({
+                                    id: 'create-work',
+                                    title: 'Error',
+                                    message: `Hubo un error creando el trabajo. ${err.message}`,
+                                    color: 'red',
+                                    autoClose: 3000,
+                                });
                             });
+                        },
+                        onError: (error) => {
+                            notifications.update({
+                                id: 'create-work',
+                                title: 'Error',
+                                message: "Hubo un error creando el trabajo. " + error.message,
+                                color: 'red',
+                                autoClose: 3000,
+                            });
+                            setIsCreatingWork(false);
+                            props.closePopup();
                         }
-                    }).catch(() => {
-                        notifications.update({
-                            id: 'create-work',
-                            title: 'Error',
-                            message: "Hubo un error subiendo el archivo.",
-                            color: 'red',
-                            autoClose: 3000,
-                        });
-                        setIsCreatingWork(false);
-                        props.closePopup();
-                    });
+                    })
                 }
             },
             onError: (error) => {

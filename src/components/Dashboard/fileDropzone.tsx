@@ -235,7 +235,7 @@ const STLDropzone = () => {
         <></>
       ) : (
         <>
-          <h1 className="font-semibold mb-[100px]">Sube tu archivo y te mostraremos los distintos proovedores</h1>
+          <h1 className="font-semibold mb-[100px]">Sube tu archivo aca abajo</h1>
         </>
       )}
 
